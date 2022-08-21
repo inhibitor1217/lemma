@@ -13,6 +13,13 @@ yarn setup:local
 yarn shutdown:local
 ```
 
+### Sync RDS schema with local database
+
+```bash
+yarn generate       # Generate @prisma/client with the schema
+yarn migrate:local  # Apply the schema to the local database
+```
+
 ### Install dependencies
 
 ```bash
