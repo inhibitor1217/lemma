@@ -21,8 +21,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:."\
       },\
       {\
-        "name": "lemma-http",\
-        "reference": "workspace:packages/lemma-http"\
+        "name": "@lemma/http",\
+        "reference": "workspace:packages/lemma__http"\
       },\
       {\
         "name": "@lemma/prisma-client",\
@@ -32,8 +32,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "enableTopLevelFallback": true,\
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
+      ["@lemma/http", ["workspace:packages/lemma__http"]],\
       ["@lemma/prisma-client", ["workspace:packages/lemma__prisma-client"]],\
-      ["lemma-http", ["workspace:packages/lemma-http"]],\
       ["root-workspace-0b6124", ["workspace:."]]\
     ],\
     "fallbackPool": [\
@@ -199,6 +199,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jridgewell/sourcemap-codec", "npm:1.4.14"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lemma/http", [\
+        ["workspace:packages/lemma__http", {\
+          "packageLocation": "./packages/lemma__http/",\
+          "packageDependencies": [\
+            ["@lemma/http", "workspace:packages/lemma__http"],\
+            ["@types/node", "npm:18.7.8"],\
+            ["fastify", "npm:4.5.2"],\
+            ["nodemon", "npm:2.0.19"],\
+            ["pino-pretty", "npm:9.0.1"],\
+            ["ts-node", "virtual:3831c4b745e08067287318ea0feba296f19e69d0d0f1d56ae0d0d275fd0130a7b1b2f8bb74193d62a23ee6dbe2be8cd6f470e5ee46b7db0858a1324d1c1dfda0#npm:10.9.1"],\
+            ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["@lemma/prisma-client", [\
@@ -2997,21 +3012,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["lemma-http", [\
-        ["workspace:packages/lemma-http", {\
-          "packageLocation": "./packages/lemma-http/",\
-          "packageDependencies": [\
-            ["lemma-http", "workspace:packages/lemma-http"],\
-            ["@types/node", "npm:18.7.8"],\
-            ["fastify", "npm:4.5.2"],\
-            ["nodemon", "npm:2.0.19"],\
-            ["pino-pretty", "npm:9.0.1"],\
-            ["ts-node", "virtual:9e5d9c662462c4d204d94e52ff3f2c1aaeeec501e1035dd5701e36f61d2a8ecf0d69ccb243ceaf3ed03a8f44373b93e2aaa03fd8528a37797f5c6f0d768069f7#npm:10.9.1"],\
-            ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"]\
-          ],\
-          "linkType": "SOFT"\
-        }]\
-      ]],\
       ["levn", [\
         ["npm:0.4.1", {\
           "packageLocation": "./.yarn/cache/levn-npm-0.4.1-d183b2d7bb-12c5021c85.zip/node_modules/levn/",\
@@ -4393,10 +4393,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:9e5d9c662462c4d204d94e52ff3f2c1aaeeec501e1035dd5701e36f61d2a8ecf0d69ccb243ceaf3ed03a8f44373b93e2aaa03fd8528a37797f5c6f0d768069f7#npm:10.9.1", {\
-          "packageLocation": "./.yarn/__virtual__/ts-node-virtual-863ee1b0c9/0/cache/ts-node-npm-10.9.1-6c268be7f4-090adff130.zip/node_modules/ts-node/",\
+        ["virtual:3831c4b745e08067287318ea0feba296f19e69d0d0f1d56ae0d0d275fd0130a7b1b2f8bb74193d62a23ee6dbe2be8cd6f470e5ee46b7db0858a1324d1c1dfda0#npm:10.9.1", {\
+          "packageLocation": "./.yarn/__virtual__/ts-node-virtual-d3d8a933cc/0/cache/ts-node-npm-10.9.1-6c268be7f4-090adff130.zip/node_modules/ts-node/",\
           "packageDependencies": [\
-            ["ts-node", "virtual:9e5d9c662462c4d204d94e52ff3f2c1aaeeec501e1035dd5701e36f61d2a8ecf0d69ccb243ceaf3ed03a8f44373b93e2aaa03fd8528a37797f5c6f0d768069f7#npm:10.9.1"],\
+            ["ts-node", "virtual:3831c4b745e08067287318ea0feba296f19e69d0d0f1d56ae0d0d275fd0130a7b1b2f8bb74193d62a23ee6dbe2be8cd6f470e5ee46b7db0858a1324d1c1dfda0#npm:10.9.1"],\
             ["@cspotcode/source-map-support", "npm:0.8.1"],\
             ["@swc/core", null],\
             ["@swc/wasm", null],\

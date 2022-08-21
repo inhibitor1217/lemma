@@ -2,7 +2,7 @@
   "include": [],
   "references": [
     {
-      "path": "./packages/lemma-http/tsconfig.json"
+      "path": "./packages/lemma__http/tsconfig.json"
     }
   ]
 }

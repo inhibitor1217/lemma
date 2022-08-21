@@ -5,5 +5,8 @@ module.exports = {
   ],
   parserOptions: {
     project: './tsconfig.lint.json',
-  }
+  },
+  rules: {
+    'import/prefer-default-export': 'off',
+  },
 }

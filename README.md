@@ -29,5 +29,5 @@ yarn install
 ### Run local development server
 
 ```bash
-yarn workspace lemma-http start:dev
+yarn workspace @lemma/http start:dev
 ```

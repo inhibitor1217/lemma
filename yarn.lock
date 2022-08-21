@@ -130,6 +130,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lemma/http@workspace:packages/lemma__http":
+  version: 0.0.0-use.local
+  resolution: "@lemma/http@workspace:packages/lemma__http"
+  dependencies:
+    "@types/node": ^18.7.8
+    fastify: ^4.5.2
+    nodemon: ^2.0.19
+    pino-pretty: ^9.0.1
+    ts-node: ^10.9.1
+    typescript: ^4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@lemma/prisma-client@workspace:packages/lemma__prisma-client":
   version: 0.0.0-use.local
   resolution: "@lemma/prisma-client@workspace:packages/lemma__prisma-client"
@@ -2399,19 +2412,6 @@ __metadata:
   checksum: bcc946eeec3407fb3b42d831ce985357162113c5f07a8c45c12ede39704ba2d99be4c3dded76d2d2d2a2366627e42440bdde24393216164156928399949c12a1
   languageName: node
   linkType: hard
-
-"lemma-http@workspace:packages/lemma-http":
-  version: 0.0.0-use.local
-  resolution: "lemma-http@workspace:packages/lemma-http"
-  dependencies:
-    "@types/node": ^18.7.8
-    fastify: ^4.5.2
-    nodemon: ^2.0.19
-    pino-pretty: ^9.0.1
-    ts-node: ^10.9.1
-    typescript: ^4.7.4
-  languageName: unknown
-  linkType: soft
 
 "levn@npm:^0.4.1":
   version: 0.4.1
