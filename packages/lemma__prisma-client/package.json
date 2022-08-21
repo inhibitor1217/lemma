@@ -1,0 +1,26 @@
+{
+  "name": "@lemma/prisma-client",
+  "version": "0.0.1",
+  "description": "Prisma client for RDS",
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "packageManager": "yarn@3.2.2",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate": "yarn pnpify prisma generate",
+    "migrate:local": "yarn pnpify prisma migrate dev --skip-generate",
+    "reset:local": "yarn pnpify prisma migrate reset --skip-generate"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.8",
+    "@yarnpkg/pnpify": "^4.0.0-rc.14",
+    "prisma": "^4.2.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.2.1"
+  }
+}
