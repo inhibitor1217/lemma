@@ -1,0 +1,13 @@
+# This configuration is for the local development environment.
+
+version: '3.8'
+
+services:
+  rds:
+    build: './postgres'
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'

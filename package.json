@@ -8,7 +8,9 @@
   "scripts": {
     "check:lint": "yarn eslint .",
     "check:typescript": "tsc --build --verbose",
-    "fix:lint": "yarn eslint --fix ."
+    "fix:lint": "yarn eslint --fix .",
+    "setup:local": "./setup/boot.sh",
+    "shutdown:local": "./setup/shutdown.sh"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.33.1",

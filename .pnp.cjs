@@ -239,6 +239,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@prisma/engines", [\
+        ["npm:4.2.1", {\
+          "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-4.2.1-22c8ca1e1a/node_modules/@prisma/engines/",\
+          "packageDependencies": [\
+            ["@prisma/engines", "npm:4.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@tootallnate/once", [\
         ["npm:2.0.0", {\
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-2.0.0-e36cf4f140-ad87447820.zip/node_modules/@tootallnate/once/",\
@@ -1082,7 +1091,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["debug", "virtual:5d6fa595c641abcb43d18b774684bacd52037a1e3ff8c4155feb531408a1913bd7a19513bf820252cfaae35026a75a776e3349943c7c05cd54bf6c51005e9d45#npm:3.2.7"],\
             ["@types/supports-color", null],\
-            ["ms", "npm:2.1.3"],\
+            ["ms", "npm:2.1.2"],\
             ["supports-color", "npm:5.5.0"]\
           ],\
           "packagePeers": [\
@@ -1110,7 +1119,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["debug", "virtual:d9426786c635bc4b52511d6cc4b56156f50d780a698c0e20fc6caf10d3be51cbf176e79cff882f4d42a23ff4d0f89fe94222849578214e7fbae0f2754c82af02#npm:3.2.7"],\
             ["@types/supports-color", null],\
-            ["ms", "npm:2.1.3"],\
+            ["ms", "npm:2.1.2"],\
             ["supports-color", null]\
           ],\
           "packagePeers": [\
@@ -2523,6 +2532,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fastify", "npm:4.5.2"],\
             ["nodemon", "npm:2.0.19"],\
             ["pino-pretty", "npm:9.0.1"],\
+            ["prisma", "npm:4.2.1"],\
             ["ts-node", "virtual:9e5d9c662462c4d204d94e52ff3f2c1aaeeec501e1035dd5701e36f61d2a8ecf0d69ccb243ceaf3ed03a8f44373b93e2aaa03fd8528a37797f5c6f0d768069f7#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"]\
           ],\
@@ -3122,6 +3132,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/prelude-ls-npm-1.2.1-3e4d272a55-cd192ec0d0.zip/node_modules/prelude-ls/",\
           "packageDependencies": [\
             ["prelude-ls", "npm:1.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["prisma", [\
+        ["npm:4.2.1", {\
+          "packageLocation": "./.yarn/unplugged/prisma-npm-4.2.1-ecc0ac3576/node_modules/prisma/",\
+          "packageDependencies": [\
+            ["prisma", "npm:4.2.1"],\
+            ["@prisma/engines", "npm:4.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
