@@ -1,0 +1,18 @@
+{
+  "extends": "../../support/typescript/tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist/",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "./src"
+  ],
+  "references": []
+}

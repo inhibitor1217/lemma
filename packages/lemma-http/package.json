@@ -1,0 +1,14 @@
+{
+  "name": "lemma-http",
+  "version": "0.0.1",
+  "description": "HTTP server for Lemma",
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "private": true,
+  "packageManager": "yarn@3.2.2",
+  "scripts": {
+    "check:typescript": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
