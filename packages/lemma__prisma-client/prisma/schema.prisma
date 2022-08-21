@@ -7,3 +7,18 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum AuthProvider {
+  GOOGLE
+}
+
+model Account {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  authProvider   AuthProvider
+  authProviderId String
+  name           String?
+  email          String?
+  photo          String?
+}
