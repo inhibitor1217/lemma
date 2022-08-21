@@ -23,7 +23,6 @@
     "dotenv": "^16.0.1",
     "extended-enum": "^1.0.1",
     "fastify": "^4.5.2",
-    "passport": "^0.6.0",
-    "passport-google-oidc": "^0.1.0"
+    "fastify-plugin": "^4.2.0"
   }
 }

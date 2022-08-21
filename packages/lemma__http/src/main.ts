@@ -1,10 +1,10 @@
-import app from './app';
+import fastify from './app';
 
 const main = async () => {
   try {
-    await app.listen({ port: 3000 });
+    await fastify.listen({ port: 3000 });
   } catch (e) {
-    app.log.error(e);
+    fastify.log.error(e);
     process.exit(1);
   }
 };

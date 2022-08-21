@@ -1,13 +1,31 @@
-import fastify from 'fastify';
-import * as auth from '~/auth';
-import * as error from '~/error';
-import * as ping from '~/ping';
+import Fastify, {
+  FastifyError,
+  FastifyReply,
+  FastifyRequest,
+} from 'fastify';
+import db from '~/db';
+import env from '~/env';
+import ping from '~/ping';
 
-const app = fastify({ logger: true });
+const fastify = Fastify({ logger: true });
 
-app.register(auth.routes, { prefix: '/auth' });
-app.register(ping.routes, { prefix: '/ping' });
+fastify.setErrorHandler(async (
+  error: FastifyError,
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  reply.statusCode = error.statusCode ?? 500;
+  fastify.log.error(error);
 
-app.setErrorHandler(error.handler);
+  return {
+    statusCode: 500,
+    message: 'Internal Server Error',
+  };
+});
 
-export default app;
+fastify.register(env);
+fastify.register(db);
+
+fastify.register(ping, { prefix: '/ping' });
+
+export default fastify;

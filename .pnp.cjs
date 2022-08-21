@@ -167,9 +167,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv", "npm:16.0.1"],\
             ["extended-enum", "virtual:3831c4b745e08067287318ea0feba296f19e69d0d0f1d56ae0d0d275fd0130a7b1b2f8bb74193d62a23ee6dbe2be8cd6f470e5ee46b7db0858a1324d1c1dfda0#npm:1.0.1"],\
             ["fastify", "npm:4.5.2"],\
+            ["fastify-plugin", "npm:4.2.0"],\
             ["nodemon", "npm:2.0.19"],\
-            ["passport", "npm:0.6.0"],\
-            ["passport-google-oidc", "npm:0.1.0"],\
             ["pino-pretty", "npm:9.0.1"],\
             ["ts-node", "virtual:3831c4b745e08067287318ea0feba296f19e69d0d0f1d56ae0d0d275fd0130a7b1b2f8bb74193d62a23ee6dbe2be8cd6f470e5ee46b7db0858a1324d1c1dfda0#npm:10.9.1"],\
             ["tsconfig-paths", "npm:4.1.0"],\
@@ -1367,6 +1366,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["fastify-plugin", [\
+        ["npm:4.2.0", {\
+          "packageLocation": "./.yarn/cache/fastify-plugin-npm-4.2.0-97afcaacd7-30d7fd3c8f.zip/node_modules/fastify-plugin/",\
+          "packageDependencies": [\
+            ["fastify-plugin", "npm:4.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["fastq", [\
         ["npm:1.13.0", {\
           "packageLocation": "./.yarn/cache/fastq-npm-1.13.0-a45963881c-32cf15c29a.zip/node_modules/fastq/",\
@@ -2206,15 +2214,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["oauth", [\
-        ["npm:0.9.15", {\
-          "packageLocation": "./.yarn/cache/oauth-npm-0.9.15-a6aae972bc-957c0d8d85.zip/node_modules/oauth/",\
-          "packageDependencies": [\
-            ["oauth", "npm:0.9.15"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["on-exit-leak-free", [\
         ["npm:2.1.0", {\
           "packageLocation": "./.yarn/cache/on-exit-leak-free-npm-2.1.0-b522202aa1-7334d98b87.zip/node_modules/on-exit-leak-free/",\
@@ -2272,48 +2271,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["passport", [\
-        ["npm:0.6.0", {\
-          "packageLocation": "./.yarn/cache/passport-npm-0.6.0-0a57682d5b-ef932ad671.zip/node_modules/passport/",\
-          "packageDependencies": [\
-            ["passport", "npm:0.6.0"],\
-            ["passport-strategy", "npm:1.0.0"],\
-            ["pause", "npm:0.0.1"],\
-            ["utils-merge", "npm:1.0.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["passport-google-oidc", [\
-        ["npm:0.1.0", {\
-          "packageLocation": "./.yarn/cache/passport-google-oidc-npm-0.1.0-6481f34223-4600c0f916.zip/node_modules/passport-google-oidc/",\
-          "packageDependencies": [\
-            ["passport-google-oidc", "npm:0.1.0"],\
-            ["passport-openidconnect", "npm:0.1.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["passport-openidconnect", [\
-        ["npm:0.1.1", {\
-          "packageLocation": "./.yarn/cache/passport-openidconnect-npm-0.1.1-cc88c10600-75fbe69b7d.zip/node_modules/passport-openidconnect/",\
-          "packageDependencies": [\
-            ["passport-openidconnect", "npm:0.1.1"],\
-            ["oauth", "npm:0.9.15"],\
-            ["passport-strategy", "npm:1.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["passport-strategy", [\
-        ["npm:1.0.0", {\
-          "packageLocation": "./.yarn/cache/passport-strategy-npm-1.0.0-5648a82a66-5086693f25.zip/node_modules/passport-strategy/",\
-          "packageDependencies": [\
-            ["passport-strategy", "npm:1.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["path-is-absolute", [\
         ["npm:1.0.1", {\
           "packageLocation": "./.yarn/cache/path-is-absolute-npm-1.0.1-31bc695ffd-060840f92c.zip/node_modules/path-is-absolute/",\
@@ -2337,15 +2294,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/path-type-npm-4.0.0-10d47fc86a-5b1e2daa24.zip/node_modules/path-type/",\
           "packageDependencies": [\
             ["path-type", "npm:4.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["pause", [\
-        ["npm:0.0.1", {\
-          "packageLocation": "./.yarn/cache/pause-npm-0.0.1-0c421a299d-e96ee581b6.zip/node_modules/pause/",\
-          "packageDependencies": [\
-            ["pause", "npm:0.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3164,15 +3112,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/util-deprecate-npm-1.0.2-e3fe1a219c-474acf1146.zip/node_modules/util-deprecate/",\
           "packageDependencies": [\
             ["util-deprecate", "npm:1.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["utils-merge", [\
-        ["npm:1.0.1", {\
-          "packageLocation": "./.yarn/cache/utils-merge-npm-1.0.1-363bbdfbca-c810954932.zip/node_modules/utils-merge/",\
-          "packageDependencies": [\
-            ["utils-merge", "npm:1.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
