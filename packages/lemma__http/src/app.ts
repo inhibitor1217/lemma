@@ -3,6 +3,7 @@ import Fastify, {
   FastifyReply,
   FastifyRequest,
 } from 'fastify';
+import auth, { authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
 import ping from '~/ping';
@@ -25,7 +26,9 @@ fastify.setErrorHandler(async (
 
 fastify.register(env);
 fastify.register(db);
+fastify.register(auth);
 
+fastify.register(authRoutes, { prefix: '/auth' });
 fastify.register(ping, { prefix: '/ping' });
 
 export default fastify;
