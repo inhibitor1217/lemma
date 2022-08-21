@@ -7,7 +7,8 @@
   "packageManager": "yarn@3.2.2",
   "scripts": {
     "check:typescript": "tsc --noEmit",
-    "start:dev": "yarn ts-node -r tsconfig-paths/register --transpileOnly src/main.ts | yarn pino-pretty"
+    "start:dev": "yarn ts-node -r tsconfig-paths/register --transpileOnly src/main.ts | yarn pino-pretty",
+    "watch:dev": "nodemon --watch ./src -e ts --exec \"yarn start:dev\""
   },
   "devDependencies": {
     "@types/node": "^18.7.8",
