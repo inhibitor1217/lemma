@@ -11,7 +11,9 @@
     "watch:dev": "nodemon --watch ./src -e ts --exec \"yarn start:dev\""
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^18.7.8",
+    "@types/node-fetch": "^2.6.2",
     "nodemon": "^2.0.19",
     "pino-pretty": "^9.0.1",
     "ts-node": "^10.9.1",
@@ -25,6 +27,8 @@
     "dotenv": "^16.0.1",
     "extended-enum": "^1.0.1",
     "fastify": "^4.5.2",
-    "fastify-plugin": "^4.2.0"
+    "fastify-plugin": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.7"
   }
 }

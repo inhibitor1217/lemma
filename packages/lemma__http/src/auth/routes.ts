@@ -1,5 +1,32 @@
 import crypto from 'crypto';
-import { FastifyInstance } from 'fastify';
+import {
+  FastifyInstance,
+  FastifyRequest,
+} from 'fastify';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import fetch from 'node-fetch';
+
+declare module 'fastify' {
+  interface Session {
+    state?: string
+  }
+}
+
+type GoogleOAuth2TokenResponse = {
+  access_token: string;
+  expires_in: number;
+  id_token: string;
+  scope: string;
+  token_type: string;
+  refresh_token?: string;
+}
+
+type GoogleOAuth2IdTokenPayload = {
+  email?: string;
+  given_name?: string;
+  family_name?: string;
+  picture?: string;
+}
 
 function nonce() {
   return crypto.randomBytes(32).toString('hex');
@@ -22,7 +49,54 @@ export default async function routes(fastify: FastifyInstance) {
     reply.redirect(302, oauthAuthorizeUrl.href);
   });
 
-  fastify.get('/google/redirect', async (request, reply) => {
+  fastify.get('/google/redirect', async (
+    request: FastifyRequest<{
+      Querystring: {
+        state: string;
+        code: string;
+      }
+    }>,
+    reply,
+  ) => {
+    if (request.session.state !== request.query.state) {
+      reply.statusCode = 401;
+      return reply.send('Invalid authentication request state');
+    }
+
+    if (!request.query.code) {
+      reply.statusCode = 401;
+      return reply.send('Invalid authentication request code');
+    }
+
+    const oauthAccessTokenUrl = new URL('https://oauth2.googleapis.com/token');
+
+    oauthAccessTokenUrl.searchParams.set('code', request.query.code);
+    oauthAccessTokenUrl.searchParams.set('client_id', fastify.env.auth.providers.google.clientId);
+    oauthAccessTokenUrl.searchParams.set('client_secret', fastify.env.auth.providers.google.clientSecret);
+    oauthAccessTokenUrl.searchParams.set('redirect_uri', fastify.env.auth.providers.google.redirectUrl);
+    oauthAccessTokenUrl.searchParams.set('grant_type', 'authorization_code');
+
+    const { id_token } = await fetch(oauthAccessTokenUrl.href, { method: 'POST' })
+      .then(res => res.json() as Promise<GoogleOAuth2TokenResponse>);
+
+    const payload = jwt.decode(id_token);
+
+    if (!payload || typeof payload === 'string') {
+      reply.statusCode = 400;
+      return reply.send('Invalid authentication id token');
+    }
+
+    const {
+      sub: providerId,
+      email,
+      given_name: lastName,
+      first_name: firstName,
+      picture: photoUrl,
+    } = payload as JwtPayload & GoogleOAuth2IdTokenPayload;
+
+    // @todo create user if not exists
+    // @todo create a session to the current user
+
     reply.statusCode = 501;
     reply.send('Not implemented');
   });
