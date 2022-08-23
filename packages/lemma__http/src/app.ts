@@ -3,7 +3,9 @@ import Fastify, {
   FastifyReply,
   FastifyRequest,
 } from 'fastify';
-import auth, { authRoutes } from '~/auth';
+import auth, {
+  routes as authRoutes,
+} from '~/auth';
 import db from '~/db';
 import env from '~/env';
 import ping from '~/ping';

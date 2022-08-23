@@ -1,19 +1,28 @@
+import cookie from '@fastify/cookie';
+import session from '@fastify/session';
 import { FastifyInstance } from 'fastify';
+import fp from 'fastify-plugin';
+import { Stage } from '~/env';
+
+declare module 'fastify' {
+  interface Session {
+    // @todo
+  }
+}
 
 async function auth(fastify: FastifyInstance) {
-
-}
-
-export async function authRoutes(fastify: FastifyInstance) {
-  fastify.get('/google', async (request, reply) => {
-    reply.statusCode = 501;
-    reply.send('Not implemented');
-  });
-
-  fastify.get('/google/redirect', async (request, reply) => {
-    reply.statusCode = 501;
-    reply.send('Not implemented');
+  fastify.register(cookie);
+  fastify.register(session, {
+    secret: fastify.env.auth.session.secret,
+    cookie: {
+      httpOnly: true,
+      secure: fastify.env.stage.isNot(Stage.Dev),
+    },
+    // @todo store
+    saveUninitialized: false,
   });
 }
 
-export default auth;
+export default fp(auth);
+
+export { default as routes } from './routes'

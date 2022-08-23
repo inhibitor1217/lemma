@@ -4,6 +4,9 @@ export type Env = {
   stage: Stage;
 
   auth: {
+    session: {
+      secret: string;
+    };
     providers: {
       google: {
         clientId: string;

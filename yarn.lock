@@ -34,6 +34,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/cookie@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@fastify/cookie@npm:8.0.0"
+  dependencies:
+    cookie: ^0.5.0
+    fastify-plugin: ^4.0.0
+  checksum: 6108fa3cfffc34a9dbeb85db90f44209aee647691d9395893f6ba5859d78cf5f114a0bd33725877312cfef834a133d7e8ebb75e277a90b71a0b298db8699001b
+  languageName: node
+  linkType: hard
+
 "@fastify/deepmerge@npm:^1.0.0":
   version: 1.1.0
   resolution: "@fastify/deepmerge@npm:1.1.0"
@@ -54,6 +64,18 @@ __metadata:
   dependencies:
     fast-json-stringify: ^5.0.0
   checksum: 5cfeebcd9fb7ae5d912836503a7934ed4b9db83c30cae15e393341b52c059cd83531b375226406f8056b09f472c11560c730999c7ae4647c2fb9771d372db60a
+  languageName: node
+  linkType: hard
+
+"@fastify/session@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@fastify/session@npm:9.0.0"
+  dependencies:
+    cookie-signature: ^1.1.0
+    fastify-plugin: ^3.0.0
+    safe-stable-stringify: ^2.3.1
+    uid-safe: ^2.1.5
+  checksum: a21a6f586533163db9275da754abfec18a879c31f73216623fd2124609cf46a5241ca7530a36fad337df6474b2f4fd92d0fd1a6ddd0795396df437b81519c01b
   languageName: node
   linkType: hard
 
@@ -101,6 +123,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lemma/http@workspace:packages/lemma__http"
   dependencies:
+    "@fastify/cookie": ^8.0.0
+    "@fastify/session": ^9.0.0
     "@lemma/prisma-client": "workspace:^"
     "@types/node": ^18.7.8
     dotenv: ^16.0.1
@@ -840,6 +864,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie-signature@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "cookie-signature@npm:1.2.0"
+  checksum: d11f56f909733695d989511bf0e1dd874220d818b9d118945dce3c275fa50adfb3f6984354de0f5eefdc9347951a22ba3545230a762576019d23c16055b12d4c
+  languageName: node
+  linkType: hard
+
 "cookie@npm:^0.5.0":
   version: 0.5.0
   resolution: "cookie@npm:0.5.0"
@@ -1081,7 +1112,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^4.2.0":
+"fastify-plugin@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "fastify-plugin@npm:3.0.1"
+  checksum: 131ba0a388f777829c3fb0fd5b75cf057688ce6d0ca354fb1ebf829767a8c853b0825762b9185b5200097454df0ede2f3095da2efe1aa1b3736d07f194e6d374
+  languageName: node
+  linkType: hard
+
+"fastify-plugin@npm:^4.0.0, fastify-plugin@npm:^4.2.0":
   version: 4.2.0
   resolution: "fastify-plugin@npm:4.2.0"
   checksum: 30d7fd3c8f5e9bd87ca43b15e59fff8ca28772920c979bd18420f8874e81cd24592410101f1e0d3de443f19e599464b245a171692883acff934763152e3dc3eb
@@ -2100,6 +2138,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"random-bytes@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "random-bytes@npm:1.0.0"
+  checksum: 09faa256394aa2ca9754aa57e92a27c452c3e97ffb266e98bebb517332e9df7168fea393159f88d884febce949ba8bec8ddb02f03342da6c6023ecc7b155e0ae
+  languageName: node
+  linkType: hard
+
 "readable-stream@npm:^3.6.0":
   version: 3.6.0
   resolution: "readable-stream@npm:3.6.0"
@@ -2614,6 +2659,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 9096d8f6c16cb80ef3bf96fcbbd055bf1c4a43bd14f3b7be45a9fbe7ada46ec977f604d5feed3263b4f2aa7d4c7477ce5f9cd87de0d6feedec69a983f3a4f93e
+  languageName: node
+  linkType: hard
+
+"uid-safe@npm:^2.1.5":
+  version: 2.1.5
+  resolution: "uid-safe@npm:2.1.5"
+  dependencies:
+    random-bytes: ~1.0.0
+  checksum: 07536043da9a026f4a2bc397543d0ace7587449afa1d9d2c4fd3ce76af8a5263a678788bcc429dff499ef29d45843cd5ee9d05434450fcfc19cc661229f703d1
   languageName: node
   linkType: hard
 

@@ -17,6 +17,9 @@ const loadEnv = (() => {
       return {
         stage: Stage.from(process.env.STAGE) ?? Stage.Dev,
         auth: {
+          session: {
+            secret: process.env.SESSION_SECRET || '',
+          },
           providers: {
             google: {
               clientId: process.env.GOOGLE_CLIENT_ID || '',
