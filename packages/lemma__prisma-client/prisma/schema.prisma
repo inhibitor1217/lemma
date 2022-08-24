@@ -18,6 +18,8 @@ model Account {
   updatedAt      DateTime     @updatedAt
   authProvider   AuthProvider
   authProviderId String
+  firstName      String?
+  lastName       String?
   name           String?
   email          String?
   photo          String?
