@@ -21,4 +21,6 @@ model Account {
   name           String?
   email          String?
   photo          String?
+
+  @@unique([authProvider, authProviderId])
 }
