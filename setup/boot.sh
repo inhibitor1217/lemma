@@ -8,6 +8,10 @@ main() {
 
   docker compose -f $(dirname $0)/docker-compose.yml \
     up -d
+
+  # Run database migrations
+  yarn workspace @lemma/prisma-client generate
+  yarn workspace @lemma/prisma-client reset:local
 }
 
 main $@
