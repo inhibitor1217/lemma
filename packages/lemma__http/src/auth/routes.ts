@@ -1,3 +1,6 @@
+import {
+  AuthProvider,
+} from '@lemma/prisma-client';
 import crypto from 'crypto';
 import {
   FastifyInstance,
@@ -22,6 +25,7 @@ type GoogleOAuth2TokenResponse = {
 }
 
 type GoogleOAuth2IdTokenPayload = {
+  sub: string;
   email?: string;
   given_name?: string;
   family_name?: string;
@@ -89,12 +93,39 @@ export default async function routes(fastify: FastifyInstance) {
     const {
       sub: providerId,
       email,
-      given_name: lastName,
-      first_name: firstName,
+      given_name: firstName,
+      family_name: lastName,
       picture: photoUrl,
     } = payload as JwtPayload & GoogleOAuth2IdTokenPayload;
 
-    // @todo create user if not exists
+    const name = (() => {
+      if (firstName && lastName) {
+        return `${firstName} ${lastName}`;
+      }
+      return firstName ?? lastName;
+    })();
+
+    const account =
+      await fastify.db.account.findUnique({
+        where: {
+          authProvider_authProviderId: {
+            authProvider: AuthProvider.GOOGLE,
+            authProviderId: providerId,
+          },
+        },
+      }) ??
+      await fastify.db.account.create({
+        data: {
+          authProvider: AuthProvider.GOOGLE,
+          authProviderId: providerId,
+          firstName,
+          lastName,
+          name,
+          email,
+          photo: photoUrl,
+        },
+      });
+
     // @todo create a session to the current user
 
     reply.statusCode = 501;
