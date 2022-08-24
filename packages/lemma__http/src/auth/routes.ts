@@ -37,32 +37,69 @@ function nonce() {
 }
 
 export default async function routes(fastify: FastifyInstance) {
-  fastify.get('/google', async (request, reply) => {
+  fastify.get('/google', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          redirect_to: { type: 'string' },
+        },
+      },
+    },
+  }, async (
+    request: FastifyRequest<{
+      Querystring: {
+        redirect_to?: string;
+      };
+    }>,
+    reply,
+  ) => {
     const oauthAuthorizeUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    const state = new URLSearchParams();
 
-    const state = nonce();
+    const _nonce = nonce();
+
+    state.set('nonce', _nonce);
+    if (request.query.redirect_to) {
+      state.set('redirect_to', request.query.redirect_to);
+    }
 
     oauthAuthorizeUrl.searchParams.set('response_type', 'code');
     oauthAuthorizeUrl.searchParams.set('client_id', fastify.env.auth.providers.google.clientId);
     oauthAuthorizeUrl.searchParams.set('scope', 'openid profile email');
     oauthAuthorizeUrl.searchParams.set('redirect_uri', fastify.env.auth.providers.google.redirectUrl);
-    oauthAuthorizeUrl.searchParams.set('state', state);
+    oauthAuthorizeUrl.searchParams.set('state', state.toString());
 
-    request.session.set('state', state);
+    request.session.set('state', _nonce);
 
     reply.redirect(302, oauthAuthorizeUrl.href);
   });
 
-  fastify.get('/google/redirect', async (
+  fastify.get('/google/redirect', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          state: { type: 'string' },
+          code: { type: 'string' },
+        },
+        required: ['state', 'code'],
+      },
+    },
+  }, async (
     request: FastifyRequest<{
       Querystring: {
         state: string;
         code: string;
-      }
+      };
     }>,
     reply,
   ) => {
-    if (request.session.state !== request.query.state) {
+    const state = new URLSearchParams(request.query.state);
+    const nonce = state.get('nonce');
+    const redirectTo = state.get('redirect_to');
+
+    if (request.session.state !== nonce) {
       reply.statusCode = 401;
       return reply.send('Invalid authentication request state');
     }
@@ -128,7 +165,10 @@ export default async function routes(fastify: FastifyInstance) {
 
     // @todo create a session to the current user
 
-    reply.statusCode = 501;
-    reply.send('Not implemented');
+    if (redirectTo) {
+      return reply.redirect(302, redirectTo);
+    }
+
+    reply.statusCode = 200;
   });
 }

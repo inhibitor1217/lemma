@@ -20,8 +20,15 @@ fastify.setErrorHandler(async (
   reply.statusCode = error.statusCode ?? 500;
   fastify.log.error(error);
 
+  if (error.statusCode === 400) {
+    return {
+      statusCode: error.statusCode,
+      message: error.message,
+    };
+  }
+
   return {
-    statusCode: 500,
+    statusCode: error.statusCode ?? 500,
     message: 'Internal Server Error',
   };
 });
