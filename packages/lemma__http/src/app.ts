@@ -3,6 +3,9 @@ import Fastify, {
   FastifyReply,
   FastifyRequest,
 } from 'fastify';
+import {
+  routes as accountRoutes,
+} from '~/account';
 import auth, {
   routes as authRoutes,
 } from '~/auth';
@@ -37,6 +40,7 @@ fastify.register(env);
 fastify.register(db);
 fastify.register(auth);
 
+fastify.register(accountRoutes, { prefix: '/account' });
 fastify.register(authRoutes, { prefix: '/auth' });
 fastify.register(ping, { prefix: '/ping' });
 
