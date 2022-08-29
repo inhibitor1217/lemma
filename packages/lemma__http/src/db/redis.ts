@@ -9,6 +9,17 @@ declare module 'fastify' {
 }
 
 async function redis(fastify: FastifyInstance) {
+  const client = new Redis({
+    host: fastify.env.redis.host,
+    port: fastify.env.redis.port,
+    username: fastify.env.redis.username,
+    password: fastify.env.redis.password,
+  });
+
+  client.on('error', error => {
+    fastify.log.error(error);
+  });
+
   fastify.decorate('redis', new Redis({
     host: fastify.env.redis.host,
     port: fastify.env.redis.port,

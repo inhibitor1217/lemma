@@ -163,7 +163,7 @@ export default async function routes(fastify: FastifyInstance) {
         },
       });
 
-    // @todo create a session to the current user
+    request.session.accountId = account.id;
 
     if (redirectTo) {
       return reply.redirect(302, redirectTo);

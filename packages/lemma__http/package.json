@@ -11,6 +11,7 @@
     "watch:dev": "nodemon --watch ./src -e ts --exec \"yarn start:dev\""
   },
   "devDependencies": {
+    "@types/connect-redis": "^0.0.18",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^18.7.8",
     "@types/node-fetch": "^2.6.2",
@@ -24,6 +25,7 @@
     "@fastify/cookie": "^8.0.0",
     "@fastify/session": "^9.0.0",
     "@lemma/prisma-client": "workspace:^",
+    "connect-redis": "^6.1.3",
     "dotenv": "^16.0.1",
     "extended-enum": "^1.0.1",
     "fastify": "^4.5.2",
