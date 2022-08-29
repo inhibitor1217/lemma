@@ -28,6 +28,7 @@
     "extended-enum": "^1.0.1",
     "fastify": "^4.5.2",
     "fastify-plugin": "^4.2.0",
+    "ioredis": "^5.2.3",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.7"
   }

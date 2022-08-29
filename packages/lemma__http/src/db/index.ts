@@ -1,17 +1,11 @@
-import { PrismaClient } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    db: PrismaClient
-  }
-}
-
-const client = new PrismaClient();
+import rdb from './rdb';
+import redis from './redis';
 
 async function db(fastify: FastifyInstance) {
-  fastify.decorate('db', client);
+  fastify.register(rdb);
+  fastify.register(redis);
 }
 
 export default fp(db);

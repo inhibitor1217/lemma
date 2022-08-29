@@ -143,7 +143,7 @@ export default async function routes(fastify: FastifyInstance) {
     })();
 
     const account =
-      await fastify.db.account.findUnique({
+      await fastify.rdb.account.findUnique({
         where: {
           authProvider_authProviderId: {
             authProvider: AuthProvider.GOOGLE,
@@ -151,7 +151,7 @@ export default async function routes(fastify: FastifyInstance) {
           },
         },
       }) ??
-      await fastify.db.account.create({
+      await fastify.rdb.account.create({
         data: {
           authProvider: AuthProvider.GOOGLE,
           authProviderId: providerId,
