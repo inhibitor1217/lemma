@@ -11,7 +11,7 @@ declare module 'fastify' {
 const client = new PrismaClient();
 
 async function db(fastify: FastifyInstance) {
-  fastify.db = client;
+  fastify.decorate('db', client);
 }
 
 export default fp(db);
