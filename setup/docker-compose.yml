@@ -11,3 +11,14 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - '5432:5432'
+
+  redis:
+    image: redis:7.0
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass redis
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
