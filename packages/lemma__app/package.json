@@ -14,6 +14,7 @@
     "@channel.io/bezier-react": "^1.0.0-next-v1.165",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
