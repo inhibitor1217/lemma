@@ -9,15 +9,18 @@ function GoogleIdentitySignInButton() {
         id="g_id_onload"
         data-client_id={Env.googleOauthClientId}
         data-login_uri={HttpApi.url('/auth/google')}
-        data-auto_prompt="false"
+        data-auto_prompt="true"
+        data-auto_select="true"
       />
 
       <div
         className="g_id_signin"
         data-type="standard"
         data-theme="outline"
-        data-text="sign_in_with"
-        data-shape="rectangular"
+        data-text="continue_with"
+        data-size="large"
+        data-shape="pill"
+        data-width="300"
         data-logo_alignment="left"
       />
     </>
@@ -26,7 +29,7 @@ function GoogleIdentitySignInButton() {
 
 export default function AuthorizeMethods() {
   return (
-    <VStack spacing={8}>
+    <VStack spacing={8} align="center">
       <StackItem>
         <GoogleIdentitySignInButton />
       </StackItem>
