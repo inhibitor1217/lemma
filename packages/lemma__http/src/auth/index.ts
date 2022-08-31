@@ -3,15 +3,11 @@ import session from '@fastify/session';
 import connectRedis from 'connect-redis';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-import { OAuth2Client } from 'google-auth-library';
 import { Stage } from '~/env';
+import googleOauth2Client from './lib/google-oauth2-client';
 import { SESSION_MAX_AGE_MS, SESSION_MAX_AGE_SECONDS } from './session';
 
 declare module 'fastify' {
-  interface FastifyInstance {
-    googleOAuth2Client: OAuth2Client;
-  }
-
   interface Session {
     accountId: number;
   }
@@ -21,15 +17,6 @@ declare module 'fastify' {
  * @see https://github.com/fastify/session#typescript-support
  */
 const RedisStore = connectRedis(session as any);
-
-const googleOAuth2Client = fp(async function googleOAuth2Client(
-  fastify: FastifyInstance
-) {
-  fastify.decorate(
-    'googleOAuth2Client',
-    new OAuth2Client(fastify.env.auth.providers.google.clientId)
-  );
-});
 
 async function auth(fastify: FastifyInstance) {
   fastify.register(cookie);
@@ -51,7 +38,7 @@ async function auth(fastify: FastifyInstance) {
     saveUninitialized: false,
   });
 
-  fastify.register(googleOAuth2Client);
+  fastify.register(googleOauth2Client);
 }
 
 export default fp(auth);

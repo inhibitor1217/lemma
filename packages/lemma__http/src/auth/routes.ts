@@ -1,34 +1,17 @@
 import formbody from '@fastify/formbody';
 import { AuthProvider } from '@lemma/prisma-client';
-import crypto from 'crypto';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fetch from 'node-fetch';
+import { nonce } from './lib/csrf';
+import {
+  type GoogleOAuth2IdTokenPayload,
+  type GoogleOAuth2TokenResponse,
+} from './lib/google-oauth2';
 
 declare module 'fastify' {
   interface Session {
     state?: string;
   }
-}
-
-type GoogleOAuth2TokenResponse = {
-  access_token: string;
-  expires_in: number;
-  id_token: string;
-  scope: string;
-  token_type: string;
-  refresh_token?: string;
-};
-
-type GoogleOAuth2IdTokenPayload = {
-  sub: string;
-  email?: string;
-  given_name?: string;
-  family_name?: string;
-  picture?: string;
-};
-
-function nonce() {
-  return crypto.randomBytes(32).toString('hex');
 }
 
 function makeName(firstName?: string, lastName?: string): string | undefined {
