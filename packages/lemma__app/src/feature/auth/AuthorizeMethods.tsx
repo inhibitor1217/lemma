@@ -8,7 +8,7 @@ function GoogleIdentitySignInButton() {
       <div
         id="g_id_onload"
         data-client_id={Env.googleOauthClientId}
-        data-login_uri={HttpApi.url('/auth/google')}
+        data-login_uri={HttpApi.url('/auth/gidc')}
         data-auto_prompt="true"
         data-auto_select="true"
       />
