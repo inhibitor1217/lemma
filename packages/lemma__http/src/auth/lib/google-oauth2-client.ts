@@ -9,8 +9,5 @@ declare module 'fastify' {
 }
 
 export default fp(async function googleOAuth2Client(fastify: FastifyInstance) {
-  fastify.decorate(
-    'googleOAuth2Client',
-    new OAuth2Client(fastify.env.auth.providers.google.clientId)
-  );
+  fastify.decorate('googleOAuth2Client', new OAuth2Client(fastify.env.auth.providers.google.clientId));
 });

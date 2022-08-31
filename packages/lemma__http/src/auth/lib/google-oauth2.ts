@@ -1,3 +1,6 @@
+import { Account, AuthProvider } from '@lemma/prisma-client';
+import { FastifyInstance } from 'fastify';
+
 export type GoogleOAuth2TokenResponse = {
   access_token: string;
   expires_in: number;
@@ -14,3 +17,60 @@ export type GoogleOAuth2IdTokenPayload = {
   family_name?: string;
   picture?: string;
 };
+
+const GOOGLE_OAUTH2_AUTHORIZE_URL = 'https://oauth2.googleapis.com/token';
+
+export async function buildGoogleOAuth2AuthorizeUrl(
+  fastify: FastifyInstance,
+  opts: {
+    code: string;
+  }
+): Promise<URL> {
+  const url = new URL(GOOGLE_OAUTH2_AUTHORIZE_URL);
+
+  url.searchParams.set('code', opts.code);
+  url.searchParams.set('client_id', fastify.env.auth.providers.google.clientId);
+  url.searchParams.set('client_secret', fastify.env.auth.providers.google.clientSecret);
+  url.searchParams.set('redirect_uri', fastify.env.auth.providers.google.redirectUrl);
+  url.searchParams.set('grant_type', 'authorization_code');
+
+  return url;
+}
+
+export async function accountFromGoogleOAuth2Token(
+  fastify: FastifyInstance,
+  payload: GoogleOAuth2IdTokenPayload
+): Promise<Account> {
+  function makeName(firstName?: string, lastName?: string): string | undefined {
+    if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    }
+    return firstName ?? lastName;
+  }
+
+  const { sub: providerId, email, given_name: firstName, family_name: lastName, picture: photoUrl } = payload;
+
+  const name = makeName(firstName, lastName);
+
+  return (
+    (await fastify.rdb.account.findUnique({
+      where: {
+        authProvider_authProviderId: {
+          authProvider: AuthProvider.GOOGLE,
+          authProviderId: providerId,
+        },
+      },
+    })) ??
+    (await fastify.rdb.account.create({
+      data: {
+        authProvider: AuthProvider.GOOGLE,
+        authProviderId: providerId,
+        firstName,
+        lastName,
+        name,
+        email,
+        photo: photoUrl,
+      },
+    }))
+  );
+}
