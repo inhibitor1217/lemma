@@ -10,8 +10,8 @@ declare module 'fastify' {
 }
 
 const loadEnv = (() => {
-  const loadFromFile = (): Promise<Env> => import('dotenv')
-    .then((dotenv) => {
+  const loadFromFile = (): Promise<Env> =>
+    import('dotenv').then((dotenv) => {
       dotenv.config({ path: '.env.local' });
 
       return {
@@ -33,6 +33,9 @@ const loadEnv = (() => {
           port: Number(process.env.REDIS_PORT) || 0,
           username: process.env.REDIS_USERNAME || '',
           password: process.env.REDIS_PASSWORD || '',
+        },
+        web: {
+          baseUrl: process.env.WEB_BASE_URL || '',
         },
       };
     });

@@ -1,25 +1,14 @@
-import Fastify, {
-  FastifyError,
-  FastifyReply,
-  FastifyRequest,
-} from 'fastify';
-import {
-  routes as accountRoutes,
-} from '~/account';
-import auth, {
-  routes as authRoutes,
-} from '~/auth';
+import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import { routes as accountRoutes } from '~/account';
+import auth, { routes as authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
 import ping from '~/ping';
+import web from '~/web';
 
 const fastify = Fastify({ logger: true });
 
-fastify.setErrorHandler(async (
-  error: FastifyError,
-  request: FastifyRequest,
-  reply: FastifyReply,
-) => {
+fastify.setErrorHandler(async (error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
   reply.statusCode = error.statusCode ?? 500;
   fastify.log.error(error);
 
@@ -38,7 +27,9 @@ fastify.setErrorHandler(async (
 
 fastify.register(env);
 fastify.register(db);
+
 fastify.register(auth);
+fastify.register(web);
 
 fastify.register(accountRoutes, { prefix: '/account' });
 fastify.register(authRoutes, { prefix: '/auth' });

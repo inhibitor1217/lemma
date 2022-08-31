@@ -22,4 +22,8 @@ export type Env = {
     username: string;
     password: string;
   };
+
+  web: {
+    baseUrl: string;
+  };
 };

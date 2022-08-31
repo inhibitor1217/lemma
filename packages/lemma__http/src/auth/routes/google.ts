@@ -156,7 +156,7 @@ export default async function google(fastify: FastifyInstance) {
 
       request.session.accountId = account.id;
 
-      return { account };
+      return reply.redirect(302, fastify.webUrl('/'));
     }
   );
 }
