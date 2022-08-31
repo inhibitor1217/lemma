@@ -18,15 +18,40 @@ export type GoogleOAuth2IdTokenPayload = {
   picture?: string;
 };
 
-const GOOGLE_OAUTH2_AUTHORIZE_URL = 'https://oauth2.googleapis.com/token';
+const GOOGLE_OAUTH2_AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
+const GOOGLE_OAUTH2_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
 export async function buildGoogleOAuth2AuthorizeUrl(
+  fastify: FastifyInstance,
+  opts: {
+    nonce: string;
+    redirectUrl?: string;
+  }
+): Promise<URL> {
+  const url = new URL(GOOGLE_OAUTH2_AUTHORIZE_URL);
+  const state = new URLSearchParams();
+
+  state.set('nonce', opts.nonce);
+  if (opts.redirectUrl) {
+    state.set('redirect_to', opts.redirectUrl);
+  }
+
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('client_id', fastify.env.auth.providers.google.clientId);
+  url.searchParams.set('scope', 'openid profile email');
+  url.searchParams.set('redirect_uri', fastify.env.auth.providers.google.redirectUrl);
+  url.searchParams.set('state', state.toString());
+
+  return url;
+}
+
+export async function buildGoogleOAuth2TokenUrl(
   fastify: FastifyInstance,
   opts: {
     code: string;
   }
 ): Promise<URL> {
-  const url = new URL(GOOGLE_OAUTH2_AUTHORIZE_URL);
+  const url = new URL(GOOGLE_OAUTH2_TOKEN_URL);
 
   url.searchParams.set('code', opts.code);
   url.searchParams.set('client_id', fastify.env.auth.providers.google.clientId);
