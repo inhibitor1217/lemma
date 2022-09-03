@@ -31,3 +31,9 @@ yarn workspace @lemma/prisma-client migrate:local  # Apply the schema to the loc
 ```bash
 yarn workspace @lemma/http start:dev
 ```
+
+### Run local development app
+
+```bash
+yarn workspace @lemma/app dev
+```
