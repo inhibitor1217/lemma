@@ -1,6 +1,4 @@
-import {
-  createGlobalStyle,
-} from '@channel.io/bezier-react';
+import { createGlobalStyle, LightFoundation, useFoundation } from '@channel.io/bezier-react';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -40,6 +38,8 @@ const GlobalStyle = createGlobalStyle`
   a:link {
     text-decoration: none;
   }
-`
+`;
 
-export default GlobalStyle;
+export default () => {
+  return <GlobalStyle foundation={useFoundation() ?? LightFoundation} />;
+};
