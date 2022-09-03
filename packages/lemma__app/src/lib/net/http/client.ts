@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { Error, ErrorSemantic } from '~/lib/error';
 
 export interface HttpClient<E> {
@@ -10,6 +10,24 @@ export interface HttpClient<E> {
 }
 
 export namespace HttpClient {
+  const requestLoggerInterceptor = (config: AxiosRequestConfig) => {
+    console.debug(new Date().toISOString(), 'HttpClient:interceptors.request', config.method, config.url);
+    return config;
+  };
+
+  const successLoggerInterceptor = (res: AxiosResponse) => {
+    console.debug(
+      new Date().toISOString(),
+      'HttpClient:interceptors.response.success',
+      res.config.method,
+      res.config.url,
+      res.status,
+      res.statusText,
+      res.data
+    );
+    return res;
+  };
+
   const errorLoggerInterceptor = (e: AxiosError) => {
     console.debug(new Date().toISOString(), `HttpClient:interceptors.response.error`, e);
     return Promise.reject(e);
@@ -18,7 +36,8 @@ export namespace HttpClient {
   export const create = <E>(): HttpClient<E> => {
     const instance = axios.create({ withCredentials: true });
 
-    instance.interceptors.response.use(undefined, errorLoggerInterceptor);
+    instance.interceptors.request.use(requestLoggerInterceptor);
+    instance.interceptors.response.use(successLoggerInterceptor, errorLoggerInterceptor);
 
     const get = <R = unknown>(url: string) => instance.get(url).then((res) => res.data as R);
 
