@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^8.0.0",
+    "@fastify/cors": "^8.1.0",
     "@fastify/formbody": "^7.1.0",
     "@fastify/session": "^9.0.0",
     "@lemma/prisma-client": "workspace:^",

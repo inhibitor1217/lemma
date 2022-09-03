@@ -4,6 +4,7 @@ import auth, { routes as authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
 import ping from '~/ping';
+import security from '~/security';
 import web from '~/web';
 
 const fastify = Fastify({ logger: true });
@@ -26,6 +27,7 @@ fastify.setErrorHandler(async (error: FastifyError, request: FastifyRequest, rep
 });
 
 fastify.register(env);
+fastify.register(security);
 fastify.register(db);
 
 fastify.register(auth);
