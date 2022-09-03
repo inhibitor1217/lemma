@@ -1,6 +1,6 @@
 import { Env } from '~/lib/env';
 import { StackItem, VStack } from '~/lib/layout';
-import { HttpApi } from '~/lib/net';
+import { HttpApi } from '~/lib/net/http-api';
 
 function GoogleIdentitySignInButton() {
   return (

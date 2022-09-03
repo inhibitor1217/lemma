@@ -1,6 +1,6 @@
 export enum ErrorSemantic {
-  Unauthorized,
-  Unknown,
+  Unauthorized = 'ErrorSemantic:Unauthorized',
+  Unknown = 'ErrorSemantic:Unknown',
 }
 
 export type Error<P = unknown> = {

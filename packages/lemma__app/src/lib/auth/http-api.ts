@@ -1,4 +1,4 @@
-import { HttpApi, HttpClient } from '~/lib/net';
+import { HttpApi } from '~/lib/net/http-api';
 import { makeQueryKey } from '~/lib/react-query';
 
 export namespace AuthHttpApi {
@@ -19,7 +19,7 @@ export namespace AuthHttpApi {
     };
   };
 
-  export const getMyAccount = (): Promise<GetMyAccountDTO['Result']> => HttpClient.get(HttpApi.url('/account/me'));
+  export const getMyAccount = () => HttpApi.get<GetMyAccountDTO['Result']>(HttpApi.url('/account/me'));
 }
 
 export namespace AuthHttpApi__RQ {
