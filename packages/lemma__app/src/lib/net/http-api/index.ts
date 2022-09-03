@@ -9,3 +9,5 @@ export namespace HttpApi {
     return url.toString();
   };
 }
+
+export { HttpApiError } from './error';
