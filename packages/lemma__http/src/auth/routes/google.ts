@@ -125,6 +125,7 @@ export default async function google(fastify: FastifyInstance) {
         querystring: {
           type: 'object',
           properties: {
+            redirect: { type: 'boolean' },
             redirect_to: { type: 'string' },
           },
         },
@@ -141,6 +142,7 @@ export default async function google(fastify: FastifyInstance) {
     async (
       request: FastifyRequest<{
         Querystring: {
+          redirect?: boolean;
           redirect_to?: string;
         };
         Body: {
@@ -165,7 +167,11 @@ export default async function google(fastify: FastifyInstance) {
 
       request.session.accountId = account.id;
 
-      return reply.redirect(302, fastify.webUrl(request.query.redirect_to ?? '/'));
+      if (request.query.redirect) {
+        return reply.redirect(302, fastify.webUrl(request.query.redirect_to ?? '/'));
+      }
+
+      return reply.status(204).send();
     }
   );
 }
