@@ -122,6 +122,12 @@ export default async function google(fastify: FastifyInstance) {
        * @see https://developers.google.com/identity/gsi/web/reference/html-reference#server-side
        */
       schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            redirect_to: { type: 'string' },
+          },
+        },
         body: {
           type: 'object',
           properties: {
@@ -134,6 +140,9 @@ export default async function google(fastify: FastifyInstance) {
     },
     async (
       request: FastifyRequest<{
+        Querystring: {
+          redirect_to?: string;
+        };
         Body: {
           g_csrf_token: string;
           credential: string;
@@ -156,7 +165,7 @@ export default async function google(fastify: FastifyInstance) {
 
       request.session.accountId = account.id;
 
-      return reply.redirect(302, fastify.webUrl('/'));
+      return reply.redirect(302, fastify.webUrl(request.query.redirect_to ?? '/'));
     }
   );
 }

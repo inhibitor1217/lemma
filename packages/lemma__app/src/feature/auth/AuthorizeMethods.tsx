@@ -1,14 +1,27 @@
+import { useMemo } from 'react';
 import { Env } from '~/lib/env';
 import { StackItem, VStack } from '~/lib/layout';
 import { HttpApi } from '~/lib/net/http-api';
+import { useSearchParams } from '~/lib/net/url';
+import { AuthorizePage } from './authorize-page';
 
 function GoogleIdentitySignInButton() {
+  const [params] = useSearchParams<AuthorizePage.QueryParams>();
+
+  const loginCallbackUri = useMemo(() => {
+    const searchParams = new URLSearchParams();
+    if (params['redirect-to']) {
+      searchParams.set('redirect_to', params['redirect-to']);
+    }
+    return HttpApi.url('/auth/google/ids', searchParams);
+  }, [params]);
+
   return (
     <>
       <div
         id="g_id_onload"
         data-client_id={Env.googleOauthClientId}
-        data-login_uri={HttpApi.url('/auth/google/ids')}
+        data-login_uri={loginCallbackUri}
         data-auto_prompt="true"
         data-auto_select="true"
       />
