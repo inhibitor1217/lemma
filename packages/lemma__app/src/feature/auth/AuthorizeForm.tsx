@@ -2,6 +2,7 @@ import { Card } from '~/lib/component';
 import { text } from '~/lib/i18n';
 import { Divider, Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';
+import AuthorizeFailedReason from './AuthorizeFailedReason';
 import AuthorizeMethods from './AuthorizeMethods';
 
 function FormTitle() {
@@ -37,25 +38,33 @@ Should fill this later. TODO`)}
 export default function AuthorizeForm() {
   return (
     <Sized width={360}>
-      <Card padding={24}>
-        <VStack spacing={16} align="center">
-          <StackItem>
-            <FormTitle />
-          </StackItem>
+      <VStack spacing={16} align="stretch">
+        <StackItem>
+          <AuthorizeFailedReason />
+        </StackItem>
 
-          <StackItem marginBefore={24}>
-            <AuthorizeMethods />
-          </StackItem>
+        <StackItem>
+          <Card padding={24}>
+            <VStack spacing={16} align="center">
+              <StackItem>
+                <FormTitle />
+              </StackItem>
 
-          <StackItem align="stretch">
-            <Divider orientation="horizontal" withoutSideIndent />
-          </StackItem>
+              <StackItem marginBefore={24}>
+                <AuthorizeMethods />
+              </StackItem>
 
-          <StackItem align="stretch">
-            <PolicyAgreementNotice />
-          </StackItem>
-        </VStack>
-      </Card>
+              <StackItem align="stretch">
+                <Divider orientation="horizontal" withoutSideIndent />
+              </StackItem>
+
+              <StackItem align="stretch">
+                <PolicyAgreementNotice />
+              </StackItem>
+            </VStack>
+          </Card>
+        </StackItem>
+      </VStack>
     </Sized>
   );
 }

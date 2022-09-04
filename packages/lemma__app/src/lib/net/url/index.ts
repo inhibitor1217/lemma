@@ -12,3 +12,5 @@ export namespace URL {
     (queryParams: QueryParams) =>
       `${path}?${querystring(queryParams)}`;
 }
+
+export { useSearchParams } from './useSearchParams';
