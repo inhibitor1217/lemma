@@ -50,3 +50,4 @@ export namespace Error {
 }
 
 export { default as Disconnected } from './Disconnected';
+export { default as Unknown } from './Unknown';

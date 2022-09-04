@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { AuthorizePage } from '~/feature/auth';
 import { withAuth } from '~/lib/auth';
-import { Disconnected, Error, ErrorSemantic } from '~/lib/error';
+import { Disconnected, Error, ErrorSemantic, Unknown } from '~/lib/error';
 import { text } from '~/lib/i18n';
 import { Center } from '~/lib/layout';
 import { FullscreenPage } from '~/lib/page-template';
@@ -35,13 +35,23 @@ function AppError({ error }: { error: Error }) {
     );
   }
 
+  if (Error.isSemanticOf(error, ErrorSemantic.Unauthorized)) {
+    return (
+      <Navigate
+        to={InternalPath.Authorize.query({
+          reason: AuthorizePage.AuthorizeFailedReason.NoSession,
+          'redirect-to': InternalPath.App,
+        })}
+      />
+    );
+  }
+
   return (
-    <Navigate
-      to={InternalPath.Authorize.query({
-        reason: AuthorizePage.AuthorizeFailedReason.NoSession,
-        'redirect-to': InternalPath.App,
-      })}
-    />
+    <FullscreenPage>
+      <Center>
+        <Unknown />
+      </Center>
+    </FullscreenPage>
   );
 }
 
