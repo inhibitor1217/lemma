@@ -9,5 +9,7 @@ export const InternalPath = {
     _: resolve('authorize'),
     query: URL.withQuery<AuthorizePage.QueryParams>(resolve('authorize')),
   },
-  App: resolve('app'),
+  App: {
+    _: resolve('app'),
+  },
 };

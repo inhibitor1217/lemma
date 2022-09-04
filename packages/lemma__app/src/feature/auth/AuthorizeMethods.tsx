@@ -12,7 +12,7 @@ function GoogleIdentitySignInButton() {
   const ref = useRef<HTMLDivElement>(null);
 
   const redirectOnSignInSuccess = useCallback(
-    () => navigate(params['redirect-to'] ?? InternalPath.App),
+    () => navigate(params['redirect-to'] ?? InternalPath.App._),
     [navigate, params['redirect-to']]
   );
 

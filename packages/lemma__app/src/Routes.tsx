@@ -9,7 +9,7 @@ export default function () {
       <Routes>
         <Route path={InternalPath.Root} element={<Root />} />
         <Route path={InternalPath.Authorize._} element={<Authorize />} />
-        <Route path={InternalPath.App} element={<App />} />
+        <Route path={`${InternalPath.App._}/*`} element={<App />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
