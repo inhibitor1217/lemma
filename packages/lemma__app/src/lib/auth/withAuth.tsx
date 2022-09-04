@@ -1,12 +1,13 @@
 import { ComponentType } from 'react';
 import { useQuery } from 'react-query';
+import { Error } from '~/lib/error';
 import { AuthHttpApi, AuthHttpApi__RQ } from './http-api';
 
 export default function withAuth<P extends JSX.IntrinsicAttributes>(
   Component: ComponentType<P>,
   {
-    Loading = () => null,
-    Error = () => null,
+    Loading: LoadingComponent = () => null,
+    Error: ErrorComponent = () => null,
   }: {
     /**
      * @default `() => null`
@@ -16,18 +17,18 @@ export default function withAuth<P extends JSX.IntrinsicAttributes>(
     /**
      * @default `() => null`
      */
-    Error?: ComponentType<P>;
+    Error?: ComponentType<P & { error: Error }>;
   }
 ): ComponentType<P> {
   return (props: P) => {
     const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount);
 
     if (result.isLoading) {
-      return <Loading {...props} />;
+      return <LoadingComponent {...props} />;
     }
 
     if (result.isError) {
-      return <Error {...props} />;
+      return <ErrorComponent error={Error.from(result.error)} {...props} />;
     }
 
     return <Component {...props} />;
