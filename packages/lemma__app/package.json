@@ -13,6 +13,7 @@
   "dependencies": {
     "@channel.io/bezier-react": "^1.0.0-next-v1.165",
     "axios": "^0.27.2",
+    "js-cookie": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",
@@ -20,6 +21,7 @@
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.2",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",

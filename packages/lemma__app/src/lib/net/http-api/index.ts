@@ -20,6 +20,8 @@ export namespace HttpApi {
   })();
 
   export const get = httpClient.get;
+
+  export const post = httpClient.post;
 }
 
 export { HttpApiError } from './error';

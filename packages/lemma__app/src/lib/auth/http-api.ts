@@ -2,6 +2,26 @@ import { HttpApi } from '~/lib/net/http-api';
 import { RQuery } from '~/lib/react-query';
 
 export namespace AuthHttpApi {
+  export type SignInWithGoogleDTO = {
+    Request: {
+      credential: string;
+      redirectTo?: string;
+      csrfToken?: string;
+    };
+  };
+
+  export const signInWithGoogle = (requestDto: SignInWithGoogleDTO['Request']) => {
+    const params = new URLSearchParams();
+    if (requestDto.redirectTo) {
+      params.set('redirect_to', requestDto.redirectTo);
+    }
+
+    return HttpApi.post(HttpApi.url('/auth/google/ids', params), {
+      g_csrf_token: requestDto.csrfToken,
+      credential: requestDto.credential,
+    });
+  };
+
   export type GetMyAccountDTO = {
     Result: {
       account: {

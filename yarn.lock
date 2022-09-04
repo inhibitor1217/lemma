@@ -563,11 +563,13 @@ __metadata:
   resolution: "@lemma/app@workspace:packages/lemma__app"
   dependencies:
     "@channel.io/bezier-react": ^1.0.0-next-v1.165
+    "@types/js-cookie": ^3.0.2
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
     "@types/styled-components": ^5.1.26
     "@vitejs/plugin-react": ^2.0.1
     axios: ^0.27.2
+    js-cookie: ^3.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-query: ^3.39.2
@@ -850,6 +852,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 0f2788cf25f490d3b345db8c5f8b8ce3f6c92cc99abcf744c8f974f02b9b3875233b3d22098614c462a0d6c41c523bd655509418ea88eb6249db6652290ce7cf
+  languageName: node
+  linkType: hard
+
+"@types/js-cookie@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@types/js-cookie@npm:3.0.2"
+  checksum: 7ab964288dd26373e134ed0bcde4a7dbea7e6f5de1805e2d1e48eac847e89a0e7f5fdc9164c37931680ec97c6e6e5a73e3e4039e0d08527c2e21badd7bee62d1
   languageName: node
   linkType: hard
 
@@ -2880,6 +2889,13 @@ __metadata:
   version: 3.1.1
   resolution: "joycon@npm:3.1.1"
   checksum: 8003c9c3fc79c5c7602b1c7e9f7a2df2e9916f046b0dbad862aa589be78c15734d11beb9fe846f5e06138df22cb2ad29961b6a986ba81c4920ce2b15a7f11067
+  languageName: node
+  linkType: hard
+
+"js-cookie@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "js-cookie@npm:3.0.1"
+  checksum: bb48de67e2a6bd1ae3dfd6b2d5a167c33dd0c5a37e909206161eb0358c98f17cb55acd55827a58e9eea3630d89444e7479f7938ef4420dda443218b8c434a4c3
   languageName: node
   linkType: hard
 

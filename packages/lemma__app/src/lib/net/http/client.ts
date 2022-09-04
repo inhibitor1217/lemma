@@ -3,6 +3,7 @@ import { Error, ErrorSemantic } from '~/lib/error';
 
 export interface HttpClient<E> {
   get: <R = unknown>(url: string) => Promise<R>;
+  post: <T = unknown, R = unknown>(url: string, data: T) => Promise<R>;
 
   error: {
     use: (fn: (e: E) => Promise<Error>) => void;
@@ -41,6 +42,8 @@ export namespace HttpClient {
 
     const get = <R = unknown>(url: string) => instance.get(url).then((res) => res.data as R);
 
+    const post = <T = unknown, R = unknown>(url: string, data: T) => instance.post(url, data).then((res) => res.data as R);
+
     const useErrorMiddleware = (fn: (e: E) => Promise<Error>) =>
       instance.interceptors.response.use(undefined, (e: AxiosError<E>) => {
         if (!e.response || !e.response.status) {
@@ -56,6 +59,7 @@ export namespace HttpClient {
 
     return {
       get,
+      post,
 
       error: {
         use: useErrorMiddleware,
