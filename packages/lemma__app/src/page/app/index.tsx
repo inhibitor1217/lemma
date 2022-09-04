@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom';
+import { AuthorizePage } from '~/feature/auth';
 import { withAuth } from '~/lib/auth';
 import { Disconnected, Error, ErrorSemantic } from '~/lib/error';
 import { text } from '~/lib/i18n';
@@ -34,7 +35,14 @@ function AppError({ error }: { error: Error }) {
     );
   }
 
-  return <Navigate to={InternalPath.Authorize} />;
+  return (
+    <Navigate
+      to={InternalPath.Authorize.query({
+        reason: AuthorizePage.AuthorizeFailedReason.NoSession,
+        'redirect-to': InternalPath.App,
+      })}
+    />
+  );
 }
 
 export default withAuth(App, {
