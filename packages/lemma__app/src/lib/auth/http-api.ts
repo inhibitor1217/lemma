@@ -1,5 +1,5 @@
 import { HttpApi } from '~/lib/net/http-api';
-import { makeQueryKey } from '~/lib/react-query';
+import { RQuery } from '~/lib/react-query';
 
 export namespace AuthHttpApi {
   export type GetMyAccountDTO = {
@@ -23,5 +23,5 @@ export namespace AuthHttpApi {
 }
 
 export namespace AuthHttpApi__RQ {
-  export const getMyAccount = makeQueryKey('auth', 'http-api', 'getMyAccount');
+  export const getMyAccount = RQuery.makeKey('auth', 'http-api', 'getMyAccount');
 }

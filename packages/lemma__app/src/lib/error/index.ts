@@ -4,6 +4,16 @@ export enum ErrorSemantic {
   Unknown = 'ErrorSemantic:Unknown',
 }
 
+export namespace ErrorSemantic {
+  export const values = Object.values(ErrorSemantic) as ErrorSemantic[];
+
+  export const is = (value: unknown): value is ErrorSemantic => values.includes(value as ErrorSemantic);
+
+  const TRANSIENT_ERROR_SEMANTICS = new Set([ErrorSemantic.Disconnected, ErrorSemantic.Unknown]);
+
+  export const isTransient = (value: ErrorSemantic): boolean => TRANSIENT_ERROR_SEMANTICS.has(value);
+}
+
 export type Error<P = unknown> = {
   semantic: ErrorSemantic;
   message: string;
@@ -17,6 +27,7 @@ export namespace Error {
       e !== null &&
       Object.prototype.hasOwnProperty.call(e, 'semantic') &&
       typeof (e as { semantic: unknown }).semantic === 'string' &&
+      ErrorSemantic.is((e as { semantic: string }).semantic) &&
       Object.prototype.hasOwnProperty.call(e, 'message') &&
       typeof (e as { message: unknown }).message === 'string' &&
       Object.prototype.hasOwnProperty.call(e, 'payload')

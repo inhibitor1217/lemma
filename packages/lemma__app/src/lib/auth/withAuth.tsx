@@ -1,6 +1,7 @@
 import { ComponentType } from 'react';
 import { useQuery } from 'react-query';
 import { Error } from '~/lib/error';
+import { RQuery } from '~/lib/react-query';
 import { AuthHttpApi, AuthHttpApi__RQ } from './http-api';
 
 export default function withAuth<P extends JSX.IntrinsicAttributes>(
@@ -21,7 +22,7 @@ export default function withAuth<P extends JSX.IntrinsicAttributes>(
   }
 ): ComponentType<P> {
   return (props: P) => {
-    const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount);
+    const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount, RQuery.defaultOptions);
 
     if (result.isLoading) {
       return <LoadingComponent {...props} />;
