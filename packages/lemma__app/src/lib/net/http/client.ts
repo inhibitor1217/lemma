@@ -43,7 +43,7 @@ export namespace HttpClient {
 
     const useErrorMiddleware = (fn: (e: E) => Promise<Error>) =>
       instance.interceptors.response.use(undefined, (e: AxiosError<E>) => {
-        if (!e.response) {
+        if (!e.response || !e.response.status) {
           return Promise.reject({
             semantic: ErrorSemantic.Disconnected,
             message: 'Unable to connect to the server.',

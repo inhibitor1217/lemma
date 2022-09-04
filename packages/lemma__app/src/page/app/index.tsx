@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { withAuth } from '~/lib/auth';
+import { Disconnected, Error, ErrorSemantic } from '~/lib/error';
 import { text } from '~/lib/i18n';
 import { Center } from '~/lib/layout';
 import { FullscreenPage } from '~/lib/page-template';
@@ -22,7 +23,21 @@ function AppLoading() {
   );
 }
 
+function AppError({ error }: { error: Error }) {
+  if (Error.isSemanticOf(error, ErrorSemantic.Disconnected)) {
+    return (
+      <FullscreenPage>
+        <Center>
+          <Disconnected />
+        </Center>
+      </FullscreenPage>
+    );
+  }
+
+  return <Navigate to={InternalPath.Authorize} />;
+}
+
 export default withAuth(App, {
   Loading: AppLoading,
-  Error: () => <Navigate to={InternalPath.Authorize} />,
+  Error: AppError,
 });

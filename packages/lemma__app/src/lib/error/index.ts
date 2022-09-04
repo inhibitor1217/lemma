@@ -23,6 +23,8 @@ export namespace Error {
     );
   };
 
+  export const isSemanticOf = (e: Error, semantic: ErrorSemantic): boolean => e.semantic === semantic;
+
   export const from = (e: unknown): Error => {
     if (isError(e)) {
       return e;
@@ -35,3 +37,5 @@ export namespace Error {
     };
   };
 }
+
+export { default as Disconnected } from './Disconnected';
