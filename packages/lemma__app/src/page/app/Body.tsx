@@ -1,11 +1,10 @@
+import { Spinner } from '@channel.io/bezier-react';
 import { Navigate } from 'react-router-dom';
 import { AuthorizePage } from '~/feature/auth';
 import { withAuth } from '~/lib/auth';
 import { Disconnected, Error, ErrorSemantic, Unknown } from '~/lib/error';
-import { text } from '~/lib/i18n';
 import { Center } from '~/lib/layout';
 import { FullscreenPage, HierarchicalPage } from '~/lib/page-template';
-import { Text, Typography } from '~/lib/typography';
 import { InternalPath } from '../path';
 
 function App() {
@@ -16,9 +15,7 @@ function AppLoading() {
   return (
     <FullscreenPage>
       <Center>
-        <Text as="h3" typo={Typography.Size18} color="txt-black-darker">
-          {text('Loading ...')}
-        </Text>
+        <Spinner color="txt-black-dark" />
       </Center>
     </FullscreenPage>
   );
