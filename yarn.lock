@@ -563,6 +563,7 @@ __metadata:
   resolution: "@lemma/app@workspace:packages/lemma__app"
   dependencies:
     "@channel.io/bezier-react": ^1.0.0-next-v1.165
+    "@lemma/prisma-client": "workspace:^"
     "@types/js-cookie": ^3.0.2
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6

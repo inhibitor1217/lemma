@@ -1,15 +1,14 @@
 export type Option<T> = Some<T> | None;
 export type Some<T> = T;
-export type None = null;
+export type None = null | undefined;
 
 export namespace Option {
-  export const some = <T>(value: T): Some<T> => value;
+  export const some = <T>(a: T): Some<T> => a;
   export const none = (): None => null;
-  export const of = <T>(value: NonNullable<T> | null | undefined): Option<NonNullable<T>> =>
-    value === null || value === undefined ? none() : some(value);
+  export const of = <T>(a: NonNullable<T> | null | undefined): Option<NonNullable<T>> => a;
 
-  export const isSome = <T>(value: Option<T>): value is Some<T> => value !== null;
-  export const isNone = <T>(value: Option<T>): value is None => value === null;
+  export const isSome = <T>(value: Option<T>): value is Some<T> => value !== null && value !== undefined;
+  export const isNone = <T>(value: Option<T>): value is None => value === null || value === undefined;
 
   export const unwrap = <T>(value: Option<T>): T => {
     if (isNone(value)) {
@@ -26,4 +25,9 @@ export namespace Option {
 
     return value;
   };
+
+  export const map =
+    <A, B>(f: (a: A) => B) =>
+    (value: Option<A>): Option<B> =>
+      isNone(value) ? none() : some(f(value));
 }

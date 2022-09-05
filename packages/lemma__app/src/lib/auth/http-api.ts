@@ -1,3 +1,7 @@
+import { type AuthProvider } from '@lemma/prisma-client';
+import { type Account } from '~/lib/account';
+import { FieldResolver, PrimitiveType } from '~/lib/field';
+import { Option, Struct } from '~/lib/fx';
 import { HttpApi } from '~/lib/net/http-api';
 import { RQuery } from '~/lib/react-query';
 
@@ -26,8 +30,8 @@ export namespace AuthHttpApi {
     Result: {
       account: {
         id: number;
-        createdAt: string;
-        updatedAt: string;
+        createdAt: PrimitiveType.ISO8601DateTime;
+        updatedAt: PrimitiveType.ISO8601DateTime;
         authProvider: string;
         authProviderId: string;
         firstName?: string;
@@ -44,4 +48,22 @@ export namespace AuthHttpApi {
 
 export namespace AuthHttpApi__RQ {
   export const getMyAccount = RQuery.makeKey('auth', 'http-api', 'getMyAccount');
+}
+
+export namespace AuthHttpApi__Resolver {
+  export namespace Account {
+    export const fromGetMyAccountResultDTO: (accountDTO: AuthHttpApi.GetMyAccountDTO['Result']['account']) => Account =
+      Struct.evolve({
+        id: FieldResolver.ID,
+        createdAt: FieldResolver.Date.fromISO8601,
+        updatedAt: FieldResolver.Date.fromISO8601,
+        authProvider: FieldResolver.Enumeration<AuthProvider>,
+        authProviderId: FieldResolver.String,
+        firstName: Option.map(FieldResolver.String),
+        lastName: Option.map(FieldResolver.String),
+        name: Option.map(FieldResolver.String),
+        email: Option.map(FieldResolver.Email),
+        photo: Option.map(FieldResolver.URL),
+      });
+  }
 }
