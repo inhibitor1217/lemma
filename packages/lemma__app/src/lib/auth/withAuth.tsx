@@ -1,6 +1,9 @@
 import { ComponentType } from 'react';
 import { useQuery } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+import { AccountAtom } from '~/lib/account';
 import { Error } from '~/lib/error';
+import { go, IO, Struct } from '~/lib/fx';
 import { RQuery } from '~/lib/react-query';
 import { AuthHttpApi, AuthHttpApi__RQ } from './http-api';
 
@@ -22,7 +25,13 @@ export default function withAuth<P extends JSX.IntrinsicAttributes>(
   }
 ): ComponentType<P> {
   return (props: P) => {
-    const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount, RQuery.defaultOptions);
+    const setMyAccount = useSetRecoilState(AccountAtom.me);
+
+    const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount, {
+      ...RQuery.defaultOptions,
+      onSuccess: (data: AuthHttpApi.GetMyAccountDTO['Result']) =>
+        go(data, Struct.pick('account'), IO.of, IO.map(setMyAccount), IO.run),
+    });
 
     if (result.isLoading) {
       return <LoadingComponent {...props} />;
