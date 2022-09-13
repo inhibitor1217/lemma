@@ -22,6 +22,8 @@ export namespace HttpApi {
   export const get = httpClient.get;
 
   export const post = httpClient.post;
+
+  export const delete_ = httpClient.delete;
 }
 
 export { HttpApiError } from './error';

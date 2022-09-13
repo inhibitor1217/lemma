@@ -44,6 +44,10 @@ export namespace AuthHttpApi {
   };
 
   export const getMyAccount = () => HttpApi.get<GetMyAccountDTO['Result']>(HttpApi.url('/account/me'));
+
+  export type SignOutDTO = {};
+
+  export const signOut = () => HttpApi.delete_(HttpApi.url('/account/me/logout'));
 }
 
 export namespace AuthHttpApi__RQ {
