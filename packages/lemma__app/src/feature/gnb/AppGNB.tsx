@@ -1,4 +1,5 @@
 import { styled } from '@channel.io/bezier-react';
+import { Children, ReactNode } from 'react';
 import { Spacer, StackItem, VStack } from '~/lib/layout';
 import GNBMyAccountButton from './GNBMyAccountButton';
 
@@ -8,15 +9,24 @@ const Layout = styled.div`
   padding: 12px 6px;
 `;
 
-export default function AppGNB() {
+function AppGNBLayout({ Top = null, Bottom = null }: { Top?: ReactNode; Bottom?: ReactNode }) {
   return (
     <Layout>
       <VStack align="stretch">
+        {Children.map(Top, (child) => (
+          <StackItem>{child}</StackItem>
+        ))}
+
         <Spacer />
-        <StackItem>
-          <GNBMyAccountButton />
-        </StackItem>
+
+        {Children.map(Bottom, (child) => (
+          <StackItem>{child}</StackItem>
+        ))}
       </VStack>
     </Layout>
   );
+}
+
+export default function AppGNB() {
+  return <AppGNBLayout Bottom={[<GNBMyAccountButton />]} />;
 }
