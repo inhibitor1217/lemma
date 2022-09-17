@@ -1,4 +1,4 @@
-import cookie from '@fastify/cookie';
+import cookie, { FastifyCookieOptions } from '@fastify/cookie';
 import session from '@fastify/session';
 import connectRedis from 'connect-redis';
 import { FastifyInstance } from 'fastify';
@@ -11,6 +11,15 @@ declare module 'fastify' {
   interface Session {
     accountId: number;
   }
+
+  interface FastifyRequest {
+    signIn(opts: { accountId: number }): Promise<void>;
+    signOut(): Promise<void>;
+  }
+
+  interface FastifyReply {
+    signOut(): Promise<void>;
+  }
 }
 
 /**
@@ -19,13 +28,17 @@ declare module 'fastify' {
 const RedisStore = connectRedis(session as any);
 
 async function auth(fastify: FastifyInstance) {
-  fastify.register(cookie);
+  fastify.register(cookie, {
+    secret: fastify.env.auth.cookie.secret,
+    hook: false,
+  } as FastifyCookieOptions);
 
   fastify.register(session, {
     secret: fastify.env.auth.session.secret,
     cookie: {
       maxAge: SESSION_MAX_AGE_MS,
       httpOnly: true,
+      path: '/',
       secure: fastify.env.stage.isNot(Stage.Dev),
     },
     /**
@@ -39,6 +52,18 @@ async function auth(fastify: FastifyInstance) {
   });
 
   fastify.register(googleOauth2Client);
+
+  fastify.decorateRequest('signIn', async function signIn(opts: { accountId: number }) {
+    this.session.accountId = opts.accountId;
+  });
+
+  fastify.decorateRequest('signOut', async function signOut() {
+    await this.session.destroy();
+  });
+
+  fastify.decorateReply('signOut', async function signOut() {
+    this.clearCookie('sessionId');
+  });
 }
 
 export default fp(auth);

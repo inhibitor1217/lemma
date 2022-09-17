@@ -17,6 +17,9 @@ const loadEnv = (() => {
       return {
         stage: Stage.from(process.env.STAGE) ?? Stage.Dev,
         auth: {
+          cookie: {
+            secret: (process.env.AUTH_COOKIE_SECRET ?? '').split(','),
+          },
           session: {
             secret: process.env.SESSION_SECRET || '',
           },

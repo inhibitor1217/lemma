@@ -8,20 +8,17 @@ async function me(fastify: FastifyInstance) {
     });
 
     if (!account) {
-      return reply
-        .status(404)
-        .send({ statusCode: 404, message: 'Not Found' });
+      return reply.status(404).send({ statusCode: 404, message: 'Not Found' });
     }
 
     return { account };
   });
 
   fastify.delete('/logout', async (request, reply) => {
-    await request.session.destroy();
+    await request.signOut();
+    await reply.signOut();
 
-    return reply
-      .status(204)
-      .send();
+    return reply.status(204).send();
   });
 }
 

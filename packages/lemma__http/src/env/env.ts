@@ -4,6 +4,9 @@ export type Env = {
   stage: Stage;
 
   auth: {
+    cookie: {
+      secret: string[];
+    };
     session: {
       secret: string;
     };
