@@ -1,4 +1,5 @@
 import cookie from 'js-cookie';
+import { useSyncExternalStore } from 'react';
 import { AuthHttpApi } from '~/lib/auth/http-api';
 import { Env } from '~/lib/env';
 import { GoogleSignInClient } from './gsi-client';
@@ -48,4 +49,23 @@ export namespace GoogleSignIn {
   export const prompt = GoogleSignInClient.prompt;
 
   export const cancel = GoogleSignInClient.cancel;
+
+  const _gsiScriptListeners = new Set<() => void>();
+  let _gsiScriptLoaded = false;
+
+  window.onGoogleLibraryLoad = () => {
+    console.debug('[gsi]', 'Google Sign-In library loaded.');
+    _gsiScriptLoaded = true;
+    _gsiScriptListeners.forEach((listener) => listener());
+  };
+
+  export function useGoogleSignInAvailable(): boolean {
+    return useSyncExternalStore(
+      (subscribe) => {
+        _gsiScriptListeners.add(subscribe);
+        return () => _gsiScriptListeners.delete(subscribe);
+      },
+      () => _gsiScriptLoaded
+    );
+  }
 }
