@@ -106,6 +106,7 @@ export default async function google(fastify: FastifyInstance) {
       const account = await accountFromGoogleOAuth2Token(fastify, ticket.getPayload() as GoogleOAuth2IdTokenPayload);
 
       await request.signIn({ accountId: account.id });
+      await reply.signIn({ accountId: account.id });
 
       if (redirectTo) {
         return reply.redirect(302, redirectTo);
@@ -166,6 +167,7 @@ export default async function google(fastify: FastifyInstance) {
       const account = await accountFromGoogleOAuth2Token(fastify, ticket.getPayload() as GoogleOAuth2IdTokenPayload);
 
       await request.signIn({ accountId: account.id });
+      await reply.signIn({ accountId: account.id });
 
       if (request.query.redirect) {
         return reply.redirect(302, fastify.webUrl(request.query.redirect_to ?? '/'));
