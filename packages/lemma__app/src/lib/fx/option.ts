@@ -26,6 +26,11 @@ export namespace Option {
     return value;
   };
 
+  export const reduce =
+    <A, B>(onSome: (a: A) => B, onNone: () => B) =>
+    (value: Option<A>): B =>
+      isSome(value) ? onSome(value) : onNone();
+
   export const map =
     <A, B>(f: (a: A) => B) =>
     (value: Option<A>): Option<B> =>

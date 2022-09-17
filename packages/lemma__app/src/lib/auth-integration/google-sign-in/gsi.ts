@@ -50,6 +50,10 @@ export namespace GoogleSignIn {
 
   export const cancel = GoogleSignInClient.cancel;
 
+  export const signOut = () => {
+    GoogleSignInClient.disableAutoSelect();
+  };
+
   const _gsiScriptListeners = new Set<() => void>();
   let _gsiScriptLoaded = false;
 
