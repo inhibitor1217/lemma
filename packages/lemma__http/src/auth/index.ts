@@ -8,8 +8,8 @@ import googleOauth2Client from './lib/google-oauth2-client';
 import {
   SESSION_MAX_AGE_MS,
   SESSION_MAX_AGE_SECONDS,
-  SILENT_SIGN_IN_COOKIE_NAME,
-  SILENT_SIGN_IN_MAX_AGE_SECONDS,
+  SESSION_REFRESH_COOKIE_NAME,
+  SESSION_REFRESH_MAX_AGE_SECONDS,
 } from './config';
 
 type SignInOptions = {
@@ -40,7 +40,6 @@ const RedisStore = connectRedis(session as any);
 async function auth(fastify: FastifyInstance) {
   fastify.register(cookie, {
     secret: fastify.env.auth.cookie.secret,
-    hook: false,
   } as FastifyCookieOptions);
 
   fastify.register(session, {
@@ -68,9 +67,9 @@ async function auth(fastify: FastifyInstance) {
   });
 
   fastify.decorateReply('signIn', async function signIn(opts: SignInOptions) {
-    this.setCookie(SILENT_SIGN_IN_COOKIE_NAME, opts.accountId.toString(), {
+    this.setCookie(SESSION_REFRESH_COOKIE_NAME, opts.accountId.toString(), {
       path: '/',
-      maxAge: SILENT_SIGN_IN_MAX_AGE_SECONDS,
+      maxAge: SESSION_REFRESH_MAX_AGE_SECONDS,
       signed: true,
     });
   });
@@ -81,7 +80,25 @@ async function auth(fastify: FastifyInstance) {
 
   fastify.decorateReply('signOut', async function signOut() {
     this.clearCookie('sessionId');
-    this.clearCookie(SILENT_SIGN_IN_COOKIE_NAME);
+    this.clearCookie(SESSION_REFRESH_COOKIE_NAME);
+  });
+
+  fastify.addHook('onRequest', async function refreshSession(request, reply) {
+    if (request.session.accountId !== undefined) {
+      return;
+    }
+
+    const refreshCookie = request.cookies[SESSION_REFRESH_COOKIE_NAME];
+    if (!refreshCookie) {
+      return;
+    }
+
+    const accountId = parseInt(refreshCookie, 10);
+    if (Number.isNaN(accountId)) {
+      return;
+    }
+
+    request.session.accountId = accountId;
   });
 }
 
