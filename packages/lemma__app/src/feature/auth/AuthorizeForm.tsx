@@ -1,6 +1,6 @@
 import { Card } from '~/lib/component';
 import { text } from '~/lib/i18n';
-import { Divider, Sized, StackItem, VStack } from '~/lib/layout';
+import { Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';
 import AuthorizeFailedReason from './AuthorizeFailedReason';
 import AuthorizeMethods from './AuthorizeMethods';
@@ -23,18 +23,6 @@ function FormTitle() {
   );
 }
 
-function PolicyAgreementNotice() {
-  return (
-    <Text as="p" typo={Typography.Size13} color="txt-black-darker">
-      {/**
-       * @todo Add links to terms of service and privacy policy page.
-       */}
-      {text(`By logging in, you are agreeing to our terms of service and privacy policy.
-Should fill this later. TODO`)}
-    </Text>
-  );
-}
-
 export default function AuthorizeForm() {
   return (
     <Sized width={360}>
@@ -52,14 +40,6 @@ export default function AuthorizeForm() {
 
               <StackItem marginBefore={24}>
                 <AuthorizeMethods />
-              </StackItem>
-
-              <StackItem align="stretch">
-                <Divider orientation="horizontal" withoutSideIndent />
-              </StackItem>
-
-              <StackItem align="stretch">
-                <PolicyAgreementNotice />
               </StackItem>
             </VStack>
           </Card>
