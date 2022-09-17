@@ -1,4 +1,4 @@
-import { makeQueryKey } from './query-key';
+import { makeQueryKey } from './key';
 import { presetQueryOptions } from './query-options';
 
 export namespace RQuery {

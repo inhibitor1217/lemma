@@ -1,11 +1,6 @@
 import { ComponentType } from 'react';
-import { useQuery } from 'react-query';
-import { useSetRecoilState } from 'recoil';
-import { AccountAtom } from '~/lib/account';
 import { Error } from '~/lib/error';
-import { go, IO, Struct } from '~/lib/fx';
-import { RQuery } from '~/lib/react-query';
-import { AuthHttpApi, AuthHttpApi__Resolver, AuthHttpApi__RQ } from './http-api';
+import { useAuthQuery } from './useAuth';
 
 export default function withAuth<P extends JSX.IntrinsicAttributes>(
   Component: ComponentType<P>,
@@ -25,27 +20,14 @@ export default function withAuth<P extends JSX.IntrinsicAttributes>(
   }
 ): ComponentType<P> {
   return (props: P) => {
-    const setMyAccount = useSetRecoilState(AccountAtom.me);
+    const authQueryResult = useAuthQuery();
 
-    const result = useQuery(AuthHttpApi__RQ.getMyAccount, AuthHttpApi.getMyAccount, {
-      ...RQuery.defaultOptions,
-      onSuccess: (data: AuthHttpApi.GetMyAccountDTO['Result']) =>
-        go(
-          data,
-          Struct.pick('account'),
-          AuthHttpApi__Resolver.Account.fromGetMyAccountResultDTO,
-          IO.of,
-          IO.map(setMyAccount),
-          IO.run
-        ),
-    });
-
-    if (result.isLoading) {
+    if (authQueryResult.isLoading) {
       return <LoadingComponent {...props} />;
     }
 
-    if (result.isError) {
-      return <ErrorComponent error={Error.from(result.error)} {...props} />;
+    if (authQueryResult.isError) {
+      return <ErrorComponent error={Error.from(authQueryResult.error)} {...props} />;
     }
 
     return <Component {...props} />;

@@ -13,4 +13,10 @@ export namespace IO {
     (a: IO<A>): IO<B> =>
     () =>
       f(a());
+
+  export const flatMap =
+    <A, B>(f: (a: A) => IO<B>) =>
+    (a: IO<A>): IO<B> =>
+    () =>
+      f(a())();
 }

@@ -3,7 +3,7 @@ import { type Account } from '~/lib/account';
 import { FieldResolver, PrimitiveType } from '~/lib/field';
 import { Option, Struct } from '~/lib/fx';
 import { HttpApi } from '~/lib/net/http-api';
-import { RQuery } from '~/lib/react-query';
+import { RMutation, RQuery } from '~/lib/react-query';
 
 export namespace AuthHttpApi {
   export type SignInWithGoogleDTO = {
@@ -52,6 +52,8 @@ export namespace AuthHttpApi {
 
 export namespace AuthHttpApi__RQ {
   export const getMyAccount = RQuery.makeKey('auth', 'http-api', 'getMyAccount');
+
+  export const signOut = RMutation.makeKey('auth', 'http-api', 'signOut');
 }
 
 export namespace AuthHttpApi__Resolver {
