@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSetRecoilState } from 'recoil';
 import { AccountAtom } from '~/lib/account';
 import { go, IO, Option, Struct } from '~/lib/fx';
