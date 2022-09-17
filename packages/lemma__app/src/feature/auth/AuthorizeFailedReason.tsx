@@ -6,6 +6,7 @@ import { AuthorizePage } from './authorize-page';
 
 const REASON_DESCRPITIONS: Record<AuthorizePage.AuthorizeFailedReason, string> = {
   [AuthorizePage.AuthorizeFailedReason.NoSession]: 'You are not logged in. Please log in again.',
+  [AuthorizePage.AuthorizeFailedReason.SignOut]: 'You have been logged out. Please log in again.',
 };
 
 function AuthorizeFailedReasonBanner({ reason }: { reason: AuthorizePage.AuthorizeFailedReason }) {

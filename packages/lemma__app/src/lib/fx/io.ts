@@ -2,7 +2,7 @@ export type IO<T> = () => T;
 
 export namespace IO {
   export const of =
-    <T>(a: T): IO<T> =>
+    <A>(a: A): IO<A> =>
     () =>
       a;
 

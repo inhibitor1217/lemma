@@ -32,7 +32,9 @@ export function useAuthSignOutMutation() {
     onMutate: () =>
       go(
         IO.of(() => setMyAccount(Option.none())),
-        IO.flatMap(IO.of(() => queryClient.invalidateQueries(AuthHttpApi__RQ.getMyAccount))),
+        IO.flatMap(() => () => {
+          queryClient.invalidateQueries(AuthHttpApi__RQ.getMyAccount);
+        }),
         IO.run
       ),
   });
