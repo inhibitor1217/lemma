@@ -3,7 +3,7 @@ import { routes as accountRoutes } from '~/account';
 import auth, { routes as authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
-import jwt from '~/lib/jwt';
+import jwt from '~/lib/jwt-plugin';
 import ping from '~/ping';
 import security from '~/security';
 import web from '~/web';
