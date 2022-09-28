@@ -17,6 +17,10 @@ type SignInOptions = {
   accountId: number;
 };
 
+type RefreshTokenPayload = {
+  accountId: number;
+}
+
 declare module 'fastify' {
   interface Session {
     accountId: number;
@@ -37,6 +41,27 @@ declare module 'fastify' {
  * @see https://github.com/fastify/session#typescript-support
  */
 const RedisStore = connectRedis(session as any);
+
+async function signRefreshToken(fastify: FastifyInstance, payload: RefreshTokenPayload): Promise<string> {
+  return fastify.signJwt(
+    payload,
+    fastify.env.auth.cookie.secret,
+    {
+      subject: SESSION_REFRESH_SUBJECT,
+      expireDurationSeconds: SESSION_REFRESH_MAX_AGE_SECONDS,
+    },
+  )
+}
+
+async function decodeRefreshToken(fastify: FastifyInstance, token: string): Promise<RefreshTokenPayload> {
+  return fastify.verifyJwt<RefreshTokenPayload>(
+    token,
+    fastify.env.auth.cookie.secret,
+    {
+      subject: SESSION_REFRESH_SUBJECT,
+    },
+  )
+}
 
 async function auth(fastify: FastifyInstance) {
   fastify.register(cookie);
@@ -68,14 +93,7 @@ async function auth(fastify: FastifyInstance) {
   fastify.decorateReply('signIn', async function signIn(opts: SignInOptions) {
     this.setCookie(
       SESSION_REFRESH_COOKIE_NAME,
-      await fastify.signJwt(
-        { accountId: opts.accountId },
-        fastify.env.auth.cookie.secret,
-        {
-          subject: SESSION_REFRESH_SUBJECT,
-          expireDurationSeconds: SESSION_REFRESH_MAX_AGE_SECONDS,
-        },
-      ),
+      await signRefreshToken(fastify, { accountId: opts.accountId }),
       {
         path: '/',
         maxAge: SESSION_REFRESH_MAX_AGE_SECONDS,
@@ -105,17 +123,7 @@ async function auth(fastify: FastifyInstance) {
     }
 
     try {
-      const { accountId } = await fastify.verifyJwt<{ accountId: unknown }>(
-        sessionRefreshCookie,
-        fastify.env.auth.cookie.secret,
-        {
-          subject: SESSION_REFRESH_SUBJECT,
-        },
-      )
-
-      if (typeof accountId !== 'number') {
-        throw new TypeError('Invalid refresh cookie payload');
-      }
+      const { accountId } = await decodeRefreshToken(fastify, sessionRefreshCookie);
 
       request.session.accountId = accountId;
     } catch (e) {
