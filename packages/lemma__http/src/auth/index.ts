@@ -10,6 +10,7 @@ import {
   SESSION_MAX_AGE_SECONDS,
   SESSION_REFRESH_COOKIE_NAME,
   SESSION_REFRESH_MAX_AGE_SECONDS,
+  SESSION_REFRESH_SUBJECT,
 } from './config';
 
 type SignInOptions = {
@@ -38,9 +39,7 @@ declare module 'fastify' {
 const RedisStore = connectRedis(session as any);
 
 async function auth(fastify: FastifyInstance) {
-  fastify.register(cookie, {
-    secret: fastify.env.auth.cookie.secret,
-  } as FastifyCookieOptions);
+  fastify.register(cookie);
 
   fastify.register(session, {
     secret: fastify.env.auth.session.secret,
@@ -67,11 +66,23 @@ async function auth(fastify: FastifyInstance) {
   });
 
   fastify.decorateReply('signIn', async function signIn(opts: SignInOptions) {
-    this.setCookie(SESSION_REFRESH_COOKIE_NAME, opts.accountId.toString(), {
-      path: '/',
-      maxAge: SESSION_REFRESH_MAX_AGE_SECONDS,
-      signed: true,
-    });
+    this.setCookie(
+      SESSION_REFRESH_COOKIE_NAME,
+      await fastify.signJwt(
+        { accountId: opts.accountId },
+        fastify.env.auth.cookie.secret,
+        {
+          subject: SESSION_REFRESH_SUBJECT,
+          expireDurationSeconds: SESSION_REFRESH_MAX_AGE_SECONDS,
+        },
+      ),
+      {
+        path: '/',
+        maxAge: SESSION_REFRESH_MAX_AGE_SECONDS,
+        httpOnly: true,
+        secure: fastify.env.stage.isNot(Stage.Dev),
+      },
+    );
   });
 
   fastify.decorateRequest('signOut', async function signOut() {
@@ -88,17 +99,28 @@ async function auth(fastify: FastifyInstance) {
       return;
     }
 
-    const refreshCookie = request.cookies[SESSION_REFRESH_COOKIE_NAME];
-    if (!refreshCookie) {
+    const sessionRefreshCookie = request.cookies[SESSION_REFRESH_COOKIE_NAME];
+    if (!sessionRefreshCookie) {
       return;
     }
 
-    const accountId = parseInt(refreshCookie, 10);
-    if (Number.isNaN(accountId)) {
+    try {
+      const { accountId } = await fastify.verifyJwt<{ accountId: unknown }>(
+        sessionRefreshCookie,
+        fastify.env.auth.cookie.secret,
+        {
+          subject: SESSION_REFRESH_SUBJECT,
+        },
+      )
+
+      if (typeof accountId !== 'number') {
+        throw new TypeError('Invalid refresh cookie payload');
+      }
+
+      request.session.accountId = accountId;
+    } catch (e) {
       return;
     }
-
-    request.session.accountId = accountId;
   });
 }
 

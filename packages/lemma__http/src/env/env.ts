@@ -5,7 +5,7 @@ export type Env = {
 
   auth: {
     cookie: {
-      secret: string[];
+      secret: string;
     };
     session: {
       secret: string;
