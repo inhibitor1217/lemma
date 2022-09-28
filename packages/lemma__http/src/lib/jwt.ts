@@ -7,6 +7,8 @@ export type JwtSignOptions = {
   expireDurationSeconds: number;
 };
 
+export type JwtDecodedPayload<Payload> = Payload & jwt.JwtPayload;
+
 export type JwtVerificationOptions = {
   subject: string;
 };
@@ -27,7 +29,7 @@ export type JwtVerificationError = {
 declare module 'fastify' {
   interface FastifyInstance {
     signJwt(payload: string | object, secret: string, opts: JwtSignOptions): Promise<string>;
-    verifyJwt<Payload extends string | object>(token: string, secret: string, opts: JwtVerificationOptions): Promise<Payload>;
+    verifyJwt<Payload extends string | object>(token: string, secret: string, opts: JwtVerificationOptions): Promise<JwtDecodedPayload<Payload>>;
   }
 }
 

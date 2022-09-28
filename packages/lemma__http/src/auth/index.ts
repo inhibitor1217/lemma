@@ -1,14 +1,17 @@
-import cookie, { FastifyCookieOptions } from '@fastify/cookie';
+import cookie, { CookieSerializeOptions } from '@fastify/cookie';
 import session from '@fastify/session';
 import connectRedis from 'connect-redis';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import { Stage } from '~/env';
 import googleOauth2Client from './lib/google-oauth2-client';
+import { JwtDecodedPayload } from '~/lib/jwt';
 import {
   SESSION_MAX_AGE_MS,
   SESSION_MAX_AGE_SECONDS,
   SESSION_REFRESH_COOKIE_NAME,
+  SESSION_REFRESH_IMMINENT_MS,
+  SESSION_REFRESH_MAX_AGE_MS,
   SESSION_REFRESH_MAX_AGE_SECONDS,
   SESSION_REFRESH_SUBJECT,
 } from './config';
@@ -53,7 +56,7 @@ async function signRefreshToken(fastify: FastifyInstance, payload: RefreshTokenP
   )
 }
 
-async function decodeRefreshToken(fastify: FastifyInstance, token: string): Promise<RefreshTokenPayload> {
+async function decodeRefreshToken(fastify: FastifyInstance, token: string): Promise<JwtDecodedPayload<RefreshTokenPayload>> {
   return fastify.verifyJwt<RefreshTokenPayload>(
     token,
     fastify.env.auth.cookie.secret,
@@ -63,17 +66,30 @@ async function decodeRefreshToken(fastify: FastifyInstance, token: string): Prom
   )
 }
 
+function isJwtExpireImminent(payload: JwtDecodedPayload<unknown>, thresholdMs: number): boolean {
+  const { exp } = payload;
+  if (typeof exp !== 'number') {
+    return false;
+  }
+
+  return exp - Date.now() < thresholdMs;
+}
+
+function cookieOptions(fastify: FastifyInstance, opts: { maxAgeMs: number }): CookieSerializeOptions {
+  return {
+    path: '/',
+    maxAge: opts.maxAgeMs,
+    httpOnly: true,
+    secure: fastify.env.stage.isNot(Stage.Dev),
+  };
+}
+
 async function auth(fastify: FastifyInstance) {
   fastify.register(cookie);
 
   fastify.register(session, {
     secret: fastify.env.auth.session.secret,
-    cookie: {
-      maxAge: SESSION_MAX_AGE_MS,
-      httpOnly: true,
-      path: '/',
-      secure: fastify.env.stage.isNot(Stage.Dev),
-    },
+    cookie: cookieOptions(fastify, { maxAgeMs: SESSION_MAX_AGE_MS }),
     /**
      * @see https://github.com/fastify/session#typescript-support
      */
@@ -94,12 +110,7 @@ async function auth(fastify: FastifyInstance) {
     this.setCookie(
       SESSION_REFRESH_COOKIE_NAME,
       await signRefreshToken(fastify, { accountId: opts.accountId }),
-      {
-        path: '/',
-        maxAge: SESSION_REFRESH_MAX_AGE_SECONDS,
-        httpOnly: true,
-        secure: fastify.env.stage.isNot(Stage.Dev),
-      },
+      cookieOptions(fastify, { maxAgeMs: SESSION_REFRESH_MAX_AGE_MS }),
     );
   });
 
@@ -123,9 +134,17 @@ async function auth(fastify: FastifyInstance) {
     }
 
     try {
-      const { accountId } = await decodeRefreshToken(fastify, sessionRefreshCookie);
+      const payload = await decodeRefreshToken(fastify, sessionRefreshCookie);
 
-      request.session.accountId = accountId;
+      if (isJwtExpireImminent(payload, SESSION_REFRESH_IMMINENT_MS)) {
+        reply.setCookie(
+          SESSION_REFRESH_COOKIE_NAME,
+          await signRefreshToken(fastify, { accountId: payload.accountId }),
+          cookieOptions(fastify, { maxAgeMs: SESSION_REFRESH_MAX_AGE_MS }),
+        );
+      }
+
+      request.session.accountId = payload.accountId;
     } catch (e) {
       return;
     }
