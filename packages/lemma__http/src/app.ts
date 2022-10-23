@@ -7,6 +7,7 @@ import jwt from '~/lib/jwt-plugin';
 import ping from '~/ping';
 import security from '~/security';
 import web from '~/web';
+import { routes as workspaceRoutes } from '~/workspace';
 
 const fastify = Fastify({ logger: true });
 
@@ -38,5 +39,6 @@ fastify.register(web);
 fastify.register(accountRoutes, { prefix: '/account' });
 fastify.register(authRoutes, { prefix: '/auth' });
 fastify.register(ping, { prefix: '/ping' });
+fastify.register(workspaceRoutes, { prefix: '/workspace' });
 
 export default fastify;
