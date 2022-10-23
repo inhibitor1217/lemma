@@ -23,6 +23,7 @@ model Account {
   name           String?
   email          String?
   photo          String?
+  Member         Member[]
 
   @@unique([authProvider, authProviderId])
 }
@@ -33,6 +34,7 @@ model Workspace {
   updatedAt DateTime          @updatedAt
   slug      String            @unique
   profile   WorkspaceProfile?
+  Member    Member[]
 }
 
 model WorkspaceProfile {
@@ -42,5 +44,15 @@ model WorkspaceProfile {
   displayName String
   photo       String?
   workspaceId Int       @unique
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+model Member {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  accountId   Int
+  account     Account   @relation(fields: [accountId], references: [id])
+  workspaceId Int
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
 }
