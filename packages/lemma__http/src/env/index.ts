@@ -54,6 +54,7 @@ const loadEnv = (() => {
 
 async function env(fastify: FastifyInstance) {
   fastify.decorate('env', await loadEnv());
+  fastify.log.level = fastify.env.stage.is(Stage.Dev) ? 'debug' : 'info';
 }
 
 export default fp(env);
