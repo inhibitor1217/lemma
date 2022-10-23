@@ -21,6 +21,9 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
           },
         },
       },
+      include: {
+        profile: true,
+      },
       ...OffsetPagination.optionsToRdbQuery(options),
     });
   }
