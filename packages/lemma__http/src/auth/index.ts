@@ -1,13 +1,11 @@
 import cookie from '@fastify/cookie';
 import session from '@fastify/session';
+import { Account } from '@lemma/prisma-client';
 import connectRedis from 'connect-redis';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import { Jwt } from '~/lib/jwt';
-import {
-  SESSION_MAX_AGE_MS,
-  SESSION_MAX_AGE_SECONDS,
-} from './config';
+import { SESSION_MAX_AGE_MS, SESSION_MAX_AGE_SECONDS } from './config';
 import { cookieOptions } from './lib/cookie';
 import googleOauth2Client from './lib/google-oauth2-client';
 import { decodeRefreshToken, signRefreshToken, SessionRefreshConfig } from './lib/refresh';
@@ -18,7 +16,7 @@ type SignInOptions = {
 
 declare module 'fastify' {
   interface Session {
-    accountId: number;
+    accountId: Account['id'];
   }
 
   interface FastifyRequest {
@@ -63,7 +61,7 @@ async function auth(fastify: FastifyInstance) {
     this.setCookie(
       SessionRefreshConfig.COOKIE_NAME,
       await signRefreshToken(fastify, { accountId: opts.accountId }),
-      cookieOptions(fastify, { maxAgeMs: SessionRefreshConfig.MAX_AGE_MS }),
+      cookieOptions(fastify, { maxAgeMs: SessionRefreshConfig.MAX_AGE_MS })
     );
   });
 
@@ -93,7 +91,7 @@ async function auth(fastify: FastifyInstance) {
         reply.setCookie(
           SessionRefreshConfig.COOKIE_NAME,
           await signRefreshToken(fastify, { accountId: payload.accountId }),
-          cookieOptions(fastify, { maxAgeMs: SessionRefreshConfig.MAX_AGE_MS }),
+          cookieOptions(fastify, { maxAgeMs: SessionRefreshConfig.MAX_AGE_MS })
         );
       }
 
