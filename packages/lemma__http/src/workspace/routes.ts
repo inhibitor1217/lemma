@@ -61,8 +61,29 @@ export default async function routes(fastify: FastifyInstance) {
         },
       },
     },
-    async (request, reply) => {
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+    async (
+      request: FastifyRequest<{
+        Body: {
+          slug: string;
+        };
+      }>,
+      reply
+    ) => {
+      const { accountId } = request.session;
+      const { slug } = request.body;
+
+      const duplicate = await fastify.workspaceBehavior.findWorkspaceBySlug(slug);
+
+      if (duplicate) {
+        return reply.status(400).send({
+          statusCode: 400,
+          message: `Workspace with slug '${slug}' already exists`,
+        });
+      }
+
+      const workspace = await fastify.workspaceBehavior.createWorkspace(accountId, { slug });
+
+      return { workspace };
     }
   );
 }
