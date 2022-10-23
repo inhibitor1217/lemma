@@ -55,4 +55,6 @@ model Member {
   account     Account   @relation(fields: [accountId], references: [id])
   workspaceId Int
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
+  @@unique([accountId, workspaceId])
 }
