@@ -28,8 +28,19 @@ model Account {
 }
 
 model Workspace {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  slug      String   @unique
+  id        Int               @id @default(autoincrement())
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  slug      String            @unique
+  profile   WorkspaceProfile?
+}
+
+model WorkspaceProfile {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  displayName String
+  photo       String?
+  workspaceId Int       @unique
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 }
