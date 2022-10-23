@@ -27,3 +27,4 @@ export namespace HttpApi {
 }
 
 export { HttpApiError } from './error';
+export { type HttpApiOffsetPagination } from './offset-pagination';
