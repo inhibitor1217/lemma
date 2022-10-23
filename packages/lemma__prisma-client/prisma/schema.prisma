@@ -26,3 +26,10 @@ model Account {
 
   @@unique([authProvider, authProviderId])
 }
+
+model Workspace {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  slug      String   @unique
+}
