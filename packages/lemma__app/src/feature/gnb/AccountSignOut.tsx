@@ -10,7 +10,7 @@ import { go, IO } from '~/lib/fx';
 function useNavigateToAuthorizeRoute() {
   const navigate = useNavigate();
 
-  return () => navigate(InternalPath.Authorize.query({ reason: AuthorizePage.AuthorizeFailedReason.SignOut }));
+  return () => navigate(InternalPath.Authorize._query({ reason: AuthorizePage.AuthorizeFailedReason.SignOut }));
 }
 
 export default function AccountSignOut() {

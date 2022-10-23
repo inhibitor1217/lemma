@@ -1,11 +1,19 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Body from './Body';
+import { withAuth } from '~/lib/auth';
+import { InternalPath } from '~/page/path';
+import { AppError, AppLoading } from './Body';
+import { WorkspacesRoutes } from './workspaces';
 
-export default function BodyRoutes() {
+function BodyRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Body />} />
-      <Route path="*" element={<Navigate to="." />} />
+      <Route path={InternalPath.App.Workspaces._path} element={<WorkspacesRoutes />} />
+      <Route path="*" element={<Navigate to={InternalPath.App.Workspaces._} />} />
     </Routes>
   );
 }
+
+export default withAuth(BodyRoutes, {
+  Loading: AppLoading,
+  Error: AppError,
+});
