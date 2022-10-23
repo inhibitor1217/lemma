@@ -43,7 +43,26 @@ export default async function routes(fastify: FastifyInstance) {
     }
   );
 
-  fastify.post('/', async (request, reply) => {
-    return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
-  });
+  fastify.post(
+    '/',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          properties: {
+            slug: {
+              type: 'string',
+              minLength: 1,
+              maxLength: 32,
+              pattern: '^[a-z0-9-_/]+$',
+            },
+          },
+          required: ['slug'],
+        },
+      },
+    },
+    async (request, reply) => {
+      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+    }
+  );
 }
