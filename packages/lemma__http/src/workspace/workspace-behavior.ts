@@ -7,6 +7,7 @@ declare module 'fastify' {
     workspaceBehavior: {
       getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]>;
       getWorkspacesNumPages(accountId: Account['id']): Promise<number>;
+      findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null>;
       createWorkspace(accountId: Account['id'], args: Pick<Workspace, 'slug'>): Promise<Workspace>;
     };
   }
@@ -46,6 +47,14 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
       .then(OffsetPagination.toNumPages);
   }
 
+  async function findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null> {
+    return fastify.rdb.workspace.findUnique({
+      where: {
+        slug,
+      },
+    });
+  }
+
   async function createWorkspace(accountId: Account['id'], args: Pick<Workspace, 'slug'>): Promise<Workspace> {
     return fastify.rdb.workspace.create({
       data: {
@@ -70,6 +79,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
   fastify.decorate('workspaceBehavior', {
     getWorkspacesPage,
     getWorkspacesNumPages,
+    findWorkspaceBySlug,
     createWorkspace,
   });
 }
