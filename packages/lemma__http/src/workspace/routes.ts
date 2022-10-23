@@ -39,7 +39,7 @@ export default async function routes(fastify: FastifyInstance) {
         page: options.page,
       };
 
-      return { workspaces };
+      return reply.status(200).send({ workspaces });
     }
   );
 
@@ -83,7 +83,7 @@ export default async function routes(fastify: FastifyInstance) {
 
       const workspace = await fastify.workspaceBehavior.createWorkspace(accountId, { slug });
 
-      return { workspace };
+      return reply.status(201).send({ workspace });
     }
   );
 }
