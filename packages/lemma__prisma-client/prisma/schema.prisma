@@ -24,16 +24,5 @@ model Account {
   email          String?
   photo          String?
 
-  AuthToken AuthToken[]
-
   @@unique([authProvider, authProviderId])
-}
-
-model AuthToken {
-  id              Int      @id @default(autoincrement())
-  account         Account  @relation(fields: [accountId], references: [id])
-  accountId       Int
-  createdAt       DateTime @default(now())
-  blocked         Boolean  @default(false)
-  rotationCounter Int      @default(0)
 }
