@@ -61,6 +61,9 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
           },
         },
       },
+      include: {
+        profile: true,
+      },
     });
   }
 
