@@ -23,7 +23,7 @@ model Account {
   name           String?
   email          String?
   photo          String?
-  Member         Member[]
+  members        Member[]
 
   @@unique([authProvider, authProviderId])
 }
@@ -34,7 +34,7 @@ model Workspace {
   updatedAt DateTime          @updatedAt
   slug      String            @unique
   profile   WorkspaceProfile?
-  Member    Member[]
+  members   Member[]
 }
 
 model WorkspaceProfile {
