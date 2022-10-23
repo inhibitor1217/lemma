@@ -3,7 +3,11 @@ export namespace OffsetPagination {
   const DEFAULT_PAGE_SIZE = 64;
 
   export const requestSchemaQuerystringProperties = {
-    page: { type: 'number' },
+    page: {
+      type: 'number',
+      minimum: 0,
+      multipleOf: 1,
+    },
   };
 
   export type RequestQuerystring = {
