@@ -3,12 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { AuthorizePage } from '~/feature/auth';
 import { Disconnected, Error, ErrorSemantic, Unknown } from '~/lib/error';
 import { Center } from '~/lib/layout';
-import { FullscreenPage, HierarchicalPage } from '~/lib/page-template';
+import { FullscreenPage } from '~/lib/page-template';
 import { InternalPath } from '../path';
-
-function App() {
-  return <HierarchicalPage.EmptyPage />;
-}
 
 export function AppLoading() {
   return (
