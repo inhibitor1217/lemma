@@ -13,9 +13,9 @@ export default function WorkspacesRoutes() {
       <Route
         path="/"
         element={
-          <FullscreenPage>
+          <FullscreenPage.Padded>
             <WorkspaceList />
-          </FullscreenPage>
+          </FullscreenPage.Padded>
         }
       />
       <Route path="*" element={<Navigate to="." />} />

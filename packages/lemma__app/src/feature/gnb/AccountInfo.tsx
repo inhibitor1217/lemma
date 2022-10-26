@@ -2,7 +2,7 @@ import { Avatar, AvatarSize, ellipsis } from '@channel.io/bezier-react';
 import { selector, useRecoilValue } from 'recoil';
 import { AccountAtom } from '~/lib/account';
 import { Option } from '~/lib/fx';
-import { text } from '~/lib/i18n';
+import { i18ntext } from '~/lib/i18n';
 import { HStack, Padding, Sized, StackItem, VStack } from '~/lib/layout';
 import { RecoilAtom } from '~/lib/recoil';
 import { Text, Typography } from '~/lib/typography';
@@ -26,7 +26,7 @@ function AccountInfoName() {
 
   return (
     <Text typo={Typography.Size16} bold color="txt-black-darkest">
-      {me?.name ?? text('Unknown user')}
+      {me?.name ?? i18ntext('Unknown user')}
     </Text>
   );
 }

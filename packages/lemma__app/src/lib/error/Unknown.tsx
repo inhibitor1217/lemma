@@ -1,5 +1,5 @@
 import { ErrorTriangleFilledIcon, Icon, IconSize } from '@channel.io/bezier-react';
-import { text } from '~/lib/i18n';
+import { i18ntext } from '~/lib/i18n';
 import { Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';
 
@@ -12,7 +12,7 @@ export default function Unknown() {
         </StackItem>
         <StackItem>
           <Text typo={Typography.Size15} color="txt-black-darker">
-            {text('Oops! Something went wrong.')}
+            {i18ntext('Oops! Something went wrong.')}
           </Text>
         </StackItem>
       </VStack>

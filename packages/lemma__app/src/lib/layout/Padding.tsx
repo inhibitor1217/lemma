@@ -2,6 +2,8 @@ import { styled } from '@channel.io/bezier-react';
 import { CSSProperties, PropsWithChildren } from 'react';
 
 const Layout = styled.div`
+  width: 100%;
+  height: 100%;
   padding-top: var(--padding-top);
   padding-right: var(--padding-right);
   padding-bottom: var(--padding-bottom);

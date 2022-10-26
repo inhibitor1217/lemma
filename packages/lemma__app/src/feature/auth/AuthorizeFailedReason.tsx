@@ -1,5 +1,5 @@
 import { Banner, BannerVariant } from '@channel.io/bezier-react';
-import { text } from '~/lib/i18n';
+import { i18ntext } from '~/lib/i18n';
 import { useSearchParams } from '~/lib/net/url';
 import { Text, Typography } from '~/lib/typography';
 import { AuthorizePage } from './authorize-page';
@@ -14,7 +14,7 @@ function AuthorizeFailedReasonBanner({ reason }: { reason: AuthorizePage.Authori
     <Banner
       icon="error-triangle-filled"
       variant={BannerVariant.Orange}
-      content={<Text typo={Typography.Size14}>{text(REASON_DESCRPITIONS[reason])}</Text>}
+      content={<Text typo={Typography.Size14}>{i18ntext(REASON_DESCRPITIONS[reason])}</Text>}
     />
   );
 }

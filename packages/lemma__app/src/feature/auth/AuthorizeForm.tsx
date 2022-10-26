@@ -1,5 +1,5 @@
 import { Card } from '~/lib/component';
-import { text } from '~/lib/i18n';
+import { i18ntext } from '~/lib/i18n';
 import { Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';
 import AuthorizeFailedReason from './AuthorizeFailedReason';
@@ -10,13 +10,13 @@ function FormTitle() {
     <VStack spacing={4} align="center">
       <StackItem>
         <Text as="h1" typo={Typography.Size24} bold color="txt-black-darkest">
-          {text('LEMMA')}
+          {i18ntext('LEMMA')}
         </Text>
       </StackItem>
 
       <StackItem>
         <Text as="h2" typo={Typography.Size18} color="txt-black-darkest">
-          {text('Sign in to your account')}
+          {i18ntext('Sign in to your account')}
         </Text>
       </StackItem>
     </VStack>
