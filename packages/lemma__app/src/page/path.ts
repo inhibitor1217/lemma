@@ -1,4 +1,4 @@
-import { AuthorizePage } from '~/feature/auth';
+import { type AuthorizePage } from '~/feature/auth';
 import { URL } from '~/lib/net/url';
 
 const resolve = (...paths: string[]) => `/${paths.join('/')}`;

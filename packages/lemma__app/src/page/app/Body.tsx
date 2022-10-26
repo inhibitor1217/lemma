@@ -1,4 +1,3 @@
-import { Spinner } from '@channel.io/bezier-react';
 import { Navigate } from 'react-router-dom';
 import { AuthorizePage } from '~/feature/auth';
 import { Disconnected, Error, ErrorSemantic, Unknown } from '~/lib/error';
@@ -7,13 +6,7 @@ import { FullscreenPage } from '~/lib/page-template';
 import { InternalPath } from '../path';
 
 export function AppLoading() {
-  return (
-    <FullscreenPage>
-      <Center>
-        <Spinner color="txt-black-dark" />
-      </Center>
-    </FullscreenPage>
-  );
+  return <FullscreenPage.Loading />;
 }
 
 export function AppError({ error }: { error: Error }) {
