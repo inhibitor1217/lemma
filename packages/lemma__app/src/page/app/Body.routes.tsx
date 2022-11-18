@@ -7,7 +7,7 @@ import { WorkspacesRoutes } from './workspaces';
 function BodyRoutes() {
   return (
     <Routes>
-      <Route path={InternalPath.App.Workspaces._path} element={<WorkspacesRoutes />} />
+      <Route path={`${InternalPath.App.Workspaces._path}/*`} element={<WorkspacesRoutes />} />
       <Route path="*" element={<Navigate to={InternalPath.App.Workspaces._} />} />
     </Routes>
   );
