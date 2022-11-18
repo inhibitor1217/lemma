@@ -32,7 +32,7 @@ export default function AuthorizeForm() {
         </StackItem>
 
         <StackItem>
-          <Card padding={24}>
+          <Card.Static padding={24}>
             <VStack spacing={16} align="center">
               <StackItem>
                 <FormTitle />
@@ -42,7 +42,7 @@ export default function AuthorizeForm() {
                 <AuthorizeMethods />
               </StackItem>
             </VStack>
-          </Card>
+          </Card.Static>
         </StackItem>
       </VStack>
     </Sized>

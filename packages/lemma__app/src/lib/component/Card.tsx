@@ -8,11 +8,14 @@ const Elevation = styled.div`
   ${({ foundation }) => foundation?.elevation.ev3()}
 `;
 
-export default function Card({
-  children,
-  padding = 16,
-}: PropsWithChildren<{
-  padding?: number;
-}>) {
-  return <Elevation style={{ padding }}>{children}</Elevation>;
+export namespace Card {
+  export function Static({
+    children,
+
+    padding = 16,
+  }: PropsWithChildren<{
+    padding?: number;
+  }>) {
+    return <Elevation style={{ padding }}>{children}</Elevation>;
+  }
 }
