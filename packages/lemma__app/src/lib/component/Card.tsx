@@ -1,4 +1,4 @@
-import { css, styled, TransitionDuration } from '@channel.io/bezier-react';
+import { ArrowRightIcon, css, Icon, IconSize, styled, TransitionDuration } from '@channel.io/bezier-react';
 import { PropsWithChildren } from 'react';
 
 export namespace Card {
@@ -19,6 +19,24 @@ export namespace Card {
     ${defaultElevation}
   `;
 
+  const Layout = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+  `;
+
+  export const CTA = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+  `;
+
+  export const Link = styled(Icon).attrs({
+    source: ArrowRightIcon,
+    size: IconSize.Normal,
+    color: 'txt-black-darker',
+  })``;
+
   export function Static({
     children,
 
@@ -29,7 +47,11 @@ export namespace Card {
      */
     padding?: number;
   }>) {
-    return <Elevation style={{ padding }}>{children}</Elevation>;
+    return (
+      <Elevation style={{ padding }}>
+        <Layout>{children}</Layout>
+      </Elevation>
+    );
   }
 
   const AnimatedElevation = styled(Elevation)<{
@@ -46,8 +68,12 @@ export namespace Card {
   `}
 
     &:hover {
-      ${({ disabled }) => !disabled && activeElevation}
-      transform: translateY(-4px);
+      ${({ disabled }) =>
+        !disabled &&
+        `
+        ${activeElevation}
+        transform: translateY(-4px);
+      `}
     }
   `;
 
@@ -73,7 +99,7 @@ export namespace Card {
   }>) {
     return (
       <AnimatedElevation style={{ padding }} disabled={disabled} onClick={onClick}>
-        {children}
+        <Layout>{children}</Layout>
       </AnimatedElevation>
     );
   }
