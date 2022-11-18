@@ -576,7 +576,7 @@ __metadata:
     react-router-dom: ^6.3.0
     recoil: ^0.7.5
     styled-components: ^5.3.5
-    typescript: ^4.8.2
+    typescript: ^4.9.3
     vite: ^3.0.7
   languageName: unknown
   linkType: soft
@@ -607,7 +607,7 @@ __metadata:
     pino-pretty: ^9.0.1
     ts-node: ^10.9.1
     tsconfig-paths: ^4.1.0
-    typescript: ^4.8.2
+    typescript: ^4.9.3
   languageName: unknown
   linkType: soft
 
@@ -619,7 +619,7 @@ __metadata:
     "@types/node": ^18.7.8
     "@yarnpkg/pnpify": ^4.0.0-rc.14
     prisma: ^4.2.1
-    typescript: ^4.8.2
+    typescript: ^4.9.3
   languageName: unknown
   linkType: soft
 
@@ -4052,7 +4052,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     husky: ^8.0.1
-    typescript: ^4.8.2
+    typescript: ^4.9.3
   languageName: unknown
   linkType: soft
 
@@ -4556,23 +4556,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.8.2":
-  version: 4.8.2
-  resolution: "typescript@npm:4.8.2"
+"typescript@npm:^4.9.3":
+  version: 4.9.3
+  resolution: "typescript@npm:4.9.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 7f5b81d0d558c9067f952c7af52ab7f19c2e70a916817929e4a5b256c93990bf3178eccb1ac8a850bc75df35f6781b6f4cb3370ce20d8b1ded92ed462348f628
+  checksum: 17b8f816050b412403e38d48eef0e893deb6be522d6dc7caf105e54a72e34daf6835c447735fd2b28b66784e72bfbf87f627abb4818a8e43d1fa8106396128dc
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.8.2#~builtin<compat/typescript>":
-  version: 4.8.2
-  resolution: "typescript@patch:typescript@npm%3A4.8.2#~builtin<compat/typescript>::version=4.8.2&hash=f456af"
+"typescript@patch:typescript@^4.9.3#~builtin<compat/typescript>":
+  version: 4.9.3
+  resolution: "typescript@patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=f456af"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6f49363af8af2fe480da1d5fa68712644438785208b06690a3cbe5e7365fd652c3a0f1e587bc8684d78fb69de3dde4de185c0bad7bb4f3664ddfc813ce8caad6
+  checksum: ef65c22622d864497d0a0c5db693523329b3284c15fe632e93ad9aa059e8dc38ef3bd767d6f26b1e5ecf9446f49bd0f6c4e5714a2eeaf352805dc002479843d1
   languageName: node
   linkType: hard
 
