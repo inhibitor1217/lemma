@@ -1,9 +1,14 @@
+import { styled, TransitionDuration } from '@channel.io/bezier-react';
 import { Children, useMemo, type PropsWithChildren } from 'react';
 import ReactGridLayout, { Layout, Layouts, Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout';
 import { go } from '~/lib/fx';
 
 const StaticGrid = WidthProvider(ReactGridLayout);
-const ResponsiveGrid = WidthProvider(ResponsiveGridLayout);
+const ResponsiveGrid = styled(WidthProvider(ResponsiveGridLayout))`
+  .react-grid-item {
+    ${({ foundation }) => foundation?.transition.getTransitionsCSS(['transform'], TransitionDuration.M)}
+  }
+`;
 
 const DEFAULT_MARGIN_PX = 16;
 
