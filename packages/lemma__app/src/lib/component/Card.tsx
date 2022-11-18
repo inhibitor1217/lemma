@@ -37,7 +37,7 @@ export namespace Card {
   }>`
     cursor: pointer;
 
-    ${({ foundation }) => foundation?.transition.getTransitionsCSS(['box-shadow'], TransitionDuration.M)}
+    ${({ foundation }) => foundation?.transition.getTransitionsCSS(['box-shadow', 'transform'], TransitionDuration.M)}
 
     ${({ disabled }) =>
       disabled &&
@@ -45,8 +45,9 @@ export namespace Card {
     cursor: not-allowed;
   `}
 
-  &:hover {
+    &:hover {
       ${({ disabled }) => !disabled && activeElevation}
+      transform: translateY(-4px);
     }
   `;
 
