@@ -1,41 +1,23 @@
 import { css, styled, TransitionDuration } from '@channel.io/bezier-react';
 import { PropsWithChildren } from 'react';
 
-const defaultElevation = css`
-  ${({ foundation }) => foundation?.elevation.ev3()};
-`;
-
-const activeElevation = css`
-  ${({ foundation }) => foundation?.elevation.ev4()};
-`;
-
-const Elevation = styled.div`
-  width: 100%;
-  height: 100%;
-  ${({ foundation }) => foundation?.rounding.round16}
-  ${defaultElevation}
-`;
-
-const AnimatedElevation = styled(Elevation)<{
-  disabled: boolean;
-}>`
-  cursor: pointer;
-
-  ${({ foundation }) => foundation?.transition.getTransitionsCSS(['box-shadow'], TransitionDuration.M)}
-
-  ${({ disabled }) =>
-    disabled &&
-    `
-    cursor: not-allowed;
-  `}
-
-  &:hover {
-    ${({ disabled }) => !disabled && activeElevation}
-  }
-`;
-
 export namespace Card {
   const DEFAULT_PADDING_PX = 16;
+
+  const defaultElevation = css`
+    ${({ foundation }) => foundation?.elevation.ev3()};
+  `;
+
+  const activeElevation = css`
+    ${({ foundation }) => foundation?.elevation.ev4()};
+  `;
+
+  const Elevation = styled.div`
+    width: 100%;
+    height: 100%;
+    ${({ foundation }) => foundation?.rounding.round16}
+    ${defaultElevation}
+  `;
 
   export function Static({
     children,
@@ -49,6 +31,24 @@ export namespace Card {
   }>) {
     return <Elevation style={{ padding }}>{children}</Elevation>;
   }
+
+  const AnimatedElevation = styled(Elevation)<{
+    disabled: boolean;
+  }>`
+    cursor: pointer;
+
+    ${({ foundation }) => foundation?.transition.getTransitionsCSS(['box-shadow'], TransitionDuration.M)}
+
+    ${({ disabled }) =>
+      disabled &&
+      `
+    cursor: not-allowed;
+  `}
+
+  &:hover {
+      ${({ disabled }) => !disabled && activeElevation}
+    }
+  `;
 
   export function Interactive({
     children,
