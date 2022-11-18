@@ -36,14 +36,11 @@ export namespace WorkspaceHttpApi {
       params.set('page', Option.unwrap(requestDto.page).toString());
     }
 
-    return HttpApi.get<GetWorkspacesDTO['Response']>(HttpApi.url('/workspaces', params));
+    return HttpApi.get<GetWorkspacesDTO['Response']>(HttpApi.url('/workspace', params));
   };
 }
 
 export namespace WorkspaceHttpApi__RQ {
-  /**
-   * @todo Should consider pagination here.
-   */
   export const getWorkspaces = RQuery.makeKey('workspace', 'http-api', 'getWorkspaces');
 }
 
