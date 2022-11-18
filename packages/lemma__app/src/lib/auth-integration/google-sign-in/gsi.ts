@@ -58,7 +58,7 @@ export namespace GoogleSignIn {
   let _gsiScriptLoaded = false;
 
   window.onGoogleLibraryLoad = () => {
-    console.debug('[gsi]', 'Google Sign-In library loaded.');
+    console.debug('[lib:auth-integration:GoogleSignIn]', 'Google Sign-In library loaded.');
     _gsiScriptLoaded = true;
     _gsiScriptListeners.forEach((listener) => listener());
   };
