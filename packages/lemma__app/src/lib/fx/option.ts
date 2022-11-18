@@ -31,8 +31,18 @@ export namespace Option {
     (value: Option<A>): B =>
       isSome(value) ? onSome(value) : onNone();
 
+  export const getOrElse =
+    <A>(onNone: () => A) =>
+    (value: Option<A>): A =>
+      isSome(value) ? value : onNone();
+
   export const map =
     <A, B>(f: (a: A) => B) =>
     (value: Option<A>): Option<B> =>
       isNone(value) ? none() : some(f(value));
+
+  export const flatMap =
+    <A, B>(f: (a: A) => Option<B>) =>
+    (value: Option<A>): Option<B> =>
+      isNone(value) ? none() : f(value);
 }
