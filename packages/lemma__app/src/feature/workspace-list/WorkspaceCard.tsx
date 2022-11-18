@@ -4,7 +4,7 @@ import { Sized } from '~/lib/layout';
 export default function WorkspaceCard() {
   return (
     <Sized height={160}>
-      <Card.Static />
+      <Card.Interactive />
     </Sized>
   );
 }
