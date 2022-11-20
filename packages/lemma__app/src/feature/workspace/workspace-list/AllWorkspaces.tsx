@@ -1,6 +1,6 @@
 import { Array, go } from '~/lib/fx';
 import { Divider, StackItem, VStack } from '~/lib/layout';
-import { useCreateWorkspace, useWorkspaces } from '~/lib/workspace';
+import { useCreateWorkspaceForm, useWorkspaces } from '~/lib/workspace';
 import { AllWorkspacesHeader } from './ui/all-workspaces-header';
 import {
   EmptyWorkspaceList,
@@ -14,7 +14,7 @@ import WorkspaceCard from './WorkspaceCard';
 
 function WorkspaceList() {
   const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useWorkspaces();
-  const createWorkspace = useCreateWorkspace();
+  const createWorkspace = useCreateWorkspaceForm();
 
   if (isLoading) {
     return (
@@ -54,7 +54,7 @@ function WorkspaceList() {
 }
 
 export default function AllWorkspaces() {
-  const createWorkspace = useCreateWorkspace();
+  const createWorkspace = useCreateWorkspaceForm();
 
   return (
     <VStack spacing={16} align="stretch">
