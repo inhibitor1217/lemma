@@ -3,7 +3,7 @@ import { asDefaultExport, lazyComponent } from '~/lib/dynamic-import';
 import { FullscreenPage } from '~/lib/page-template';
 
 const WorkspaceList = lazyComponent(
-  () => import('~/feature/workspace-list').then(asDefaultExport('WorkspaceList')),
+  () => import('~/feature/workspace/workspace-list').then(asDefaultExport('WorkspaceList')),
   <FullscreenPage.Loading />
 );
 
