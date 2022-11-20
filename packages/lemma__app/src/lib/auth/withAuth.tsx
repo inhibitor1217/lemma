@@ -27,7 +27,7 @@ export default function withAuth<P extends JSX.IntrinsicAttributes>(
     }
 
     if (authQueryResult.isError) {
-      return <ErrorComponent error={Error.from(authQueryResult.error)} {...props} />;
+      return <ErrorComponent error={authQueryResult.error} {...props} />;
     }
 
     return <Component {...props} />;
