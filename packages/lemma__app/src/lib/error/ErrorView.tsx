@@ -1,6 +1,7 @@
 import Disconnected from './Disconnected';
 import { Error } from './error';
 import { ErrorSemantic } from './error-semantic';
+import InvalidEntity from './InvalidEntity';
 import Unknown from './Unknown';
 
 /**
@@ -10,6 +11,10 @@ import Unknown from './Unknown';
 export default function ErrorView({ error }: { error: Error }) {
   if (Error.isSemanticOf(error, ErrorSemantic.Disconnected)) {
     return <Disconnected />;
+  }
+
+  if (Error.isSemanticOf(error, ErrorSemantic.InvalidEntity)) {
+    return <InvalidEntity />;
   }
 
   return <Unknown />;

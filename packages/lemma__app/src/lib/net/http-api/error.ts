@@ -18,9 +18,21 @@ export namespace HttpApiError {
 
   export const toError = (dto: DTO): Error<{ __raw: DTO }> => {
     switch (dto.statusCode) {
+      case STATUS_CODE.BAD_REQUEST:
+        return {
+          semantic: ErrorSemantic.InvalidServiceRequest,
+          message: dto.message,
+          payload: { __raw: dto },
+        };
       case STATUS_CODE.UNAUTHORIZED:
         return {
           semantic: ErrorSemantic.Unauthorized,
+          message: dto.message,
+          payload: { __raw: dto },
+        };
+      case STATUS_CODE.NOT_FOUND:
+        return {
+          semantic: ErrorSemantic.InvalidEntity,
           message: dto.message,
           payload: { __raw: dto },
         };

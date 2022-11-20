@@ -1,5 +1,7 @@
 export enum ErrorSemantic {
   Disconnected = 'ErrorSemantic:Disconnected',
+  InvalidEntity = 'ErrorSemantic:InvalidEntity',
+  InvalidServiceRequest = 'ErrorSemantic:InvalidServiceRequest',
   Unauthorized = 'ErrorSemantic:Unauthorized',
   Unknown = 'ErrorSemantic:Unknown',
 }

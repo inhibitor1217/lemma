@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { AuthorizePage } from '~/feature/auth';
-import { Disconnected, Error, ErrorSemantic, Unknown } from '~/lib/error';
+import { Disconnected, Error, ErrorSemantic, InvalidEntity, Unknown } from '~/lib/error';
 import { Center } from '~/lib/layout';
 import { FullscreenPage } from '~/lib/page-template';
 import { InternalPath } from '../path';
@@ -28,6 +28,16 @@ export function AppError({ error }: { error: Error }) {
           'redirect-to': InternalPath.App._,
         })}
       />
+    );
+  }
+
+  if (Error.isSemanticOf(error, ErrorSemantic.InvalidEntity)) {
+    return (
+      <FullscreenPage>
+        <Center>
+          <InvalidEntity />
+        </Center>
+      </FullscreenPage>
     );
   }
 
