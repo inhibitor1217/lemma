@@ -6,12 +6,19 @@ import { RMutation } from './mutation';
 /**
  * @note
  *
+ * Fixed typing for react-query useMutation key.
+ */
+type MutationKey = string[];
+
+/**
+ * @note
+ *
  * Application-specific error type for useMutation.
  */
 type MutationError = Error;
 
 export default function useMutation<TData = void>(
-  key: string[],
+  key: MutationKey,
   fn: Task<TData, unknown>,
   options: Omit<UseMutationOptions<TData, MutationError>, 'mutationFn'>
 ) {

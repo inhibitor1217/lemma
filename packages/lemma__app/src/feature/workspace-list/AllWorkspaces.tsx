@@ -1,8 +1,8 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { Array, go, Option } from '~/lib/fx';
+import { Array, go, Option, pipe, Struct, Task } from '~/lib/fx';
 import { Divider, StackItem, VStack } from '~/lib/layout';
-import { RQuery } from '~/lib/react-query';
+import { HttpApiOffsetPagination } from '~/lib/net/http-api';
+import { usePaginatedQuery } from '~/lib/react-query';
 import { WorkspaceHttpApi, WorkspaceHttpApi__Resolver, WorkspaceHttpApi__RQ } from '~/lib/workspace';
 import { AllWorkspacesHeader } from './ui/all-workspaces-header';
 import {
@@ -15,14 +15,19 @@ import {
 } from './ui/paginated-list';
 import WorkspaceCard from './WorkspaceCard';
 
-function useWorkspaces() {
-  return useInfiniteQuery(
-    WorkspaceHttpApi__RQ.getWorkspaces,
-    ({ pageParam: page }) => WorkspaceHttpApi.getWorkspaces({ page: Option.some(page) }),
-    {
-      ...RQuery.InfiniteQuery.fromPaginatedApi('workspaces'),
-    }
+const getPaginatedWorkspaces = (page: number) =>
+  go(
+    () => WorkspaceHttpApi.getWorkspaces({ page: Option.some(page) }),
+    Task.mapLeft(
+      pipe(
+        Struct.pick('workspaces'),
+        HttpApiOffsetPagination.resolve(WorkspaceHttpApi__Resolver.Workspace.fromGetWorkspacesResultDTO)
+      )
+    )
   );
+
+function useWorkspaces() {
+  return usePaginatedQuery(WorkspaceHttpApi__RQ.getWorkspaces, getPaginatedWorkspaces);
 }
 
 function useAddWorkspace() {
@@ -50,8 +55,7 @@ function WorkspaceList() {
     <WorkspaceGrid>
       {go(
         data.pages,
-        Array.flatMap((page) => page.workspaces.items),
-        Array.map(WorkspaceHttpApi__Resolver.Workspace.fromGetWorkspacesResultDTO),
+        Array.flatMap((page) => page.items),
         Array.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />)
       )}
 

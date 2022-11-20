@@ -1,4 +1,4 @@
-import { Option } from '~/lib/fx';
+import { Option, Struct, id, Array } from '~/lib/fx';
 
 export namespace HttpApiOffsetPagination {
   export type RequestDTO = {
@@ -10,4 +10,11 @@ export namespace HttpApiOffsetPagination {
     pages: number;
     page: number;
   };
+
+  export const resolve = <A, B>(itemResolver: (item: A) => B): ((paginatedResponse: ResponseDTO<A>) => ResponseDTO<B>) =>
+    Struct.evolve({
+      items: Array.map(itemResolver),
+      pages: id<number>,
+      page: id<number>,
+    });
 }

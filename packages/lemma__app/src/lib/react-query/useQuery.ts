@@ -18,12 +18,12 @@ type QueryKey = string[];
 type QueryError = Error;
 
 export default function useQuery<TData = unknown>(
-  key: string[],
+  key: QueryKey,
   fn: Task<TData, unknown>,
   options?: Omit<UseQueryOptions<unknown, QueryError, TData, QueryKey>, 'queryKey' | 'queryFn'>
 ) {
   return _useQuery(key, go(fn, Task.mapRight(Error.from)), {
-    ...(RQuery.defaultOptions as UseQueryOptions<unknown, QueryError, TData, QueryKey>),
+    ...RQuery.defaultOptions,
     ...options,
   }) as UseQueryResult<TData, QueryError>;
 }

@@ -4,4 +4,4 @@ export { Option, type Some, type None } from './option';
 export { Struct } from './struct';
 export { Task } from './task';
 
-export { go, pipe } from './pipe';
+export { go, pipe, id } from './pipe';

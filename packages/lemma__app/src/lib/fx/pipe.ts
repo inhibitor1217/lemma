@@ -36,3 +36,5 @@ export const pipe: Pipe =
   (...fs: any[]) =>
   (a: any) =>
     go(a, ...fs);
+
+export const id = <A>(a: A) => a;
