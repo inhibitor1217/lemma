@@ -17,6 +17,11 @@ export const InternalPath = {
     Workspaces: {
       _: resolve('app', 'workspaces'),
       _path: resolve('workspaces'),
+
+      Create: {
+        _: resolve('app', 'workspaces', 'new'),
+        _path: resolve('new'),
+      },
     },
   },
 };

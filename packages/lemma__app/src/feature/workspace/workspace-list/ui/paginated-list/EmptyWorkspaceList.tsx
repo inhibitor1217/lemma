@@ -16,7 +16,7 @@ const AddWorkspaceLink = styled(Text).attrs({
   cursor: pointer;
 `;
 
-export default function EmptyWorkspaceList({ addWorkspace }: { addWorkspace: () => void }) {
+export default function EmptyWorkspaceList({ createWorkspace }: { createWorkspace: () => void }) {
   return (
     <Padding equal={32}>
       <VStack spacing={16} align="center">
@@ -25,7 +25,7 @@ export default function EmptyWorkspaceList({ addWorkspace }: { addWorkspace: () 
         </StackItem>
 
         <StackItem>
-          <AddWorkspaceLink onClick={addWorkspace}>{i18ntext('Start a new project')}</AddWorkspaceLink>
+          <AddWorkspaceLink onClick={createWorkspace}>{i18ntext('Start a new project')}</AddWorkspaceLink>
         </StackItem>
       </VStack>
     </Padding>
