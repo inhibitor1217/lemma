@@ -30,15 +30,19 @@ function WorkspaceList() {
     return <WorkspaceListError error={error} />;
   }
 
-  if (data.pages.length === 0) {
+  const workspaces = go(
+    data.pages,
+    Array.flatMap((page) => page.items)
+  );
+
+  if (workspaces.length === 0) {
     return <EmptyWorkspaceList addWorkspace={addWorkspace} />;
   }
 
   return (
     <WorkspaceGrid>
       {go(
-        data.pages,
-        Array.flatMap((page) => page.items),
+        workspaces,
         Array.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />)
       )}
 
