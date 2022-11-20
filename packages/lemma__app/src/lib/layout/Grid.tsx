@@ -1,13 +1,22 @@
-import { styled, TransitionDuration } from '@channel.io/bezier-react';
-import { Children, useMemo, type PropsWithChildren } from 'react';
+import { css, styled, TransitionDuration } from '@channel.io/bezier-react';
+import { Children, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import ReactGridLayout, { Layout, Layouts, Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout';
 import { go } from '~/lib/fx';
 
-const StaticGrid = WidthProvider(ReactGridLayout);
-const ResponsiveGrid = styled(WidthProvider(ResponsiveGridLayout))`
+const itemTransitionStyle = css<{
+  animate: boolean;
+}>`
   .react-grid-item {
-    ${({ foundation }) => foundation?.transition.getTransitionsCSS(['transform'], TransitionDuration.M)}
+    ${({ foundation, animate }) => animate && foundation?.transition.getTransitionsCSS(['transform'], TransitionDuration.M)}
   }
+`;
+
+const StaticGrid = styled(WidthProvider(ReactGridLayout))`
+  ${itemTransitionStyle}
+`;
+
+const ResponsiveGrid = styled(WidthProvider(ResponsiveGridLayout))`
+  ${itemTransitionStyle}
 `;
 
 const DEFAULT_MARGIN_PX = 16;
@@ -47,6 +56,20 @@ function sanitizedMargin(margin?: number | [number, number]): [number, number] {
 }
 
 export namespace Grid {
+  /**
+   * This prevents the transition of grid items
+   * on first render.
+   */
+  function useAnimateAfterMount() {
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => {
+      setAnimate(true);
+    }, []);
+
+    return animate;
+  }
+
   export function Static({
     children,
 
@@ -65,6 +88,8 @@ export namespace Grid {
   }>) {
     const numChildren = Children.count(children);
 
+    const animate = useAnimateAfterMount();
+
     return (
       <StaticGrid
         layout={useGridLayout(numChildren, numColumns)}
@@ -73,6 +98,7 @@ export namespace Grid {
         isResizable={false}
         rowHeight={rowHeight}
         margin={sanitizedMargin(margin)}
+        animate={animate}
       >
         {Children.toArray(children).map((child, i) => (
           <div key={`${i}`}>{child}</div>
@@ -152,6 +178,8 @@ export namespace Grid {
       return Object.fromEntries(Object.entries(margin).map(([breakpoint, value]) => [breakpoint, sanitizedMargin(value)]));
     }, [margin]);
 
+    const animate = useAnimateAfterMount();
+
     return (
       <ResponsiveGrid
         breakpoints={breakpointsPx}
@@ -161,6 +189,7 @@ export namespace Grid {
         isResizable={false}
         rowHeight={rowHeight}
         margin={appliedMargins}
+        animate={animate}
       >
         {Children.toArray(children).map((child, i) => (
           <div key={`${i}`}>{child}</div>
