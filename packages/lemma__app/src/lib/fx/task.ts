@@ -1,5 +1,3 @@
-import { pipe } from './pipe';
-
 export type Task<A, E> = () => Promise<A>;
 
 export namespace Task {
@@ -25,7 +23,7 @@ export namespace Task {
     <A, E, F>(f: (e: E) => F) =>
     (fa: Task<A, E>): Task<A, F> =>
     () =>
-      fa().catch(pipe(f, Promise.reject));
+      fa().catch((e) => Promise.reject(f(e)));
 
   export const flatMapLeft =
     <A, B, E>(f: (a: A) => Task<B, E>) =>

@@ -8,20 +8,26 @@ import {
   WorkspaceGrid,
   WorkspaceListError,
   WorkspaceListNextPageSkeleton,
-  WorkspaceListSkeleton,
+  WorkspaceSkeleton,
 } from './ui/paginated-list';
 import WorkspaceCard from './WorkspaceCard';
 
 function WorkspaceList() {
-  const { data, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage } = useWorkspaces();
+  const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useWorkspaces();
   const addWorkspace = useAddWorkspace();
 
   if (isLoading) {
-    return <WorkspaceListSkeleton />;
+    return (
+      <WorkspaceGrid>
+        <WorkspaceSkeleton />
+        <WorkspaceSkeleton />
+        <WorkspaceSkeleton />
+      </WorkspaceGrid>
+    );
   }
 
   if (isError) {
-    return <WorkspaceListError />;
+    return <WorkspaceListError error={error} />;
   }
 
   if (data.pages.length === 0) {

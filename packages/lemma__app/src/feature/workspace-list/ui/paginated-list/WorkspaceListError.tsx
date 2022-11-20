@@ -1,10 +1,10 @@
-import { Unknown } from '~/lib/error';
+import { Error, ErrorView } from '~/lib/error';
 import { Center } from '~/lib/layout';
 
-export default function WorkspaceListError() {
+export default function WorkspaceListError({ error }: { error: Error }) {
   return (
     <Center>
-      <Unknown />
+      <ErrorView error={error} />
     </Center>
   );
 }
