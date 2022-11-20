@@ -73,6 +73,10 @@ export namespace Card {
         `
         ${activeElevation}
         transform: translateY(-4px);
+
+        ${Link} {
+          color: var(--txt-black-darkest);
+        }
       `}
     }
   `;
