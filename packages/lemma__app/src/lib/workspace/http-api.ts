@@ -1,12 +1,12 @@
 import { FieldResolver, PrimitiveType } from '~/lib/field';
-import { Option, Struct } from '~/lib/fx';
+import { go, Option, Struct } from '~/lib/fx';
 import { HttpApi, HttpApiOffsetPagination } from '~/lib/net/http-api';
-import { RQuery } from '~/lib/react-query';
+import { RMutation, RQuery } from '~/lib/react-query';
 import { Workspace } from './workspace';
 import { WorkspaceProfile } from './workspace-profile';
 
-export namespace WorkspaceHttpApi {
-  export type GetWorkspacesWorkspaceProfileDTO = {
+namespace View {
+  export type WorkspaceProfile = {
     id: number;
     createdAt: PrimitiveType.ISO8601DateTime;
     updatedAt: PrimitiveType.ISO8601DateTime;
@@ -15,13 +15,19 @@ export namespace WorkspaceHttpApi {
     workspaceId: number;
   };
 
-  export type GetWorkspacesWorkspaceDTO = {
+  export type Workspace = {
     id: number;
     createdAt: PrimitiveType.ISO8601DateTime;
     updatedAt: PrimitiveType.ISO8601DateTime;
     slug: string;
-    profile: GetWorkspacesWorkspaceProfileDTO | null;
+    profile: WorkspaceProfile | null;
   };
+}
+
+export namespace WorkspaceHttpApi {
+  export type GetWorkspacesWorkspaceProfileDTO = View.WorkspaceProfile;
+
+  export type GetWorkspacesWorkspaceDTO = View.Workspace;
 
   export type GetWorkspacesDTO = {
     Request: HttpApiOffsetPagination.RequestDTO;
@@ -38,32 +44,48 @@ export namespace WorkspaceHttpApi {
 
     return HttpApi.get<GetWorkspacesDTO['Response']>(HttpApi.url('/workspace', params));
   };
+
+  export type CreateWorkspaceDTO = {
+    Request: {
+      slug: string;
+      displayName?: string;
+    };
+    Response: {
+      workspace: View.Workspace;
+    };
+  };
+
+  export const createWorkspace = (requestDto: CreateWorkspaceDTO['Request']) =>
+    HttpApi.post<CreateWorkspaceDTO['Request'], CreateWorkspaceDTO['Response']>(HttpApi.url('/workspace'), requestDto);
 }
 
 export namespace WorkspaceHttpApi__RQ {
   export const getWorkspaces = RQuery.makeKey('workspace', 'http-api', 'getWorkspaces');
+
+  export const createWorkspace = RMutation.makeKey('workspace', 'http-api', 'createWorkspace');
 }
 
 export namespace WorkspaceHttpApi__Resolver {
-  export namespace WorkspaceProfile {
-    export const fromGetWorkspacesResultDTO: (dto: WorkspaceHttpApi.GetWorkspacesWorkspaceProfileDTO) => WorkspaceProfile =
-      Struct.evolve({
-        id: FieldResolver.ID,
-        createdAt: FieldResolver.Date.fromISO8601,
-        updatedAt: FieldResolver.Date.fromISO8601,
-        displayName: FieldResolver.String,
-        photo: Option.map(FieldResolver.URL),
-        workspaceId: FieldResolver.ID,
-      });
-  }
+  const fromWorkspaceProfileView: (profileView: View.WorkspaceProfile) => WorkspaceProfile = Struct.evolve({
+    id: FieldResolver.ID,
+    createdAt: FieldResolver.Date.fromISO8601,
+    updatedAt: FieldResolver.Date.fromISO8601,
+    displayName: FieldResolver.String,
+    photo: Option.map(FieldResolver.URL),
+    workspaceId: FieldResolver.ID,
+  });
 
-  export namespace Workspace {
-    export const fromGetWorkspacesResultDTO: (dto: WorkspaceHttpApi.GetWorkspacesWorkspaceDTO) => Workspace = Struct.evolve({
-      id: FieldResolver.ID,
-      createdAt: FieldResolver.Date.fromISO8601,
-      updatedAt: FieldResolver.Date.fromISO8601,
-      slug: FieldResolver.String,
-      profile: Option.map(WorkspaceProfile.fromGetWorkspacesResultDTO),
-    });
-  }
+  const fromWorkspaceView: (workspaceView: View.Workspace) => Workspace = Struct.evolve({
+    id: FieldResolver.ID,
+    createdAt: FieldResolver.Date.fromISO8601,
+    updatedAt: FieldResolver.Date.fromISO8601,
+    slug: FieldResolver.String,
+    profile: Option.map(fromWorkspaceProfileView),
+  });
+
+  export const fromGetWorkspacesResultDTO = (dto: WorkspaceHttpApi.GetWorkspacesDTO['Response']) =>
+    go(dto, Struct.pick('workspaces'), HttpApiOffsetPagination.resolve(fromWorkspaceView));
+
+  export const fromCreateWorkspaceResultDTO = (dto: WorkspaceHttpApi.CreateWorkspaceDTO['Response']) =>
+    go(dto, Struct.pick('workspace'), fromWorkspaceView);
 }
