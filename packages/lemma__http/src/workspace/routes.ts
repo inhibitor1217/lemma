@@ -56,6 +56,11 @@ export default async function routes(fastify: FastifyInstance) {
               maxLength: 32,
               pattern: '^[a-z0-9-_/]+$',
             },
+            displayName: {
+              type: 'string',
+              minLength: 1,
+              maxLength: 100,
+            },
           },
           required: ['slug'],
         },
@@ -65,12 +70,13 @@ export default async function routes(fastify: FastifyInstance) {
       request: FastifyRequest<{
         Body: {
           slug: string;
+          displayName?: string;
         };
       }>,
       reply
     ) => {
       const { accountId } = request.session;
-      const { slug } = request.body;
+      const { slug, displayName } = request.body;
 
       const duplicate = await fastify.workspaceBehavior.findWorkspaceBySlug(slug);
 
@@ -81,7 +87,7 @@ export default async function routes(fastify: FastifyInstance) {
         });
       }
 
-      const workspace = await fastify.workspaceBehavior.createWorkspace(accountId, { slug });
+      const workspace = await fastify.workspaceBehavior.createWorkspace(accountId, { slug, displayName });
 
       return reply.status(201).send({ workspace });
     }

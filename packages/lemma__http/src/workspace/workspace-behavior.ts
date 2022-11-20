@@ -2,13 +2,18 @@ import { Account, Workspace } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
 import { OffsetPagination } from '~/lib/offset-pagination';
 
+type CreateWorkspaceArgs = {
+  slug: string;
+  displayName?: string;
+};
+
 declare module 'fastify' {
   interface FastifyInstance {
     workspaceBehavior: {
       getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]>;
       getWorkspacesNumPages(accountId: Account['id']): Promise<number>;
       findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null>;
-      createWorkspace(accountId: Account['id'], args: Pick<Workspace, 'slug'>): Promise<Workspace>;
+      createWorkspace(accountId: Account['id'], args: CreateWorkspaceArgs): Promise<Workspace>;
     };
   }
 }
@@ -55,13 +60,13 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
     });
   }
 
-  async function createWorkspace(accountId: Account['id'], args: Pick<Workspace, 'slug'>): Promise<Workspace> {
+  async function createWorkspace(accountId: Account['id'], args: CreateWorkspaceArgs): Promise<Workspace> {
     return fastify.rdb.workspace.create({
       data: {
         slug: args.slug,
         profile: {
           create: {
-            displayName: args.slug,
+            displayName: args.displayName ?? args.slug,
           },
         },
         members: {
