@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { CreateWorkspaceForm } from '~/feature/workspace/create-workspace';
 import { asDefaultExport, lazyComponent } from '~/lib/dynamic-import';
 import { FullscreenPage } from '~/lib/page-template';
 import { InternalPath } from '~/page/path';
@@ -19,7 +20,14 @@ export default function WorkspacesRoutes() {
           </FullscreenPage.Padded>
         }
       />
-      <Route path={`${InternalPath.App.Workspaces.Create._path}`} element={<FullscreenPage.Padded />} />
+      <Route
+        path={`${InternalPath.App.Workspaces.Create._path}`}
+        element={
+          <FullscreenPage.Padded>
+            <CreateWorkspaceForm />
+          </FullscreenPage.Padded>
+        }
+      />
       <Route path="*" element={<Navigate to="." />} />
     </Routes>
   );
