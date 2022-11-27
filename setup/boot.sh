@@ -11,7 +11,7 @@ main() {
 
   # Run database migrations
   yarn workspace @lemma/prisma-client generate
-  yarn workspace @lemma/prisma-client reset:local
+  yarn workspace @lemma/prisma-client migrate:local
 }
 
 main $@
