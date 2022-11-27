@@ -20,6 +20,7 @@ export default function WorkspacesRoutes() {
           </FullscreenPage.Padded>
         }
       />
+
       <Route
         path={`${InternalPath.App.Workspaces.Create._path}`}
         element={
@@ -28,6 +29,9 @@ export default function WorkspacesRoutes() {
           </FullscreenPage.Padded>
         }
       />
+
+      <Route path={`${InternalPath.App.Workspace._path}`} element={<FullscreenPage.Loading />} />
+
       <Route path="*" element={<Navigate to="." />} />
     </Routes>
   );

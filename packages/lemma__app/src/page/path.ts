@@ -23,5 +23,16 @@ export const InternalPath = {
         _path: resolve('new'),
       },
     },
+
+    Workspace: Object.assign(
+      (id: string) => ({
+        _: resolve('app', 'workspaces', id),
+        _path: resolve(id),
+      }),
+      {
+        _: resolve('app', 'workspaces', ':workspaceId'),
+        _path: resolve(':workspaceId'),
+      }
+    ),
   },
 };
