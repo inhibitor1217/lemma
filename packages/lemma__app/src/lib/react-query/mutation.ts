@@ -1,8 +1,8 @@
+import { MutationOptions } from '@tanstack/react-query';
 import { makeMutationKey } from './key';
-import { presetMutationOptions } from './mutation-options';
 
 export namespace RMutation {
   export const makeKey = makeMutationKey;
 
-  export const defaultOptions = presetMutationOptions;
+  export const defaultOptions: MutationOptions<any, any, any, any> = {};
 }

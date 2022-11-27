@@ -1,6 +1,6 @@
 import { useMutation as _useMutation, UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { Error } from '~/lib/error';
-import { go, Task } from '~/lib/fx';
+import { go, pipe, Task } from '~/lib/fx';
 import { RMutation } from './mutation';
 
 /**
@@ -17,7 +17,7 @@ type MutationKey = string[];
  */
 type MutationError = Error;
 
-export default function useMutation<TData = void>(
+export function useMutation<TData = void>(
   key: MutationKey,
   fn: Task<TData, unknown>,
   options: Omit<UseMutationOptions<TData, MutationError>, 'mutationFn'>
@@ -26,4 +26,15 @@ export default function useMutation<TData = void>(
     ...RMutation.defaultOptions,
     ...options,
   }) as UseMutationResult<TData, MutationError, void>;
+}
+
+export function useParametricMutation<TParams, TData = void>(
+  key: MutationKey,
+  fn: (params: TParams) => Task<TData, unknown>,
+  options: Omit<UseMutationOptions<TData, MutationError, TParams>, 'mutationFn'>
+) {
+  return _useMutation(key, pipe(fn, Task.mapRight(Error.from), Task.run), {
+    ...RMutation.defaultOptions,
+    ...options,
+  }) as UseMutationResult<TData, MutationError, TParams>;
 }
