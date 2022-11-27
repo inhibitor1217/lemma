@@ -43,6 +43,43 @@ export default async function routes(fastify: FastifyInstance) {
     }
   );
 
+  fastify.get(
+    '/search',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            slug: {
+              type: 'string',
+              minLength: 1,
+              maxLength: 32,
+              pattern: '^[a-z0-9-_/]+$',
+            },
+          },
+          required: ['slug'],
+        },
+      },
+    },
+    async (
+      request: FastifyRequest<{
+        Querystring: {
+          slug: string;
+        };
+      }>,
+      reply
+    ) => {
+      const { slug } = request.query;
+      const workspace = await fastify.workspaceBehavior.findWorkspaceBySlug(slug);
+
+      if (!workspace) {
+        return reply.status(404).send({ statusCode: 404, message: 'Not Found' });
+      }
+
+      return reply.status(200).send({ workspace });
+    }
+  );
+
   fastify.post(
     '/',
     {
