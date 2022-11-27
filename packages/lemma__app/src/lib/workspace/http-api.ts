@@ -45,6 +45,22 @@ export namespace WorkspaceHttpApi {
     return HttpApi.get<GetWorkspacesDTO['Response']>(HttpApi.url('/workspace', params));
   };
 
+  export type SearchWorkspaceDTO = {
+    Request: {
+      slug: string;
+    };
+    Response: {
+      workspace: View.Workspace;
+    };
+  };
+
+  export const searchWorkspace = (requestDto: SearchWorkspaceDTO['Request']) => {
+    const params = new URLSearchParams();
+    params.set('slug', requestDto.slug);
+
+    return HttpApi.get<SearchWorkspaceDTO['Response']>(HttpApi.url('/workspace/search', params));
+  };
+
   export type CreateWorkspaceDTO = {
     Request: {
       slug: string;
@@ -61,6 +77,9 @@ export namespace WorkspaceHttpApi {
 
 export namespace WorkspaceHttpApi__RQ {
   export const getWorkspaces = RQuery.makeKey('workspace', 'http-api', 'getWorkspaces');
+
+  export const searchWorkspace = (requestDto: WorkspaceHttpApi.SearchWorkspaceDTO['Request']) =>
+    RQuery.makeParametricKey('workspace', 'http-api', 'searchWorkspace', requestDto);
 
   export const createWorkspace = RMutation.makeKey('workspace', 'http-api', 'createWorkspace');
 }
@@ -85,6 +104,9 @@ export namespace WorkspaceHttpApi__Resolver {
 
   export const fromGetWorkspacesResultDTO = (dto: WorkspaceHttpApi.GetWorkspacesDTO['Response']) =>
     go(dto, Struct.pick('workspaces'), HttpApiOffsetPagination.resolve(fromWorkspaceView));
+
+  export const fromSearchWorkspaceResultDTO = (dto: WorkspaceHttpApi.SearchWorkspaceDTO['Response']) =>
+    go(dto, Struct.pick('workspace'), fromWorkspaceView);
 
   export const fromCreateWorkspaceResultDTO = (dto: WorkspaceHttpApi.CreateWorkspaceDTO['Response']) =>
     go(dto, Struct.pick('workspace'), fromWorkspaceView);

@@ -8,7 +8,7 @@ import { RQuery } from './query';
  *
  * Fixed typing for react-query useQuery key.
  */
-type QueryKey = string[];
+type QueryKey = readonly [string, string, string];
 
 /**
  * @note

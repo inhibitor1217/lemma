@@ -8,7 +8,7 @@ import { RMutation } from './mutation';
  *
  * Fixed typing for react-query useMutation key.
  */
-type MutationKey = string[];
+type MutationKey = readonly [string, string, string];
 
 /**
  * @note

@@ -8,7 +8,7 @@ import { RQuery } from './query';
  *
  * Fixed typing for react-query useInfiniteQuery key.
  */
-type InfiniteQueryKey = string[];
+type InfiniteQueryKey = readonly [string, string, string];
 
 /**
  * @note
