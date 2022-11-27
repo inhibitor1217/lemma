@@ -1,6 +1,7 @@
 export { WorkspaceHttpApi, WorkspaceHttpApi__RQ, WorkspaceHttpApi__Resolver } from './http-api';
 export { useCreateWorkspace } from './useCreateWorkspace';
-export { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
+export { useCreateWorkspaceRoute } from './useCreateWorkspaceRoute';
+export { useWorkspaceRoute } from './useWorkspaceRoute';
 export { useWorkspaces } from './useWorkspaces';
 export { type Workspace } from './workspace';
 export { type WorkspaceProfile } from './workspace-profile';

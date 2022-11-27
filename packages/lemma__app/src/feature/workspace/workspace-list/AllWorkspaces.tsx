@@ -1,6 +1,6 @@
 import { Array, go } from '~/lib/fx';
 import { Divider, StackItem, VStack } from '~/lib/layout';
-import { useCreateWorkspaceForm, useWorkspaces } from '~/lib/workspace';
+import { useCreateWorkspaceRoute, useWorkspaces } from '~/lib/workspace';
 import { AllWorkspacesHeader } from './ui/all-workspaces-header';
 import {
   EmptyWorkspaceList,
@@ -14,7 +14,7 @@ import WorkspaceCard from './WorkspaceCard';
 
 function WorkspaceList() {
   const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useWorkspaces();
-  const createWorkspace = useCreateWorkspaceForm();
+  const createWorkspaceRoute = useCreateWorkspaceRoute();
 
   if (isLoading) {
     return (
@@ -36,7 +36,7 @@ function WorkspaceList() {
   );
 
   if (workspaces.length === 0) {
-    return <EmptyWorkspaceList createWorkspace={createWorkspace} />;
+    return <EmptyWorkspaceList createWorkspace={createWorkspaceRoute} />;
   }
 
   return (
@@ -54,12 +54,12 @@ function WorkspaceList() {
 }
 
 export default function AllWorkspaces() {
-  const createWorkspace = useCreateWorkspaceForm();
+  const createWorkspaceRoute = useCreateWorkspaceRoute();
 
   return (
     <VStack spacing={16} align="stretch">
       <StackItem>
-        <AllWorkspacesHeader createWorkspace={createWorkspace} />
+        <AllWorkspacesHeader createWorkspace={createWorkspaceRoute} />
       </StackItem>
 
       <StackItem>

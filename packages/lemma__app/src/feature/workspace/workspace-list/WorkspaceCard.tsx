@@ -4,12 +4,14 @@ import { go, Option } from '~/lib/fx';
 import { i18ntext } from '~/lib/i18n';
 import { HStack, Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';
-import { Workspace } from '~/lib/workspace';
+import { useWorkspaceRoute, Workspace } from '~/lib/workspace';
 
 export default function WorkspaceCard({ workspace }: { workspace: Workspace }) {
+  const routeToWorkspace = useWorkspaceRoute();
+
   return (
     <Sized height={160}>
-      <Card.Interactive>
+      <Card.Interactive onClick={routeToWorkspace(workspace.id)}>
         <HStack align="stretch" spacing={8}>
           {go(
             workspace.profile,
