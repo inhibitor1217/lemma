@@ -2,6 +2,7 @@ import { styled } from '@channel.io/bezier-react';
 import { Children, ReactNode } from 'react';
 import { Spacer, StackItem, VStack } from '~/lib/layout';
 import GNBMyAccountButton from './GNBMyAccountButton';
+import GNBWorkspacesItem from './GNBWorkspacesItem';
 
 const Layout = styled.div`
   width: 100%;
@@ -28,5 +29,5 @@ function AppGNBLayout({ Top = null, Bottom = null }: { Top?: ReactNode; Bottom?:
 }
 
 export default function AppGNB() {
-  return <AppGNBLayout Bottom={[<GNBMyAccountButton />]} />;
+  return <AppGNBLayout Top={[<GNBWorkspacesItem />]} Bottom={[<GNBMyAccountButton />]} />;
 }
