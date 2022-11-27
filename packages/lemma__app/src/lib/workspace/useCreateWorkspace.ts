@@ -1,7 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { go, IO, Task } from '~/lib/fx';
+import { Error } from '~/lib/error';
+import { go, IO, pipe, Task } from '~/lib/fx';
+import { i18nstring } from '~/lib/i18n';
 import { useParametricMutation } from '~/lib/react-query';
+import { useToastService } from '~/lib/toast';
 import { WorkspaceHttpApi, WorkspaceHttpApi__Resolver, WorkspaceHttpApi__RQ } from './http-api';
+import { Workspace } from './workspace';
 
 /**
  * Regard empty display name as a default value.
@@ -27,8 +31,25 @@ const createWorkspace = (form: { slug: string; displayName: string }) =>
 
 export function useCreateWorkspace() {
   const queryClient = useQueryClient();
+  const toastService = useToastService();
+
+  const showWorkspaceCreateSuccessToast =
+    (workspace: Workspace): IO<void> =>
+    () =>
+      toastService.success(i18nstring(`Workspace "${workspace.profile?.displayName}" has been created.`));
+
+  const showWorkspaceCreateErrorToast =
+    (error: Error): IO<void> =>
+    () =>
+      toastService.error(error.message);
+
+  const onSuccess = showWorkspaceCreateSuccessToast;
+
+  const onError = showWorkspaceCreateErrorToast;
 
   return useParametricMutation(createWorkspaceKey, createWorkspace, {
     onMutate: () => go(() => queryClient.invalidateQueries(WorkspaceHttpApi__RQ.getWorkspaces), IO.run),
+    onSuccess: pipe(onSuccess, IO.run),
+    onError: pipe(onError, IO.run),
   });
 }
