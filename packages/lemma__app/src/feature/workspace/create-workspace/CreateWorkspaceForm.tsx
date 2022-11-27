@@ -1,4 +1,4 @@
-import { go, IO } from '~/lib/fx';
+import { IO } from '~/lib/fx';
 import { StackItem, VStack } from '~/lib/layout';
 import { useCreateWorkspace, useWorkspaceRoute, Workspace } from '~/lib/workspace';
 import { CreateWorkspaceFormProvider, CreateWorkspaceFormValues, DisplayNameField, SlugField, SubmitButton } from './form';
@@ -24,11 +24,11 @@ export default function CreateWorkspaceForm() {
           <CreateWorkspaceFormTitle />
         </StackItem>
 
-        <StackItem>
+        <StackItem style={{ width: 480 }}>
           <SlugField />
         </StackItem>
 
-        <StackItem>
+        <StackItem style={{ width: 480 }}>
           <DisplayNameField />
         </StackItem>
 
