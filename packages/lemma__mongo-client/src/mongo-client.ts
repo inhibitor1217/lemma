@@ -21,6 +21,8 @@ export type MongoClientOptions = {
     logger: MongoClientLogger;
     level: MongoClientLogLevel;
   };
+
+  enableMigration: boolean;
 };
 
 const constructMongoUri = (options: MongoClientOptions): string => {
@@ -57,7 +59,9 @@ export class MongoClient {
 
     mongoose
       .connect(constructMongoUri(options), {
+        autoCreate: options.enableMigration,
         authSource: MongoClient.ADMIN_DATABASE,
+        autoIndex: options.enableMigration,
         logger,
         loggerLevel: options.log.level,
       })

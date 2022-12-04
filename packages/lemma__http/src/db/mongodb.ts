@@ -21,6 +21,8 @@ async function mongodb(fastify: FastifyInstance) {
       logger: fastify.log,
       level: fastify.env.stage.is(Stage.Dev) ? 'debug' : 'info',
     },
+
+    enableMigration: fastify.env.stage.is(Stage.Dev),
   });
 
   fastify.decorate('mongodb', client);
