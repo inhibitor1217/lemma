@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import * as models from '~/model';
 import { Future } from './future';
 
 export type MongoClientLogger = {
@@ -70,5 +71,9 @@ export class MongoClient {
         this.connectionFuture.resolve();
       })
       .catch((error) => this.connectionFuture.reject(error));
+  }
+
+  get translation() {
+    return models.Translation;
   }
 }

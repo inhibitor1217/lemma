@@ -1,0 +1,1 @@
+export { translation } from './translation';
