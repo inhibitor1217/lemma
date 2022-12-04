@@ -1,13 +1,15 @@
-import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import Fastify, { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { routes as accountRoutes } from '~/account';
 import auth, { routes as authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
 import jwt from '~/lib/jwt-plugin';
+import sessionGuard from '~/lib/session-guard';
 import ping from '~/ping';
 import security from '~/security';
+import { routes as translationRoutes } from '~/translation';
 import web from '~/web';
-import { routes as workspaceRoutes } from '~/workspace';
+import { routes as workspaceRoutes, workspaceGuard } from '~/workspace';
 
 const fastify = Fastify({ logger: true });
 
@@ -39,6 +41,16 @@ fastify.register(web);
 fastify.register(accountRoutes, { prefix: '/account' });
 fastify.register(authRoutes, { prefix: '/auth' });
 fastify.register(ping, { prefix: '/ping' });
-fastify.register(workspaceRoutes, { prefix: '/workspace' });
+fastify.register(workspaceRoutes.workspaces, { prefix: '/workspace' });
+fastify.register(
+  async (fastify: FastifyInstance) => {
+    fastify.register(sessionGuard);
+    fastify.register(workspaceGuard);
+
+    fastify.register(workspaceRoutes.workspace);
+    fastify.register(translationRoutes, { prefix: '/translation' });
+  },
+  { prefix: '/workspace/:workspaceId' }
+);
 
 export default fastify;

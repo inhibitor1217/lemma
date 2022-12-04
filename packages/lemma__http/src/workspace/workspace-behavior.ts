@@ -10,6 +10,7 @@ type CreateWorkspaceArgs = {
 declare module 'fastify' {
   interface FastifyInstance {
     workspaceBehavior: {
+      getWorkspace(workspaceId: Workspace['id']): Promise<Workspace | null>;
       getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]>;
       getWorkspacesNumPages(accountId: Account['id']): Promise<number>;
       findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null>;
@@ -19,6 +20,17 @@ declare module 'fastify' {
 }
 
 export async function workspaceBehavior(fastify: FastifyInstance) {
+  async function getWorkspace(workspaceId: Workspace['id']): Promise<Workspace | null> {
+    return fastify.rdb.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        profile: true,
+      },
+    });
+  }
+
   async function getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]> {
     return fastify.rdb.workspace.findMany({
       where: {
@@ -82,6 +94,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
   }
 
   fastify.decorate('workspaceBehavior', {
+    getWorkspace,
     getWorkspacesPage,
     getWorkspacesNumPages,
     findWorkspaceBySlug,
