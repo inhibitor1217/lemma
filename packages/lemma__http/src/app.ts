@@ -47,6 +47,11 @@ fastify.register(
     fastify.register(sessionGuard);
     fastify.register(workspaceGuard);
 
+    fastify.addSchema({
+      $id: 'workspaceId',
+      type: 'number',
+    });
+
     fastify.register(workspaceRoutes.workspace);
     fastify.register(translationRoutes, { prefix: '/translation' });
   },

@@ -10,9 +10,7 @@ export default async function routes(fastify: FastifyInstance) {
     {
       schema: {
         params: {
-          workspaceId: {
-            type: 'number',
-          },
+          workspaceId: fastify.getSchema('workspaceId'),
         },
       },
     },
