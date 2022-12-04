@@ -9,6 +9,9 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "compile": "tsc --build ./tsconfig.json"
+  },
   "devDependencies": {
     "@yarnpkg/pnpify": "^4.0.0-rc.32",
     "tsconfig-paths": "^4.1.0",
