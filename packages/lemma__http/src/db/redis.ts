@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 
 declare module 'fastify' {
   interface FastifyInstance {
-    redis: Redis
+    redis: Redis;
   }
 }
 
@@ -16,16 +16,11 @@ async function redis(fastify: FastifyInstance) {
     password: fastify.env.redis.password,
   });
 
-  client.on('error', error => {
+  client.on('error', (error) => {
     fastify.log.error(error);
   });
 
-  fastify.decorate('redis', new Redis({
-    host: fastify.env.redis.host,
-    port: fastify.env.redis.port,
-    username: fastify.env.redis.username,
-    password: fastify.env.redis.password,
-  }));
+  fastify.decorate('redis', client);
 }
 
 export default fp(redis);

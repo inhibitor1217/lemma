@@ -1468,6 +1468,7 @@ __metadata:
     "@fastify/cors": ^8.1.0
     "@fastify/formbody": ^7.1.0
     "@fastify/session": ^10.0.0
+    "@lemma/mongo-client": "workspace:^"
     "@lemma/prisma-client": "workspace:^"
     "@types/connect-redis": ^0.0.18
     "@types/jsonwebtoken": ^8.5.8
@@ -1490,7 +1491,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lemma/mongo-client@workspace:packages/lemma__mongo-client":
+"@lemma/mongo-client@workspace:^, @lemma/mongo-client@workspace:packages/lemma__mongo-client":
   version: 0.0.0-use.local
   resolution: "@lemma/mongo-client@workspace:packages/lemma__mongo-client"
   dependencies:

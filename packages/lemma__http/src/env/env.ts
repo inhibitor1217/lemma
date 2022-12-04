@@ -19,6 +19,14 @@ export type Env = {
     };
   };
 
+  mongodb: {
+    host: string;
+    port: number;
+    database: string;
+    username: string;
+    password: string;
+  };
+
   redis: {
     host: string;
     port: number;
