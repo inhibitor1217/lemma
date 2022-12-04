@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import * as models from '~/model';
 import { Future } from './future';
+import * as models from './model';
 
 export type MongoClientLogger = {
   debug: (message: string) => void;
