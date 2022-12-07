@@ -1506,7 +1506,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lemma/prisma-client@workspace:packages/lemma__prisma-client"
   dependencies:
-    "@prisma/client": ^4.2.1
+    "@prisma/client": ^4.7.1
     "@types/node": ^18.7.8
     "@yarnpkg/pnpify": ^4.0.0-rc.32
     prisma: ^4.2.1
@@ -1561,24 +1561,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "@prisma/client@npm:4.2.1"
+"@prisma/client@npm:^4.7.1":
+  version: 4.7.1
+  resolution: "@prisma/client@npm:4.7.1"
   dependencies:
-    "@prisma/engines-version": 4.2.0-33.2920a97877e12e055c1333079b8d19cee7f33826
+    "@prisma/engines-version": 4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 2eefe7182f2ebc26c35777e9ff22acb9c1d1f6e0988c518b32063d7677d066ab7258d13a0ee851addc77526dc0de9c05a02d5688c55377d65ddee1b6866b9e95
+  checksum: 01ce4c7382d80a1cca256e532a773d982ada9b7f64acd6bb590415634d04305413cee700048287dbf94f09ccf31e19db03a4a6501bfd0a01509f80498ee58121
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:4.2.0-33.2920a97877e12e055c1333079b8d19cee7f33826":
-  version: 4.2.0-33.2920a97877e12e055c1333079b8d19cee7f33826
-  resolution: "@prisma/engines-version@npm:4.2.0-33.2920a97877e12e055c1333079b8d19cee7f33826"
-  checksum: 65975c69a361b56a85cf3652c8d7aec7549abe574158e423a64bc0be4bee83fe72ac2abd60133f776f3d410f97e7dc8c5dc516791ec963703cc6f914d378efc4
+"@prisma/engines-version@npm:4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c":
+  version: 4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c
+  resolution: "@prisma/engines-version@npm:4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c"
+  checksum: 66221f1805ce700a4f9f0b6751a291d7114afff9d8b61fd03beb9bbe8b45b037fc67ee0425f45bbad57b7bf95cf649a490d5caaf75a4f3a7e17b3187ea8a6a15
   languageName: node
   linkType: hard
 
