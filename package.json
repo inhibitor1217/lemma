@@ -7,6 +7,8 @@
   "private": true,
   "scripts": {
     "check:typescript": "tsc --build --verbose",
+    "dev:app": "yarn workspace @lemma/app dev",
+    "dev:http": "yarn workspace @lemma/http watch:dev",
     "setup:local": "./setup/boot.sh",
     "shutdown:local": "./setup/shutdown.sh"
   },
