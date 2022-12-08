@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export const translation = new mongoose.Schema(
   {
     workspaceId: {
-      type: String,
+      type: Number,
       required: true,
     },
     key: {

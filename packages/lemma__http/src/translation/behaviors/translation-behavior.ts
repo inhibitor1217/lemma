@@ -12,12 +12,27 @@ type CreateTranslationArgs = {
 declare module 'fastify' {
   interface FastifyInstance {
     translationBehavior: {
+      getTranslation(workspaceId: number, translationId: string): Promise<Translation | null>;
       createTranslation(args: CreateTranslationArgs): Promise<Translation>;
     };
   }
 }
 
 export async function translationBehavior(fastify: FastifyInstance) {
+  async function getTranslation(workspaceId: number, translationId: string): Promise<Translation | null> {
+    const translation = await fastify.mongodb.translation.findById(translationId);
+
+    if (translation) {
+      if (translation.workspaceId !== workspaceId) {
+        return null;
+      }
+
+      return translation;
+    }
+
+    return null;
+  }
+
   async function createTranslation(args: CreateTranslationArgs): Promise<Translation> {
     return fastify.mongodb.translation
       .create({
@@ -35,6 +50,7 @@ export async function translationBehavior(fastify: FastifyInstance) {
   }
 
   fastify.decorate('translationBehavior', {
+    getTranslation,
     createTranslation,
   });
 }

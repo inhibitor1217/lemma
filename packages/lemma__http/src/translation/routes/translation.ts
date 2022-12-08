@@ -58,7 +58,16 @@ export default async function routes(fastify: FastifyInstance) {
     ) => {
       const { workspaceId, translationId } = request.params;
 
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+      const translation = await fastify.translationBehavior
+        .getTranslation(workspaceId, translationId)
+        .then((translation) => translation?.toObject())
+        .then((translation) => translation && MongoDBEntityView.from(translation));
+
+      if (!translation) {
+        return reply.status(404).send({ statusCode: 404, message: 'Not Found' });
+      }
+
+      return reply.status(200).send({ translation });
     }
   );
 
