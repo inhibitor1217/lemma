@@ -1,9 +1,28 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import { key, language } from '~/translation/lib';
 
 export default async function routes(fastify: FastifyInstance) {
   fastify.addSchema({
     $id: 'translationId',
     type: 'string',
+  });
+
+  fastify.addSchema({
+    $id: 'translationKey',
+    type: 'string',
+    minLength: 1,
+    maxLength: 255,
+    pattern: key.regexpStr,
+  });
+
+  fastify.addSchema({
+    $id: 'translationTranslations',
+    type: 'object',
+    patternProperties: {
+      [language.code.regexpStr]: {
+        type: 'string',
+      },
+    },
   });
 
   /**
@@ -32,6 +51,8 @@ export default async function routes(fastify: FastifyInstance) {
       }>,
       reply
     ) => {
+      const { workspaceId, translationId } = request.params;
+
       return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
     }
   );
@@ -50,6 +71,14 @@ export default async function routes(fastify: FastifyInstance) {
         params: {
           workspaceId: fastify.getSchema('workspaceId'),
         },
+        body: {
+          type: 'object',
+          properties: {
+            key: fastify.getSchema('translationKey'),
+            translations: fastify.getSchema('translationTranslations'),
+          },
+          required: ['key'],
+        },
       },
     },
     async (
@@ -57,9 +86,16 @@ export default async function routes(fastify: FastifyInstance) {
         Params: {
           workspaceId: number;
         };
+        Body: {
+          key: string;
+          translations?: Record<string, string>;
+        };
       }>,
       reply
     ) => {
+      const { workspaceId } = request.params;
+      const { key, translations } = request.body;
+
       return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
     }
   );
@@ -79,9 +115,14 @@ export default async function routes(fastify: FastifyInstance) {
           workspaceId: fastify.getSchema('workspaceId'),
           translationId: fastify.getSchema('translationId'),
         },
+        body: {
+          type: 'object',
+          properties: {
+            key: fastify.getSchema('translationKey'),
+            translations: fastify.getSchema('translationTranslations'),
+          },
+        },
       },
-      // @todo
-      // body: { ... },
     },
     async (
       request: FastifyRequest<{
@@ -89,9 +130,16 @@ export default async function routes(fastify: FastifyInstance) {
           workspaceId: number;
           translationId: string;
         };
+        Body: {
+          key?: string;
+          translations?: Record<string, string>;
+        };
       }>,
       reply
     ) => {
+      const { workspaceId, translationId } = request.params;
+      const { key, translations } = request.body;
+
       return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
     }
   );
@@ -122,6 +170,8 @@ export default async function routes(fastify: FastifyInstance) {
       }>,
       reply
     ) => {
+      const { workspaceId, translationId } = request.params;
+
       return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
     }
   );
