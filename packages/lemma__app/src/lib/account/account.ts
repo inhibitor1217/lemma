@@ -1,6 +1,6 @@
+import { type Option } from '@lemma/fx';
 import { type AuthProvider } from '@lemma/prisma-client';
 import { type PrimitiveType } from '~/lib/field';
-import { type Option } from '@lemma/fx';
 
 export type Account = {
   id: PrimitiveType.ID;

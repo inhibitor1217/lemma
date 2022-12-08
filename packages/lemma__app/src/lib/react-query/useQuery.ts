@@ -1,6 +1,6 @@
+import { go, Task } from '@lemma/fx';
 import { useQuery as _useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { Error } from '~/lib/error';
-import { go, Task } from '@lemma/fx';
 import { RQuery } from './query';
 
 /**

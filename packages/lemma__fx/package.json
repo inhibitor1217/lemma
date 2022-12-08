@@ -4,8 +4,11 @@
   "description": "Functional utility for TypeScript",
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "packageManager": "yarn@3.2.2",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],

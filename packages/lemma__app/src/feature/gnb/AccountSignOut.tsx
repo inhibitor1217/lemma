@@ -1,11 +1,11 @@
 import { ListItem, ListItemVariant } from '@channel.io/bezier-react';
+import { go, IO } from '@lemma/fx';
 import { useNavigate } from 'react-router-dom';
+import { AuthorizePage } from '~/feature/auth';
 import { useAuthSignOutMutation } from '~/lib/auth';
 import { i18ntext } from '~/lib/i18n';
 import { Text, Typography } from '~/lib/typography';
-import { AuthorizePage } from '~/feature/auth';
 import { InternalPath } from '~/page';
-import { go, IO } from '@lemma/fx';
 
 function useNavigateToAuthorizeRoute() {
   const navigate = useNavigate();

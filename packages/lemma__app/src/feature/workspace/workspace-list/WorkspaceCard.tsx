@@ -1,6 +1,6 @@
 import { Avatar, AvatarSize } from '@channel.io/bezier-react';
-import { Card } from '~/lib/component';
 import { go, Option } from '@lemma/fx';
+import { Card } from '~/lib/component';
 import { i18ntext } from '~/lib/i18n';
 import { HStack, Sized, StackItem, VStack } from '~/lib/layout';
 import { Text, Typography } from '~/lib/typography';

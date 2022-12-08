@@ -1,6 +1,6 @@
+import { IO } from '@lemma/fx';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IO } from '@lemma/fx';
 import { InternalPath } from '~/page';
 
 export function useCreateWorkspaceRoute(): IO<void> {

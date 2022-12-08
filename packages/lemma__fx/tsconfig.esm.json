@@ -2,7 +2,9 @@
   "extends": "../../support/typescript/tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "outDir": "dist/",
+    "outDir": "dist/esm",
+    "declarationDir": "dist/types",
+    "module": "esnext",
     "baseUrl": "./",
     "rootDir": "./src",
     "paths": {
@@ -10,9 +12,5 @@
     }
   },
   "include": ["./src"],
-  "references": [
-    {
-      "path": "../lemma__mongo-client/tsconfig.cjs.json"
-    }
-  ]
+  "references": []
 }

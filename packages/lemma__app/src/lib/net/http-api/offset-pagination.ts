@@ -1,4 +1,4 @@
-import { Option, Struct, id, Array } from '@lemma/fx';
+import { Array, id, Option, Struct } from '@lemma/fx';
 
 export namespace HttpApiOffsetPagination {
   export type RequestDTO = {
