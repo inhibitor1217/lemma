@@ -1497,6 +1497,7 @@ __metadata:
   resolution: "@lemma/app@workspace:packages/lemma__app"
   dependencies:
     "@channel.io/bezier-react": ^1.0.0-next-v1.165
+    "@lemma/fx": "workspace:^"
     "@lemma/prisma-client": "workspace:^"
     "@tanstack/react-query": ^4.3.4
     "@tanstack/react-query-devtools": ^4.3.5
@@ -1522,7 +1523,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lemma/fx@workspace:packages/lemma__fx":
+"@lemma/fx@workspace:^, @lemma/fx@workspace:packages/lemma__fx":
   version: 0.0.0-use.local
   resolution: "@lemma/fx@workspace:packages/lemma__fx"
   dependencies:

@@ -5,7 +5,7 @@ import { i18ntext } from '~/lib/i18n';
 import { Text, Typography } from '~/lib/typography';
 import { AuthorizePage } from '~/feature/auth';
 import { InternalPath } from '~/page';
-import { go, IO } from '~/lib/fx';
+import { go, IO } from '@lemma/fx';
 
 function useNavigateToAuthorizeRoute() {
   const navigate = useNavigate();

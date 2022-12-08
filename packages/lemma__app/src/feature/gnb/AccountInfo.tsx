@@ -1,7 +1,7 @@
 import { Avatar, AvatarSize, ellipsis } from '@channel.io/bezier-react';
 import { selector, useRecoilValue } from 'recoil';
 import { AccountAtom } from '~/lib/account';
-import { Option } from '~/lib/fx';
+import { Option } from '@lemma/fx';
 import { i18ntext } from '~/lib/i18n';
 import { HStack, Padding, Sized, StackItem, VStack } from '~/lib/layout';
 import { RecoilAtom } from '~/lib/recoil';

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Error } from '~/lib/error';
-import { go, IO, pipe, Task } from '~/lib/fx';
+import { go, IO, pipe, Task } from '@lemma/fx';
 import { i18nstring } from '~/lib/i18n';
 import { useParametricMutation } from '~/lib/react-query';
 import { useToastService } from '~/lib/toast';

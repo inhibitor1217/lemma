@@ -1,4 +1,4 @@
-import { Array, go } from '~/lib/fx';
+import { Array, go } from '@lemma/fx';
 import { Divider, StackItem, VStack } from '~/lib/layout';
 import { useCreateWorkspaceRoute, useWorkspaces } from '~/lib/workspace';
 import { AllWorkspacesHeader } from './ui/all-workspaces-header';

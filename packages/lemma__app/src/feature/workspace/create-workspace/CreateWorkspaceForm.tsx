@@ -1,4 +1,4 @@
-import { IO } from '~/lib/fx';
+import { IO } from '@lemma/fx';
 import { StackItem, VStack } from '~/lib/layout';
 import { useCreateWorkspace, useWorkspaceRoute, Workspace } from '~/lib/workspace';
 import { CreateWorkspaceFormProvider, CreateWorkspaceFormValues, DisplayNameField, SlugField, SubmitButton } from './form';

@@ -1,5 +1,5 @@
 import { PrimitiveType } from '~/lib/field';
-import { Option } from '~/lib/fx';
+import { Option } from '@lemma/fx';
 
 export type WorkspaceProfile = {
   id: PrimitiveType.ID;

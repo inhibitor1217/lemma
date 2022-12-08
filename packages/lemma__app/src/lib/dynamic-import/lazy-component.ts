@@ -1,5 +1,5 @@
 import { ComponentType, lazy, ReactNode } from 'react';
-import { go } from '~/lib/fx';
+import { go } from '@lemma/fx';
 import withSuspense from './with-suspense';
 
 export default function lazyComponent<P, ComponentModule extends { default: ComponentType<P> }>(

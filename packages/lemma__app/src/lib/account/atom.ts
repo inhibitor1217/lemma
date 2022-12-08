@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { Option } from '~/lib/fx';
+import { Option } from '@lemma/fx';
 import { RecoilAtom } from '~/lib/recoil';
 import { Account } from './account';
 

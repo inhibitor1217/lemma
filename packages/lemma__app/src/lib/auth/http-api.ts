@@ -1,7 +1,7 @@
 import { type AuthProvider } from '@lemma/prisma-client';
 import { type Account } from '~/lib/account';
 import { FieldResolver, PrimitiveType } from '~/lib/field';
-import { Option, Struct } from '~/lib/fx';
+import { Option, Struct } from '@lemma/fx';
 import { HttpApi } from '~/lib/net/http-api';
 import { RMutation, RQuery } from '~/lib/react-query';
 

@@ -1,7 +1,7 @@
 import { css, styled, TransitionDuration } from '@channel.io/bezier-react';
 import { Children, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import ReactGridLayout, { Layout, Layouts, Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout';
-import { go } from '~/lib/fx';
+import { go } from '@lemma/fx';
 
 const itemTransitionStyle = css<{
   animate: boolean;

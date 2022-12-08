@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Account, AccountAtom } from '~/lib/account';
 import { GoogleSignIn } from '~/lib/auth-integration/google-sign-in';
-import { go, IO, Option, pipe, Struct, Task } from '~/lib/fx';
+import { go, IO, Option, pipe, Struct, Task } from '@lemma/fx';
 import { useMutation, useQuery } from '~/lib/react-query';
 import { AuthHttpApi, AuthHttpApi__Resolver, AuthHttpApi__RQ } from './http-api';
 

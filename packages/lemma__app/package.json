@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@channel.io/bezier-react": "^1.0.0-next-v1.165",
+    "@lemma/fx": "workspace:^",
     "@tanstack/react-query": "^4.3.4",
     "@tanstack/react-query-devtools": "^4.3.5",
     "axios": "^0.27.2",

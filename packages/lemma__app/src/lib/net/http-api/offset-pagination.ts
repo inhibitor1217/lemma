@@ -1,4 +1,4 @@
-import { Option, Struct, id, Array } from '~/lib/fx';
+import { Option, Struct, id, Array } from '@lemma/fx';
 
 export namespace HttpApiOffsetPagination {
   export type RequestDTO = {

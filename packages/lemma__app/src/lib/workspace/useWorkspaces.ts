@@ -1,4 +1,4 @@
-import { go, Option, Task } from '~/lib/fx';
+import { go, Option, Task } from '@lemma/fx';
 import { usePaginatedQuery } from '~/lib/react-query';
 import { WorkspaceHttpApi, WorkspaceHttpApi__Resolver, WorkspaceHttpApi__RQ } from '~/lib/workspace';
 

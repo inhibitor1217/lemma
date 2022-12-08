@@ -1,6 +1,6 @@
 import { useMutation as _useMutation, UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { Error } from '~/lib/error';
-import { go, pipe, Task } from '~/lib/fx';
+import { go, pipe, Task } from '@lemma/fx';
 import { RMutation } from './mutation';
 
 /**
