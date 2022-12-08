@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { translationBehavior } from '~/translation/behaviors';
+import { MongoDBEntityView } from '~/lib/mongodb';
+import { DuplicateTranslationKeyException, translationBehavior } from '~/translation/behaviors';
 import { key, language } from '~/translation/lib';
 
 export default async function routes(fastify: FastifyInstance) {
@@ -98,9 +99,29 @@ export default async function routes(fastify: FastifyInstance) {
       reply
     ) => {
       const { workspaceId } = request.params;
-      const { key, translations } = request.body;
+      const { key, translations = {} } = request.body;
 
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+      try {
+        const translation = await fastify.translationBehavior
+          .createTranslation({
+            workspaceId,
+            key,
+            translations,
+          })
+          .then((translation) => translation.toObject())
+          .then(MongoDBEntityView.from);
+
+        return reply.status(201).send({ translation });
+      } catch (error) {
+        if (error instanceof DuplicateTranslationKeyException) {
+          return reply.status(400).send({
+            statusCode: 400,
+            message: error.message,
+          });
+        }
+
+        throw error;
+      }
     }
   );
 
