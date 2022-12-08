@@ -12,7 +12,7 @@
     "dist"
   ],
   "scripts": {
-    "compile": "tsc --build ./tsconfig.json"
+    "compile": "tsc --build ./tsconfig.cjs.json"
   },
   "devDependencies": {
     "@yarnpkg/pnpify": "^4.0.0-rc.32",

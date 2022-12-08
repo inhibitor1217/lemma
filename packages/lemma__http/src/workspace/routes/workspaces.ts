@@ -1,3 +1,4 @@
+import { go, Option } from '@lemma/fx';
 import { Workspace } from '@lemma/prisma-client';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
@@ -72,11 +73,13 @@ export default async function routes(fastify: FastifyInstance) {
       const { slug } = request.query;
       const workspace = await fastify.workspaceBehavior.findWorkspaceBySlug(slug);
 
-      if (!workspace) {
-        return reply.status(404).send({ statusCode: 404, message: 'Not Found' });
-      }
-
-      return reply.status(200).send({ workspace });
+      return go(
+        workspace,
+        Option.reduce(
+          (workspace) => reply.status(200).send({ workspace }),
+          () => reply.status(404).send({ statusCode: 404, message: 'Not Found' })
+        )
+      );
     }
   );
 
@@ -117,7 +120,7 @@ export default async function routes(fastify: FastifyInstance) {
 
       const duplicate = await fastify.workspaceBehavior.findWorkspaceBySlug(slug);
 
-      if (duplicate) {
+      if (Option.isSome(duplicate)) {
         return reply.status(400).send({
           statusCode: 400,
           message: `Workspace with slug '${slug}' already exists`,

@@ -1,4 +1,5 @@
-import { Account, Workspace } from '@lemma/prisma-client';
+import { Option } from '@lemma/fx';
+import { Workspace } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
 import { OffsetPagination } from '~/lib/pagination';
 
@@ -10,17 +11,17 @@ type CreateWorkspaceArgs = {
 declare module 'fastify' {
   interface FastifyInstance {
     workspaceBehavior: {
-      getWorkspace(workspaceId: Workspace['id']): Promise<Workspace | null>;
-      getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]>;
-      getWorkspacesNumPages(accountId: Account['id']): Promise<number>;
-      findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null>;
-      createWorkspace(accountId: Account['id'], args: CreateWorkspaceArgs): Promise<Workspace>;
+      getWorkspace(workspaceId: number): Promise<Option<Workspace>>;
+      getWorkspacesPage(accountId: number, options: OffsetPagination.RequestOptions): Promise<Workspace[]>;
+      getWorkspacesNumPages(accountId: number): Promise<number>;
+      findWorkspaceBySlug(slug: string): Promise<Option<Workspace>>;
+      createWorkspace(accountId: number, args: CreateWorkspaceArgs): Promise<Workspace>;
     };
   }
 }
 
 export async function workspaceBehavior(fastify: FastifyInstance) {
-  async function getWorkspace(workspaceId: Workspace['id']): Promise<Workspace | null> {
+  async function getWorkspace(workspaceId: number): Promise<Option<Workspace>> {
     return fastify.rdb.workspace.findUnique({
       where: {
         id: workspaceId,
@@ -31,7 +32,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
     });
   }
 
-  async function getWorkspacesPage(accountId: Account['id'], options: OffsetPagination.RequestOptions): Promise<Workspace[]> {
+  async function getWorkspacesPage(accountId: number, options: OffsetPagination.RequestOptions): Promise<Workspace[]> {
     return fastify.rdb.workspace.findMany({
       where: {
         members: {
@@ -50,7 +51,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
     });
   }
 
-  async function getWorkspacesNumPages(accountId: Account['id']): Promise<number> {
+  async function getWorkspacesNumPages(accountId: number): Promise<number> {
     return fastify.rdb.workspace
       .count({
         where: {
@@ -64,7 +65,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
       .then(OffsetPagination.toNumPages);
   }
 
-  async function findWorkspaceBySlug(slug: Workspace['slug']): Promise<Workspace | null> {
+  async function findWorkspaceBySlug(slug: string): Promise<Option<Workspace>> {
     return fastify.rdb.workspace.findUnique({
       where: {
         slug,
@@ -72,7 +73,7 @@ export async function workspaceBehavior(fastify: FastifyInstance) {
     });
   }
 
-  async function createWorkspace(accountId: Account['id'], args: CreateWorkspaceArgs): Promise<Workspace> {
+  async function createWorkspace(accountId: number, args: CreateWorkspaceArgs): Promise<Workspace> {
     return fastify.rdb.workspace.create({
       data: {
         slug: args.slug,

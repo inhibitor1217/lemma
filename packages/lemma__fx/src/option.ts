@@ -45,4 +45,9 @@ export namespace Option {
     <A, B>(f: (a: A) => Option<B>) =>
     (value: Option<A>): Option<B> =>
       isNone(value) ? none() : f(value);
+
+  export const filter =
+    <A>(f: (a: A) => boolean) =>
+    (value: Option<A>): Option<A> =>
+      isNone(value) ? none() : f(value) ? value : none();
 }

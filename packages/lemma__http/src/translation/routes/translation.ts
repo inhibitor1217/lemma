@@ -1,3 +1,4 @@
+import { go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { MongoDBEntityView } from '~/lib/mongodb';
@@ -58,16 +59,15 @@ export default async function routes(fastify: FastifyInstance) {
     ) => {
       const { workspaceId, translationId } = request.params;
 
-      const translation = await fastify.translationBehavior
-        .getTranslation(workspaceId, translationId)
-        .then((translation) => translation?.toObject())
-        .then((translation) => translation && MongoDBEntityView.from(translation));
-
-      if (!translation) {
-        return reply.status(404).send({ statusCode: 404, message: 'Not Found' });
-      }
-
-      return reply.status(200).send({ translation });
+      return go(
+        await fastify.translationBehavior.getTranslation(workspaceId, translationId),
+        Option.map((translation) => translation.toObject()),
+        Option.map(MongoDBEntityView.from),
+        Option.reduce(
+          (translation) => reply.status(200).send({ translation }),
+          () => reply.status(404).send({ statusCode: 404, message: 'Not Found' })
+        )
+      );
     }
   );
 

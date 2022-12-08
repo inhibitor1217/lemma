@@ -1,3 +1,4 @@
+import { go, Option } from '@lemma/fx';
 import { Translation } from '@lemma/mongo-client';
 import { FastifyInstance } from 'fastify';
 import { MongoDBErrorCode } from '~/lib/mongodb';
@@ -12,25 +13,18 @@ type CreateTranslationArgs = {
 declare module 'fastify' {
   interface FastifyInstance {
     translationBehavior: {
-      getTranslation(workspaceId: number, translationId: string): Promise<Translation | null>;
+      getTranslation(workspaceId: number, translationId: string): Promise<Option<Translation>>;
       createTranslation(args: CreateTranslationArgs): Promise<Translation>;
     };
   }
 }
 
 export async function translationBehavior(fastify: FastifyInstance) {
-  async function getTranslation(workspaceId: number, translationId: string): Promise<Translation | null> {
-    const translation = await fastify.mongodb.translation.findById(translationId);
-
-    if (translation) {
-      if (translation.workspaceId !== workspaceId) {
-        return null;
-      }
-
-      return translation;
-    }
-
-    return null;
+  async function getTranslation(workspaceId: number, translationId: string): Promise<Option<Translation>> {
+    return go(
+      await fastify.mongodb.translation.findById(translationId),
+      Option.filter((translation) => translation.workspaceId === workspaceId)
+    );
   }
 
   async function createTranslation(args: CreateTranslationArgs): Promise<Translation> {
