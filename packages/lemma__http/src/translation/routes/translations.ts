@@ -31,34 +31,6 @@ export default async function routes(fastify: FastifyInstance) {
   );
 
   /**
-   * @api {post} /workspace/:workspaceId/translation
-   * @description Create a translation
-   *
-   * @todo
-   * Add a new translation to a workspace.
-   */
-  fastify.post(
-    '/',
-    {
-      schema: {
-        params: {
-          workspaceId: fastify.getSchema('workspaceId'),
-        },
-      },
-    },
-    async (
-      request: FastifyRequest<{
-        Params: {
-          workspaceId: number;
-        };
-      }>,
-      reply
-    ) => {
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
-    }
-  );
-
-  /**
    * @api {get} /workspace/:workspaceId/translation/search
    * @description Search translations
    *

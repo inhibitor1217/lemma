@@ -53,7 +53,8 @@ fastify.register(
     });
 
     fastify.register(workspaceRoutes.workspace);
-    fastify.register(translationRoutes, { prefix: '/translation' });
+    fastify.register(translationRoutes.translations, { prefix: '/translation' });
+    fastify.register(translationRoutes.translation, { prefix: '/translation' });
   },
   { prefix: '/workspace/:workspaceId' }
 );
