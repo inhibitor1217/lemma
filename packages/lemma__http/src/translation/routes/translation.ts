@@ -1,4 +1,4 @@
-import { go, Option } from '@lemma/fx';
+import { Either, go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { MongoDBEntityView } from '~/lib/mongodb';
@@ -110,27 +110,23 @@ export default async function routes(fastify: FastifyInstance) {
       const { workspaceId } = request.params;
       const { key, translations = {} } = request.body;
 
-      try {
-        const translation = await fastify.translationBehavior
-          .createTranslation({
-            workspaceId,
-            key,
-            translations,
-          })
-          .then((translation) => translation.toObject())
-          .then(MongoDBEntityView.from);
-
-        return reply.status(201).send({ translation });
-      } catch (error) {
-        if (error instanceof DuplicateTranslationKeyException) {
-          return reply.status(400).send({
-            statusCode: 400,
-            message: error.message,
-          });
-        }
-
-        throw error;
-      }
+      return go(
+        await fastify.translationBehavior.createTranslation({
+          workspaceId,
+          key,
+          translations,
+        }),
+        Either.map((translation) => translation.toObject()),
+        Either.map(MongoDBEntityView.from),
+        Either.reduce(
+          (translation) => reply.status(201).send({ translation }),
+          (error) =>
+            reply.status(400).send({
+              statusCode: 400,
+              message: `Translation with key '${key}' already exists`,
+            })
+        )
+      );
     }
   );
 

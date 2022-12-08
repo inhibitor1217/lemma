@@ -1,4 +1,4 @@
-import { go, Option } from '@lemma/fx';
+import { Either, go, Option } from '@lemma/fx';
 import { Translation } from '@lemma/mongo-client';
 import { FastifyInstance } from 'fastify';
 import { MongoDBErrorCode } from '~/lib/mongodb';
@@ -10,11 +10,13 @@ type CreateTranslationArgs = {
   translations: Record<string, string>;
 };
 
+type CreateTranslationErrors = DuplicateTranslationKeyException;
+
 declare module 'fastify' {
   interface FastifyInstance {
     translationBehavior: {
       getTranslation(workspaceId: number, translationId: string): Promise<Option<Translation>>;
-      createTranslation(args: CreateTranslationArgs): Promise<Translation>;
+      createTranslation(args: CreateTranslationArgs): Promise<Either<Translation, CreateTranslationErrors>>;
     };
   }
 }
@@ -27,16 +29,17 @@ export async function translationBehavior(fastify: FastifyInstance) {
     );
   }
 
-  async function createTranslation(args: CreateTranslationArgs): Promise<Translation> {
+  async function createTranslation(args: CreateTranslationArgs): Promise<Either<Translation, CreateTranslationErrors>> {
     return fastify.mongodb.translation
       .create({
         workspaceId: args.workspaceId,
         key: args.key,
         translations: args.translations,
       })
+      .then(Either.ok)
       .catch((error) => {
         if (error.code === MongoDBErrorCode.DUPLICATE_KEY) {
-          throw new DuplicateTranslationKeyException(args.key);
+          return Either.error(new DuplicateTranslationKeyException(args.key));
         }
 
         throw error;
