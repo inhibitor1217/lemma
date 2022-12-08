@@ -1,6 +1,6 @@
 import { Account, Workspace } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
-import { OffsetPagination } from '~/lib/offset-pagination';
+import { OffsetPagination } from '~/lib/pagination';
 
 type CreateWorkspaceArgs = {
   slug: string;

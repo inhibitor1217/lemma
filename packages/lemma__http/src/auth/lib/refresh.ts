@@ -12,25 +12,20 @@ export namespace SessionRefreshConfig {
 
 export type RefreshTokenPayload = {
   accountId: number;
-}
+};
 
 export async function signRefreshToken(fastify: FastifyInstance, payload: RefreshTokenPayload): Promise<string> {
-  return fastify.signJwt(
-    payload,
-    fastify.env.auth.cookie.secret,
-    {
-      subject: SessionRefreshConfig.SUBJECT,
-      expireDurationSeconds: SessionRefreshConfig.MAX_AGE_SECONDS,
-    },
-  )
+  return fastify.signJwt(payload, fastify.env.auth.cookie.secret, {
+    subject: SessionRefreshConfig.SUBJECT,
+    expireDurationSeconds: SessionRefreshConfig.MAX_AGE_SECONDS,
+  });
 }
 
-export async function decodeRefreshToken(fastify: FastifyInstance, token: string): Promise<JwtDecodedPayload<RefreshTokenPayload>> {
-  return fastify.verifyJwt<RefreshTokenPayload>(
-    token,
-    fastify.env.auth.cookie.secret,
-    {
-      subject: SessionRefreshConfig.SUBJECT,
-    },
-  )
+export async function decodeRefreshToken(
+  fastify: FastifyInstance,
+  token: string
+): Promise<JwtDecodedPayload<RefreshTokenPayload>> {
+  return fastify.verifyJwt<RefreshTokenPayload>(token, fastify.env.auth.cookie.secret, {
+    subject: SessionRefreshConfig.SUBJECT,
+  });
 }

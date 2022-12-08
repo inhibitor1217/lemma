@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import sessionGuard from '~/lib/session-guard';
+import { sessionGuard } from '~/lib/auth';
 
 async function me(fastify: FastifyInstance) {
   fastify.get('/', async (request, reply) => {

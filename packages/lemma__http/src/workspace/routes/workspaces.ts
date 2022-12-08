@@ -1,8 +1,8 @@
 import { Workspace } from '@lemma/prisma-client';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { OffsetPagination } from '~/lib/offset-pagination';
-import sessionGuard from '~/lib/session-guard';
+import { sessionGuard } from '~/lib/auth';
+import { OffsetPagination } from '~/lib/pagination';
 import { workspaceBehavior } from '~/workspace/behaviors';
 
 export default async function routes(fastify: FastifyInstance) {

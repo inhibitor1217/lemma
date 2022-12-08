@@ -3,8 +3,8 @@ import { routes as accountRoutes } from '~/account';
 import auth, { routes as authRoutes } from '~/auth';
 import db from '~/db';
 import env from '~/env';
-import jwt from '~/lib/jwt-plugin';
-import sessionGuard from '~/lib/session-guard';
+import { sessionGuard } from '~/lib/auth';
+import { jwtPlugin } from '~/lib/jwt';
 import ping from '~/ping';
 import security from '~/security';
 import * as translation from '~/translation';
@@ -35,7 +35,7 @@ fastify.register(security);
 fastify.register(db);
 
 fastify.register(auth);
-fastify.register(jwt);
+fastify.register(jwtPlugin);
 fastify.register(web);
 
 fastify.register(accountRoutes, { prefix: '/account' });
