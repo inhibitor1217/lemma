@@ -2,7 +2,7 @@ import { Either, go, Option } from '@lemma/fx';
 import { Translation } from '@lemma/mongo-client';
 import { FastifyInstance } from 'fastify';
 import { MongoDBErrorCode } from '~/lib/mongodb';
-import { DuplicateTranslationKeyException } from './translation-behavior.exception';
+import { DuplicateTranslationKeyException, TranslationNotFoundException } from './translation-behavior.exception';
 
 type CreateTranslationArgs = {
   workspaceId: number;
@@ -12,11 +12,26 @@ type CreateTranslationArgs = {
 
 type CreateTranslationErrors = DuplicateTranslationKeyException;
 
+type UpdateTranslationArgs = {
+  workspaceId: number;
+  translationId: string;
+  translation: {
+    key?: string;
+    translations?: Record<string, string>;
+  };
+};
+
+type UpdateTranslationErrors = DuplicateTranslationKeyException | TranslationNotFoundException;
+
+type DeleteTranslationErrors = TranslationNotFoundException;
+
 declare module 'fastify' {
   interface FastifyInstance {
     translationBehavior: {
       getTranslation(workspaceId: number, translationId: string): Promise<Option<Translation>>;
       createTranslation(args: CreateTranslationArgs): Promise<Either<Translation, CreateTranslationErrors>>;
+      updateTranslation(args: UpdateTranslationArgs): Promise<Either<Translation, UpdateTranslationErrors>>;
+      deleteTranslation(workspaceId: number, translationId: string): Promise<Either<void, DeleteTranslationErrors>>;
     };
   }
 }
@@ -46,8 +61,18 @@ export async function translationBehavior(fastify: FastifyInstance) {
       });
   }
 
+  async function updateTranslation(args: UpdateTranslationArgs): Promise<Either<Translation, UpdateTranslationErrors>> {
+    throw new Error('Not implemented');
+  }
+
+  async function deleteTranslation(workspaceId: number, translationId: string): Promise<Either<void, DeleteTranslationErrors>> {
+    throw new Error('Not implemented');
+  }
+
   fastify.decorate('translationBehavior', {
     getTranslation,
     createTranslation,
+    updateTranslation,
+    deleteTranslation,
   });
 }

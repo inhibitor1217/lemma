@@ -2,7 +2,7 @@ import { Either, go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { MongoDBEntityView } from '~/lib/mongodb';
-import { DuplicateTranslationKeyException, translationBehavior } from '~/translation/behaviors';
+import { DuplicateTranslationKeyException, translationBehavior, TranslationNotFoundException } from '~/translation/behaviors';
 import { key, language } from '~/translation/lib';
 
 export default async function routes(fastify: FastifyInstance) {
@@ -170,7 +170,41 @@ export default async function routes(fastify: FastifyInstance) {
       const { workspaceId, translationId } = request.params;
       const { key, translations } = request.body;
 
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+      return go(
+        await fastify.translationBehavior.updateTranslation({
+          workspaceId,
+          translationId,
+          translation: {
+            key,
+            translations,
+          },
+        }),
+        Either.map((translation) => translation.toObject()),
+        Either.map(MongoDBEntityView.from),
+        Either.reduce(
+          (translation) => reply.status(200).send({ translation }),
+          (error) => {
+            if (error instanceof DuplicateTranslationKeyException) {
+              return reply.status(400).send({
+                statusCode: 400,
+                message: `Translation with key '${error.key}' already exists`,
+              });
+            }
+
+            if (error instanceof TranslationNotFoundException) {
+              return reply.status(404).send({
+                statusCode: 404,
+                message: `Translation with id '${error.translationId}' not found`,
+              });
+            }
+
+            return reply.status(500).send({
+              statusCode: 500,
+              message: 'Internal Server Error',
+            });
+          }
+        )
+      );
     }
   );
 
@@ -202,7 +236,25 @@ export default async function routes(fastify: FastifyInstance) {
     ) => {
       const { workspaceId, translationId } = request.params;
 
-      return reply.status(501).send({ statusCode: 501, message: 'Not Implemented' });
+      return go(
+        await fastify.translationBehavior.deleteTranslation(workspaceId, translationId),
+        Either.reduce(
+          () => reply.status(204).send(),
+          (error) => {
+            if (error instanceof TranslationNotFoundException) {
+              return reply.status(404).send({
+                statusCode: 404,
+                message: `Translation with id '${error.translationId}' not found`,
+              });
+            }
+
+            return reply.status(500).send({
+              statusCode: 500,
+              message: 'Internal Server Error',
+            });
+          }
+        )
+      );
     }
   );
 }

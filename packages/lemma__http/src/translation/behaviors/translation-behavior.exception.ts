@@ -3,3 +3,9 @@ export class DuplicateTranslationKeyException extends Error {
     super('DuplicateTranslationKeyException');
   }
 }
+
+export class TranslationNotFoundException extends Error {
+  constructor(public readonly translationId: string) {
+    super('TranslationNotFoundException');
+  }
+}

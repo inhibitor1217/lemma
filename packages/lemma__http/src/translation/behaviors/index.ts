@@ -1,2 +1,2 @@
 export { translationBehavior } from './translation-behavior';
-export { DuplicateTranslationKeyException } from './translation-behavior.exception';
+export { DuplicateTranslationKeyException, TranslationNotFoundException } from './translation-behavior.exception';
