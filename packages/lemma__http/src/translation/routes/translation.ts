@@ -1,7 +1,11 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import fp from 'fastify-plugin';
+import { translationBehavior } from '~/translation/behaviors';
 import { key, language } from '~/translation/lib';
 
 export default async function routes(fastify: FastifyInstance) {
+  fastify.register(fp(translationBehavior));
+
   fastify.addSchema({
     $id: 'translationId',
     type: 'string',
