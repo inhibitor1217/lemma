@@ -3,7 +3,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { OffsetPagination } from '~/lib/offset-pagination';
 import sessionGuard from '~/lib/session-guard';
-import { workspaceBehavior } from '../workspace-behavior';
+import { workspaceBehavior } from '~/workspace/behaviors';
 
 export default async function routes(fastify: FastifyInstance) {
   fastify.register(sessionGuard);

@@ -7,9 +7,9 @@ import jwt from '~/lib/jwt-plugin';
 import sessionGuard from '~/lib/session-guard';
 import ping from '~/ping';
 import security from '~/security';
-import { routes as translationRoutes } from '~/translation';
+import * as translation from '~/translation';
 import web from '~/web';
-import { routes as workspaceRoutes, workspaceGuard } from '~/workspace';
+import * as workspace from '~/workspace';
 
 const fastify = Fastify({ logger: true });
 
@@ -41,20 +41,21 @@ fastify.register(web);
 fastify.register(accountRoutes, { prefix: '/account' });
 fastify.register(authRoutes, { prefix: '/auth' });
 fastify.register(ping, { prefix: '/ping' });
-fastify.register(workspaceRoutes.workspaces, { prefix: '/workspace' });
+fastify.register(workspace.routes.workspaces, { prefix: '/workspace' });
 fastify.register(
   async (fastify: FastifyInstance) => {
     fastify.register(sessionGuard);
-    fastify.register(workspaceGuard);
+    fastify.register(workspace.lib.workspaceGuard);
 
     fastify.addSchema({
       $id: 'workspaceId',
       type: 'number',
     });
 
-    fastify.register(workspaceRoutes.workspace);
-    fastify.register(translationRoutes.translations, { prefix: '/translation' });
-    fastify.register(translationRoutes.translation, { prefix: '/translation' });
+    fastify.register(workspace.routes.workspace);
+
+    fastify.register(translation.routes.translations, { prefix: '/translation' });
+    fastify.register(translation.routes.translation, { prefix: '/translation' });
   },
   { prefix: '/workspace/:workspaceId' }
 );
