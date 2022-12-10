@@ -12,6 +12,16 @@ enum AuthProvider {
   GOOGLE
 }
 
+enum TranslationsImportAttemptStatus {
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+}
+
+enum TranslationsImportAttemptType {
+  FILE_JSON
+}
+
 model Account {
   id             Int          @id @default(autoincrement())
   createdAt      DateTime     @default(now())
@@ -28,13 +38,42 @@ model Account {
   @@unique([authProvider, authProviderId])
 }
 
+model Member {
+  id                        Int                         @id @default(autoincrement())
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt
+  accountId                 Int
+  account                   Account                     @relation(fields: [accountId], references: [id])
+  workspaceId               Int
+  workspace                 Workspace                   @relation(fields: [workspaceId], references: [id])
+  TranslationsImportAttempt TranslationsImportAttempt[]
+
+  @@unique([accountId, workspaceId])
+}
+
+model TranslationsImportAttempt {
+  id          Int                             @id @default(autoincrement())
+  createdAt   DateTime                        @default(now())
+  updatedAt   DateTime                        @updatedAt
+  workspaceId Int
+  workspace   Workspace                       @relation(fields: [workspaceId], references: [id])
+  status      TranslationsImportAttemptStatus
+  progress    Float                           @default(0)
+  completedAt DateTime?
+  issuerId    Int?
+  issuer      Member?                         @relation(fields: [issuerId], references: [id], onDelete: SetNull)
+  type        TranslationsImportAttemptType
+  details     Json                            @default("{}")
+}
+
 model Workspace {
-  id        Int               @id @default(autoincrement())
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-  slug      String            @unique
-  profile   WorkspaceProfile?
-  members   Member[]
+  id                        Int                         @id @default(autoincrement())
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt
+  slug                      String                      @unique
+  profile                   WorkspaceProfile?
+  members                   Member[]
+  TranslationsImportAttempt TranslationsImportAttempt[]
 }
 
 model WorkspaceProfile {
@@ -45,16 +84,4 @@ model WorkspaceProfile {
   photo       String?
   workspaceId Int       @unique
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
-}
-
-model Member {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  accountId   Int
-  account     Account   @relation(fields: [accountId], references: [id])
-  workspaceId Int
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
-
-  @@unique([accountId, workspaceId])
 }
