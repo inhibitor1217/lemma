@@ -23,6 +23,11 @@ export default (() => {
             },
           },
         },
+        aws: {
+          endpoint: process.env.AWS_ENDPOINT || '',
+          region: process.env.AWS_REGION || '',
+          resourcePrefix: process.env.AWS_RESOURCE_PREFIX || '',
+        },
         mongodb: {
           host: process.env.MONGODB_HOST || '',
           port: Number(process.env.MONGODB_PORT) || 0,

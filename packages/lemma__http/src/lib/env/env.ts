@@ -19,6 +19,12 @@ export type Env = {
     };
   };
 
+  aws: {
+    endpoint: string;
+    region: string;
+    resourcePrefix: string;
+  };
+
   mongodb: {
     host: string;
     port: number;

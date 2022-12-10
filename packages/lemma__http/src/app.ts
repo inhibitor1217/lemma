@@ -4,6 +4,7 @@ import cors from '~/lib-plugins/cors';
 import env from '~/lib-plugins/env';
 import jwt from '~/lib-plugins/jwt';
 import web from '~/lib-plugins/web';
+import aws from './service-plugins/aws';
 import db from '~/service-plugins/db';
 import routes from '~/routes';
 
@@ -31,6 +32,7 @@ fastify.register(jwt);
 fastify.register(web);
 fastify.register(cors);
 
+fastify.register(aws);
 fastify.register(db);
 
 fastify.register(auth);
