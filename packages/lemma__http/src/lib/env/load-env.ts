@@ -1,15 +1,7 @@
-import { FastifyInstance } from 'fastify';
-import fp from 'fastify-plugin';
 import { Env } from './env';
 import Stage from './stage';
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    env: Env;
-  }
-}
-
-const loadEnv = (() => {
+export default (() => {
   const loadFromFile = (): Promise<Env> =>
     import('dotenv').then((dotenv) => {
       dotenv.config({ path: '.env.local' });
@@ -58,13 +50,3 @@ const loadEnv = (() => {
 
   return () => promise;
 })();
-
-async function env(fastify: FastifyInstance) {
-  fastify.decorate('env', await loadEnv());
-  fastify.log.level = fastify.env.stage.is(Stage.Dev) ? 'debug' : 'info';
-}
-
-export default fp(env);
-
-export { type Env } from './env';
-export { default as Stage } from './stage';

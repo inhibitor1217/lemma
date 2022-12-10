@@ -1,7 +1,7 @@
 import { MongoClient } from '@lemma/mongo-client';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-import { Stage } from '~/env';
+import { Stage } from '~/lib/env';
 
 declare module 'fastify' {
   interface FastifyInstance {

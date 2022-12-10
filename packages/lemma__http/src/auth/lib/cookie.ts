@@ -1,6 +1,6 @@
 import { CookieSerializeOptions } from '@fastify/cookie';
 import { FastifyInstance } from 'fastify';
-import { Stage } from '~/env';
+import { Stage } from '~/lib/env';
 
 export function cookieOptions(fastify: FastifyInstance, opts: { maxAgeMs: number }): CookieSerializeOptions {
   return {

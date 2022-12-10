@@ -1,8 +1,8 @@
 import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import auth from '~/auth';
 import db from '~/db';
-import env from '~/env';
 import { jwtPlugin } from '~/lib/jwt';
+import env from '~/lib-plugins/env';
 import security from '~/security';
 import web from '~/web';
 
