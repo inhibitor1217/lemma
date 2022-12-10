@@ -1,11 +1,10 @@
 import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
-import db from '~/db';
 import auth from '~/lib-plugins/auth';
 import cors from '~/lib-plugins/cors';
 import env from '~/lib-plugins/env';
 import jwt from '~/lib-plugins/jwt';
 import web from '~/lib-plugins/web';
-
+import db from '~/service-plugins/db';
 import routes from '~/routes';
 
 const fastify = Fastify({ logger: true });
