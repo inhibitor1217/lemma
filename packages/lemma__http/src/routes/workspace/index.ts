@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { sessionGuard } from '~/lib/auth';
+import sessionGuard from '~/guards/session-guard';
 import workspaces from './workspaces';
 import workspaceId from './:workspaceId';
 

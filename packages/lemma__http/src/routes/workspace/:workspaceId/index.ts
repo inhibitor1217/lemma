@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { workspaceGuard } from '~/workspace/lib';
+import workspaceGuard from '~/guards/workspace-guard';
 import translation from './translation';
 import workspace from './workspace';
 

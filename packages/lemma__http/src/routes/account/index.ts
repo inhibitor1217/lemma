@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { sessionGuard } from '~/lib/auth';
+import sessionGuard from '~/guards/session-guard';
 import me from './me';
 
 export default async function account(fastify: FastifyInstance) {
