@@ -61,7 +61,7 @@ export default async function routes(fastify: FastifyInstance) {
 
       return go(
         await fastify.translationBehavior.getTranslation(workspaceId, translationId),
-        Option.map((translation) => translation.toObject()),
+        Option.map((translation) => translation.toObject({ flattenMaps: true })),
         Option.map(MongoDBEntityView.from),
         Option.reduce(
           (translation) => reply.status(200).send({ translation }),
@@ -116,7 +116,7 @@ export default async function routes(fastify: FastifyInstance) {
           key,
           translations,
         }),
-        Either.map((translation) => translation.toObject()),
+        Either.map((translation) => translation.toObject({ flattenMaps: true })),
         Either.map(MongoDBEntityView.from),
         Either.reduce(
           (translation) => reply.status(201).send({ translation }),
@@ -180,7 +180,7 @@ export default async function routes(fastify: FastifyInstance) {
             translations,
           },
         }),
-        Either.map((translation) => translation.toObject()),
+        Either.map((translation) => translation.toObject({ flattenMaps: true })),
         Either.map(MongoDBEntityView.from),
         Either.reduce(
           (translation) => reply.status(200).send({ translation }),
