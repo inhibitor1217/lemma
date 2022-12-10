@@ -71,6 +71,7 @@ model Workspace {
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @updatedAt
   slug                      String                      @unique
+  languages                 String[]
   profile                   WorkspaceProfile?
   members                   Member[]
   TranslationsImportAttempt TranslationsImportAttempt[]
