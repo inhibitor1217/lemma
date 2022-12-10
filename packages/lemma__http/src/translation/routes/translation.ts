@@ -1,4 +1,4 @@
-import { Either, go, match, Match, Option } from '@lemma/fx';
+import { Either, go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { MongoDBEntityView } from '~/lib/mongodb';
@@ -120,12 +120,12 @@ export default async function routes(fastify: FastifyInstance) {
         Either.map(MongoDBEntityView.from),
         Either.reduce(
           (translation) => reply.status(201).send({ translation }),
-          match(
-            Match.instance(DuplicateTranslationKeyException, (error) =>
-              reply.status(400).send({ statusCode: 400, message: error.message })
-            ),
-            () => reply.status(500).send({ statusCode: 500, message: 'Internal Server Error' })
-          )
+          (error) => {
+            if (error instanceof DuplicateTranslationKeyException) {
+              return reply.status(400).send({ statusCode: 400, message: error.message });
+            }
+            throw error;
+          }
         )
       );
     }
@@ -184,15 +184,15 @@ export default async function routes(fastify: FastifyInstance) {
         Either.map(MongoDBEntityView.from),
         Either.reduce(
           (translation) => reply.status(200).send({ translation }),
-          match(
-            Match.instance(DuplicateTranslationKeyException, (error) =>
-              reply.status(400).send({ statusCode: 400, message: error.message })
-            ),
-            Match.instance(TranslationNotFoundException, (error) =>
-              reply.status(404).send({ statusCode: 404, message: error.message })
-            ),
-            () => reply.status(500).send({ statusCode: 500, message: 'Internal Server Error' })
-          )
+          (error) => {
+            if (error instanceof DuplicateTranslationKeyException) {
+              return reply.status(400).send({ statusCode: 400, message: error.message });
+            }
+            if (error instanceof TranslationNotFoundException) {
+              return reply.status(404).send({ statusCode: 404, message: error.message });
+            }
+            throw error;
+          }
         )
       );
     }
@@ -230,12 +230,12 @@ export default async function routes(fastify: FastifyInstance) {
         await fastify.translationBehavior.deleteTranslation(workspaceId, translationId),
         Either.reduce(
           () => reply.status(204).send(),
-          match(
-            Match.instance(TranslationNotFoundException, (error) =>
-              reply.status(404).send({ statusCode: 404, message: error.message })
-            ),
-            () => reply.status(500).send({ statusCode: 500, message: 'Internal Server Error' })
-          )
+          (error) => {
+            if (error instanceof TranslationNotFoundException) {
+              return reply.status(404).send({ statusCode: 404, message: error.message });
+            }
+            throw error;
+          }
         )
       );
     }

@@ -62,11 +62,47 @@ export async function translationBehavior(fastify: FastifyInstance) {
   }
 
   async function updateTranslation(args: UpdateTranslationArgs): Promise<Either<Translation, UpdateTranslationErrors>> {
-    throw new Error('Not implemented');
+    return fastify.mongodb.translation
+      .findOneAndUpdate(
+        {
+          _id: args.translationId,
+          workspaceId: args.workspaceId,
+        },
+        {
+          $set: {
+            key: args.translation.key,
+            translations: args.translation.translations,
+          },
+        },
+        {
+          new: true,
+        }
+      )
+      .then((translation) =>
+        translation ? Either.ok(translation) : Either.error(new TranslationNotFoundException(args.translationId))
+      )
+      .catch((error) => {
+        if (error.code === MongoDBErrorCode.DUPLICATE_KEY) {
+          if (!args.translation.key) {
+            throw new TypeError('args.translation.key should have existed, but it was undefined');
+          }
+
+          return Either.error(new DuplicateTranslationKeyException(args.translation.key));
+        }
+
+        throw error;
+      });
   }
 
   async function deleteTranslation(workspaceId: number, translationId: string): Promise<Either<void, DeleteTranslationErrors>> {
-    throw new Error('Not implemented');
+    return fastify.mongodb.translation
+      .findOneAndDelete({
+        _id: translationId,
+        workspaceId,
+      })
+      .then((translation) =>
+        translation ? Either.ok(undefined) : Either.error(new TranslationNotFoundException(translationId))
+      );
   }
 
   fastify.decorate('translationBehavior', {

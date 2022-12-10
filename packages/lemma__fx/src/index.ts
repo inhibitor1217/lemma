@@ -5,5 +5,5 @@ export { Option, type Some, type None } from './option';
 export { Struct } from './struct';
 export { Task } from './task';
 
-export { match, Match } from './match';
 export { go, pipe, id } from './pipe';
+export { tap } from './tap';
