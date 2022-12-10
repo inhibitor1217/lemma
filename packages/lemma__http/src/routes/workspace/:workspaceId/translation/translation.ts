@@ -5,7 +5,7 @@ import { MongoDBEntityView } from '~/lib/mongodb';
 import { DuplicateTranslationKeyException, translationBehavior, TranslationNotFoundException } from '~/translation/behaviors';
 import { key, language } from '~/translation/lib';
 
-export default async function routes(fastify: FastifyInstance) {
+export default async function translation(fastify: FastifyInstance) {
   fastify.register(fp(translationBehavior));
 
   fastify.addSchema({

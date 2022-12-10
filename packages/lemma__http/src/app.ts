@@ -1,15 +1,12 @@
-import Fastify, { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { routes as accountRoutes } from '~/account';
-import auth, { routes as authRoutes } from '~/auth';
+import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import auth from '~/auth';
 import db from '~/db';
 import env from '~/env';
-import { sessionGuard } from '~/lib/auth';
 import { jwtPlugin } from '~/lib/jwt';
-import ping from '~/ping';
 import security from '~/security';
-import * as translation from '~/translation';
 import web from '~/web';
-import * as workspace from '~/workspace';
+
+import routes from '~/routes';
 
 const fastify = Fastify({ logger: true });
 
@@ -38,26 +35,6 @@ fastify.register(auth);
 fastify.register(jwtPlugin);
 fastify.register(web);
 
-fastify.register(accountRoutes, { prefix: '/account' });
-fastify.register(authRoutes, { prefix: '/auth' });
-fastify.register(ping, { prefix: '/ping' });
-fastify.register(workspace.routes.workspaces, { prefix: '/workspace' });
-fastify.register(
-  async (fastify: FastifyInstance) => {
-    fastify.register(sessionGuard);
-    fastify.register(workspace.lib.workspaceGuard);
-
-    fastify.addSchema({
-      $id: 'workspaceId',
-      type: 'number',
-    });
-
-    fastify.register(workspace.routes.workspace);
-
-    fastify.register(translation.routes.translations, { prefix: '/translation' });
-    fastify.register(translation.routes.translation, { prefix: '/translation' });
-  },
-  { prefix: '/workspace/:workspaceId' }
-);
+fastify.register(routes);
 
 export default fastify;

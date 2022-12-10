@@ -103,5 +103,3 @@ async function auth(fastify: FastifyInstance) {
 }
 
 export default fp(auth);
-
-export { default as routes } from './routes';

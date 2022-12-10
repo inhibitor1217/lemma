@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 
-export default async function routes(fastify: FastifyInstance) {
+export default async function translations(fastify: FastifyInstance) {
   /**
    * @api {get} /workspace/:workspaceId/translation Get translations
    * @description Get all translations

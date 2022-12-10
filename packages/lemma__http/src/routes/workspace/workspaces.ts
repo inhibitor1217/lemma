@@ -2,12 +2,10 @@ import { go, Option } from '@lemma/fx';
 import { Workspace } from '@lemma/prisma-client';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { sessionGuard } from '~/lib/auth';
 import { OffsetPagination } from '~/lib/pagination';
 import { workspaceBehavior } from '~/workspace/behaviors';
 
-export default async function routes(fastify: FastifyInstance) {
-  fastify.register(sessionGuard);
+export default async function workspaces(fastify: FastifyInstance) {
   fastify.register(fp(workspaceBehavior));
 
   fastify.get(
