@@ -1,6 +1,6 @@
 import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
-import auth from '~/auth';
 import db from '~/db';
+import auth from '~/lib-plugins/auth';
 import cors from '~/lib-plugins/cors';
 import env from '~/lib-plugins/env';
 import jwt from '~/lib-plugins/jwt';

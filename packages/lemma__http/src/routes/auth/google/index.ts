@@ -1,14 +1,14 @@
 import formbody from '@fastify/formbody';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fetch from 'node-fetch';
-import { nonce } from '~/auth/lib/csrf';
+import { nonce } from '~/lib/auth/csrf';
 import {
   accountFromGoogleOAuth2Token,
   buildGoogleOAuth2AuthorizeUrl,
   buildGoogleOAuth2TokenUrl,
   type GoogleOAuth2IdTokenPayload,
   type GoogleOAuth2TokenResponse,
-} from '~/auth/lib/google-oauth2';
+} from '~/lib/auth/google-oauth2';
 
 declare module 'fastify' {
   interface Session {

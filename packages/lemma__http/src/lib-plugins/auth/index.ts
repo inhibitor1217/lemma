@@ -4,11 +4,10 @@ import { Account } from '@lemma/prisma-client';
 import connectRedis from 'connect-redis';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
+import { SESSION_MAX_AGE_MS, SESSION_MAX_AGE_SECONDS } from '~/config/auth';
+import { cookieOptions, decodeRefreshToken, signRefreshToken, SessionRefreshConfig } from '~/lib/auth/session';
 import { Jwt } from '~/lib/jwt';
-import { SESSION_MAX_AGE_MS, SESSION_MAX_AGE_SECONDS } from './config';
-import { cookieOptions } from './lib/cookie';
-import googleOauth2Client from './lib/google-oauth2-client';
-import { decodeRefreshToken, signRefreshToken, SessionRefreshConfig } from './lib/refresh';
+import googleOauth2Client from './google-oauth2';
 
 type SignInOptions = {
   accountId: number;

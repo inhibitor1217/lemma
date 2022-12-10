@@ -3,7 +3,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { DuplicateTranslationKeyException, translationBehavior, TranslationNotFoundException } from '~/behaviors/translation';
 import { MongoDBEntityView } from '~/lib/mongodb';
-import { key, language } from '~/translation/lib';
+import { key, language } from '~/lib/translation';
 
 export default async function translation(fastify: FastifyInstance) {
   fastify.register(fp(translationBehavior));
