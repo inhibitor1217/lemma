@@ -6,6 +6,7 @@ import jwt from '~/lib-plugins/jwt';
 import web from '~/lib-plugins/web';
 import aws from './service-plugins/aws';
 import db from '~/service-plugins/db';
+import fileStorage from '~/service-plugins/file-storage';
 import routes from '~/routes';
 
 const fastify = Fastify({ logger: true });
@@ -36,6 +37,7 @@ fastify.register(aws);
 fastify.register(db);
 
 fastify.register(auth);
+fastify.register(fileStorage);
 
 fastify.register(routes);
 
