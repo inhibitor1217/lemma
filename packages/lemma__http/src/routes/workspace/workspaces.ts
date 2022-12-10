@@ -2,8 +2,8 @@ import { go, Option } from '@lemma/fx';
 import { Workspace } from '@lemma/prisma-client';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
+import { workspaceBehavior } from '~/behaviors/workspace';
 import { OffsetPagination } from '~/lib/pagination';
-import { workspaceBehavior } from '~/workspace/behaviors';
 
 export default async function workspaces(fastify: FastifyInstance) {
   fastify.register(fp(workspaceBehavior));

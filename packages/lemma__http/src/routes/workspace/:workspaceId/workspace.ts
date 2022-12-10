@@ -1,7 +1,7 @@
 import { go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { workspaceBehavior } from '~/workspace/behaviors';
+import { workspaceBehavior } from '~/behaviors/workspace';
 
 export default async function routes(fastify: FastifyInstance) {
   fastify.register(fp(workspaceBehavior));

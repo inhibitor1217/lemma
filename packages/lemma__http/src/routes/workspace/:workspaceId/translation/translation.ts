@@ -1,8 +1,8 @@
 import { Either, go, Option } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
+import { DuplicateTranslationKeyException, translationBehavior, TranslationNotFoundException } from '~/behaviors/translation';
 import { MongoDBEntityView } from '~/lib/mongodb';
-import { DuplicateTranslationKeyException, translationBehavior, TranslationNotFoundException } from '~/translation/behaviors';
 import { key, language } from '~/translation/lib';
 
 export default async function translation(fastify: FastifyInstance) {
