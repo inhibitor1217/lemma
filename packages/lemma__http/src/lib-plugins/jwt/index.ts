@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import jwt from 'jsonwebtoken';
-import { JwtDecodedPayload, JwtSignOptions, JwtVerificationError, JwtVerificationOptions } from './jwt';
+import { JwtDecodedPayload, JwtSignOptions, JwtVerificationError, JwtVerificationOptions } from '~/lib/jwt';
 
 declare module 'fastify' {
   interface FastifyInstance {

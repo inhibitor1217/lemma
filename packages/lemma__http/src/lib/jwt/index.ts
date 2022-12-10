@@ -6,5 +6,3 @@ export {
   type JwtVerificationErrorType,
   type JwtVerificationError,
 } from './jwt';
-
-export { default as jwtPlugin } from './jwt-plugin';

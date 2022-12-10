@@ -1,10 +1,10 @@
 import Fastify, { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import auth from '~/auth';
 import db from '~/db';
-import { jwtPlugin } from '~/lib/jwt';
+import cors from '~/lib-plugins/cors';
 import env from '~/lib-plugins/env';
-import security from '~/security';
-import web from '~/web';
+import jwt from '~/lib-plugins/jwt';
+import web from '~/lib-plugins/web';
 
 import routes from '~/routes';
 
@@ -28,12 +28,13 @@ fastify.setErrorHandler(async (error: FastifyError, request: FastifyRequest, rep
 });
 
 fastify.register(env);
-fastify.register(security);
+fastify.register(jwt);
+fastify.register(web);
+fastify.register(cors);
+
 fastify.register(db);
 
 fastify.register(auth);
-fastify.register(jwtPlugin);
-fastify.register(web);
 
 fastify.register(routes);
 
