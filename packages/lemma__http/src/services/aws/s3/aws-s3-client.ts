@@ -18,7 +18,7 @@ export class AWSS3Client {
   private readonly logger: AWSS3ClientLogger;
   private readonly resourcePrefix: string;
 
-  constructor(args: AWSS3ClientArgs) {
+  constructor(private readonly args: AWSS3ClientArgs) {
     const { logger, resourcePrefix, ...rest } = args;
 
     this.client = new S3Client(rest);
@@ -62,8 +62,11 @@ export class AWSS3Client {
   }
 
   private resourceHttpUri(resource: string): string {
-    if (this.client.config.forcePathStyle) {
-      return `${this.client.config.endpoint}/${this.bucketName(resource)}`;
+    if (this.args.forcePathStyle) {
+      if (!this.args.endpoint) {
+        throw new TypeError('Endpoint is required when forcePathStyle is true');
+      }
+      return `${this.args.endpoint}/${this.bucketName(resource)}`;
     }
 
     return `https://${this.bucketName(resource)}.s3.${this.client.config.region}.amazonaws.com`;
