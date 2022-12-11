@@ -35,7 +35,6 @@ export default async function translation(fastify: FastifyInstance) {
    * @api {get} /workspace/:workspaceId/translation/:translationId
    * @description Get a translation by id
    *
-   * @todo
    * Get a translation by id.
    */
   fastify.get(
@@ -75,7 +74,6 @@ export default async function translation(fastify: FastifyInstance) {
    * @api {post} /workspace/:workspaceId/translation
    * @description Create a translation
    *
-   * @todo
    * Add a new translation to a workspace.
    */
   fastify.post(
@@ -135,7 +133,6 @@ export default async function translation(fastify: FastifyInstance) {
    * @api {patch} /workspace/:workspaceId/translation/:translationId
    * @description Update a translation
    *
-   * @todo
    * Update a translation.
    */
   fastify.patch(
@@ -202,7 +199,6 @@ export default async function translation(fastify: FastifyInstance) {
    * @api {delete} /workspace/:workspaceId/translation/:translationId
    * @description Delete a translation
    *
-   * @todo
    * Delete a translation.
    */
   fastify.delete(

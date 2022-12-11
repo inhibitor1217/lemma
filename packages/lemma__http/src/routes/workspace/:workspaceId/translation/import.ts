@@ -17,8 +17,8 @@ export default async function _import(fastify: FastifyInstance) {
    * @api {post} /workspace/:workspaceId/translation/import/file
    * @description Import translations from a file
    *
-   * @todo
-   * Support import from JSON file.
+   * Adds translations to the workspace from a file.
+   * Supports JSON format.
    */
   fastify.post(
     '/file',
