@@ -11,8 +11,16 @@ declare module 'fastify' {
 
 async function s3(fastify: FastifyInstance) {
   const args = fastify.env.stage.is(Stage.Dev)
-    ? AWSS3ClientArgs.customEndpoint(fastify.env.aws.endpoint)
-    : AWSS3ClientArgs.region(fastify.env.aws.region);
+    ? AWSS3ClientArgs.customEndpoint({
+        endpoint: fastify.env.aws.endpoint,
+        logger: fastify.log,
+        resourcePrefix: fastify.env.aws.resourcePrefix,
+      })
+    : AWSS3ClientArgs.region({
+        logger: fastify.log,
+        region: fastify.env.aws.region,
+        resourcePrefix: fastify.env.aws.resourcePrefix,
+      });
 
   fastify.decorate('s3', new AWSS3Client(args));
 }
