@@ -13,12 +13,22 @@ const fastify = Fastify({ logger: true });
 
 fastify.setErrorHandler(async (error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
   reply.statusCode = error.statusCode ?? 500;
-  fastify.log.error(error);
+
+  if (!error.statusCode || error.statusCode >= 500) {
+    fastify.log.error(error);
+  }
 
   if (error.statusCode === 400) {
     return {
       statusCode: error.statusCode,
       message: error.message,
+    };
+  }
+
+  if (error.statusCode === 406) {
+    return {
+      statusCode: error.statusCode,
+      message: 'Not Acceptable',
     };
   }
 
