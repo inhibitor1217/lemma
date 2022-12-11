@@ -1,4 +1,4 @@
-export type Task<A, E> = () => Promise<A>;
+export type Task<A, E = unknown> = () => Promise<A>;
 
 export namespace Task {
   export const of =
