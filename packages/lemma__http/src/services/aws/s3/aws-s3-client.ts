@@ -31,10 +31,7 @@ export class AWSS3Client {
     key: string,
     file: Blob | Buffer | ReadableStream
   ): Promise<Either<AWSS3Client.PutObjectResult, AWSS3Client.PutObjectError>> {
-    this.logger.debug('AWSS3Client#putObject', {
-      resource,
-      key,
-    });
+    this.logger.debug(`AWSS3Client: upload file to resource ${resource} with key ${key}`);
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName(resource),
@@ -61,7 +58,7 @@ export class AWSS3Client {
   }
 
   private bucketName(resource: string): string {
-    return `${this.resourcePrefix}-${resource}`;
+    return `${this.resourcePrefix}.${resource}`;
   }
 
   private resourceHttpUri(resource: string): string {

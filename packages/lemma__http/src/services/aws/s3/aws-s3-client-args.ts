@@ -1,10 +1,10 @@
 import { S3ClientConfig } from '@aws-sdk/client-s3';
 
 export type AWSS3ClientLogger = {
-  debug: (...args: any[]) => void;
-  info: (...args: any[]) => void;
-  warn: (...args: any[]) => void;
-  error: (...args: any[]) => void;
+  debug: (message: any) => void;
+  info: (message: any) => void;
+  warn: (message: any) => void;
+  error: (message: any) => void;
 };
 
 export type AWSS3ClientArgs = S3ClientConfig & {

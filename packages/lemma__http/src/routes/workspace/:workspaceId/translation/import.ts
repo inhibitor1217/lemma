@@ -1,6 +1,8 @@
 import multipart, { MultipartFile, MultipartValue } from '@fastify/multipart';
+import { Either, go } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { language } from '~/lib/translation';
+import { FileStorageLocation } from '~/services/file-storage';
 
 export default async function _import(fastify: FastifyInstance) {
   fastify.register(multipart, {
@@ -73,27 +75,72 @@ export default async function _import(fastify: FastifyInstance) {
       }>,
       reply
     ) => {
+      function translationImportFileKey(args: {
+        workspaceId: number;
+        format: 'json';
+        language: string;
+        translationImportAttemptId: number;
+      }): string {
+        return [
+          'workspace',
+          args.workspaceId,
+          'translation',
+          'import',
+          `${args.translationImportAttemptId}.${args.language}.${args.format}`,
+        ].join('/');
+      }
+
       const { workspaceId } = request.params;
       const format = request.body.format.value;
       const language = request.body.language.value;
       const file = request.body.file;
-
-      fastify.log.debug({
-        format,
-        language,
-        filename: file.filename,
-        mimetype: file.mimetype,
-      });
+      const buffer = await file.toBuffer();
 
       switch (format) {
         case 'json':
+          /**
+           * @todo
+           *
+           * Move this to translationsImportBehavior.triggerFromJsonFile
+           */
           if (file.mimetype !== 'application/json') {
             return reply.status(400).send({
               message: 'Invalid file format',
             });
           }
 
-          return reply.status(200).send();
+          return go(
+            await fastify.fileStorage.uploadFile(
+              FileStorageLocation.Internal,
+              translationImportFileKey({
+                workspaceId,
+                format,
+                language,
+                /**
+                 * @todo
+                 *
+                 * 1. Create a new TranslationsImportAttempt
+                 * 2. Put object to file storage with key
+                 * 3. Patch TranslationsImportAttempt with http url of the stored file
+                 */
+                translationImportAttemptId: 1,
+              }),
+              buffer
+            ),
+            Either.mapOrElse(
+              /**
+               * @todo
+               *
+               * Return the created TranslationsImportAttempt
+               */
+              () => reply.status(201).send(),
+              () =>
+                reply.status(500).send({
+                  statusCode: 500,
+                  message: 'Internal Server Error',
+                })
+            )
+          );
         default:
           return reply.status(400).send({
             statusCode: 400,

@@ -4,7 +4,13 @@ enum _FileStorageLocation {
   Internal = 'internal',
 }
 
-export class FileStorageLocation extends extend(_FileStorageLocation) {
+interface FileStorageLocationMethods {
+  readonly bucketName: string;
+}
+
+export class FileStorageLocation extends extend<typeof _FileStorageLocation, _FileStorageLocation, FileStorageLocationMethods>(
+  _FileStorageLocation
+) {
   get bucketName(): string {
     switch (this) {
       case FileStorageLocation.Internal:
