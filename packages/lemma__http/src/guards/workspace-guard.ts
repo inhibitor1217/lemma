@@ -1,6 +1,12 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
+declare module 'fastify' {
+  interface FastifyRequest {
+    memberId: number;
+  }
+}
+
 async function workspaceGuard(fastify: FastifyInstance) {
   fastify.addHook(
     'preHandler',
@@ -28,6 +34,8 @@ async function workspaceGuard(fastify: FastifyInstance) {
       if (!member) {
         return reply.status(403).send({ statusCode: 403, message: 'Forbidden' });
       }
+
+      request.memberId = member.id;
     }
   );
 }
