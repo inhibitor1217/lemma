@@ -17,6 +17,7 @@
     "@aws-sdk/client-lambda": "^3.16.0"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "deploy:local": "./scripts/local/deploy.sh fn-example"
   }
 }
