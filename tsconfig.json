@@ -5,6 +5,9 @@
       "path": "./packages/lemma__app/tsconfig.json"
     },
     {
+      "path": "./packages/lemma__fn-example/tsconfig.json"
+    },
+    {
       "path": "./packages/lemma__fx/tsconfig.cjs.json"
     },
     {
