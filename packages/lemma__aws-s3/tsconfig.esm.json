@@ -1,0 +1,16 @@
+{
+  "extends": "../../support/typescript/tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist/esm",
+    "declarationDir": "dist/types",
+    "module": "esnext",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["./src"],
+  "references": []
+}
