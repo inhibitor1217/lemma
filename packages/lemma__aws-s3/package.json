@@ -16,6 +16,10 @@
   "scripts": {
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json"
   },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.226.0",
+    "@lemma/fx": "workspace:^"
+  },
   "devDependencies": {
     "@yarnpkg/pnpify": "^4.0.0-rc.32",
     "tsconfig-paths": "^4.1.0",
