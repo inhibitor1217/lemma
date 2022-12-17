@@ -5,6 +5,12 @@
       "path": "./packages/lemma__app/tsconfig.json"
     },
     {
+      "path": "./packages/lemma__aws-lambda/tsconfig.cjs.json"
+    },
+    {
+      "path": "./packages/lemma__aws-lambda/tsconfig.esm.json"
+    },
+    {
       "path": "./packages/lemma__fn-example/tsconfig.json"
     },
     {

@@ -2782,6 +2782,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@lemma/aws-lambda@workspace:packages/lemma__aws-lambda":
+  version: 0.0.0-use.local
+  resolution: "@lemma/aws-lambda@workspace:packages/lemma__aws-lambda"
+  dependencies:
+    "@aws-sdk/client-lambda": ^3.16.0
+    "@yarnpkg/pnpify": ^4.0.0-rc.32
+    tsconfig-paths: ^4.1.0
+    typescript: ^4.9.3
+  languageName: unknown
+  linkType: soft
+
 "@lemma/fn-example@workspace:packages/lemma__fn-example":
   version: 0.0.0-use.local
   resolution: "@lemma/fn-example@workspace:packages/lemma__fn-example"
