@@ -9,6 +9,7 @@
     "@lemma/fx": "workspace:^"
   },
   "devDependencies": {
+    "@lemma/aws-lambda": "workspace:^",
     "@types/aws-lambda": "^8.10.109",
     "@types/node": "^18.7.8",
     "tsconfig-paths": "^4.1.0",
@@ -17,6 +18,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "deploy:local": "./scripts/local/deploy.sh fn-example"
+    "deploy:local": "yarn build && aws-lambda deploy --functionName fn-example",
+    "invoke:local": "aws-lambda invoke --functionName fn-example",
+    "logs:local": "aws-lambda logs --functionName fn-example"
   }
 }
