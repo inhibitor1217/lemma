@@ -1,7 +1,7 @@
+import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import { Stage } from '~/lib/env';
-import { AWSS3Client, AWSS3ClientArgs } from '~/services/aws/s3';
 
 declare module 'fastify' {
   interface FastifyInstance {
