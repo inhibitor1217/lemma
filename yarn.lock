@@ -7291,6 +7291,9 @@ __metadata:
     cz-conventional-changelog: 3.3.0
     husky: ^8.0.1
     typescript: ^4.9.3
+    yargs: ^17.6.2
+  bin:
+    pkg: ./scripts/pkg.js
   languageName: unknown
   linkType: soft
 
