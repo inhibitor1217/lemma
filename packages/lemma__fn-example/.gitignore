@@ -1,7 +1,0 @@
-# Environment variables
-.env
-.env.*
-
-# Build artifacts
-build/
-build.zip

@@ -4,6 +4,7 @@
   "description": "<package-description>",
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "packageManager": "yarn@3.2.2",
+  "private": true,
   "exports": {
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js"

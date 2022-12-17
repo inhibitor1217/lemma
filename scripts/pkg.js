@@ -16,7 +16,7 @@ const tsconfigFileCandidates = ['tsconfig.json', 'tsconfig.esm.json', 'tsconfig.
 
 const packageTemplatesDir = path.resolve('support', 'package-template');
 const packageTemplateDir = (name) => path.resolve(packageTemplatesDir, name);
-const listTemplates = () => exec('ls', packageTemplatesDir).then(({ stdout }) => stdout.split('  ').map((name) => name.trim()));
+const listTemplates = () => exec('ls', packageTemplatesDir).then(({ stdout }) => stdout.split(/\s/).map((name) => name.trim()));
 
 const packageDir = (name) => path.resolve('packages', `lemma__${name}`);
 const packageName = (name) => `@lemma/${name}`;
