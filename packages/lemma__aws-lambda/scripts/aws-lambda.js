@@ -19,6 +19,43 @@ require('yargs')
   .scriptName('aws-lambda')
   .usage('$0 <cmd> [args]')
   .command(
+    'clean',
+    'Clean the deployed resources',
+    (yargs) => {
+      yargs.positional('stage', {
+        describe: 'The stage to deploy the lambda function to',
+        type: 'string',
+        default: 'local',
+      });
+      yargs.positional('functionName', {
+        describe: 'The name of the lambda function',
+        type: 'string',
+      });
+      yargs.positional('region', {
+        describe: 'The region to deploy the lambda function to',
+        type: 'string',
+        default: 'ap-northeast-2',
+      });
+    },
+    async (argv) => {
+      const { stage, functionName, region } = argv;
+
+      const awsCommand = stage === 'local' ? 'awslocal' : 'aws';
+
+      // Delete log group
+      console.log('Deleting log group...');
+      await exec(`${awsCommand} logs delete-log-group`, `--region ${region}`, `--log-group-name ${logGroupName(functionName)}`);
+
+      // Delete IAM Role
+      console.log('Deleting IAM Role...');
+      await exec(`${awsCommand} iam delete-role`, `--region ${region}`, `--role-name ${iamRoleName(functionName)}`);
+
+      // Delete Lambda Function
+      console.log('Deleting Lambda Function...');
+      await exec(`${awsCommand} lambda delete-function`, `--region ${region}`, `--function-name ${functionName}`);
+    }
+  )
+  .command(
     'deploy',
     'Deploy a lambda function',
     (yargs) => {
