@@ -1,6 +1,6 @@
+import { FileStorageClient } from '@lemma/file-storage-client';
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-import { FileStorageClient } from '~/services/file-storage';
 
 declare module 'fastify' {
   interface FastifyInstance {

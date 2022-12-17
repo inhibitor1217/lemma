@@ -2810,7 +2810,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lemma/file-storage-client@workspace:packages/lemma__file-storage-client":
+"@lemma/file-storage-client@workspace:^, @lemma/file-storage-client@workspace:packages/lemma__file-storage-client":
   version: 0.0.0-use.local
   resolution: "@lemma/file-storage-client@workspace:packages/lemma__file-storage-client"
   dependencies:
@@ -2843,6 +2843,7 @@ __metadata:
     "@fastify/multipart": ^7.3.0
     "@fastify/session": ^10.0.0
     "@lemma/aws-s3": "workspace:^"
+    "@lemma/file-storage-client": "workspace:^"
     "@lemma/fx": "workspace:^"
     "@lemma/mongo-client": "workspace:^"
     "@lemma/prisma-client": "workspace:^"

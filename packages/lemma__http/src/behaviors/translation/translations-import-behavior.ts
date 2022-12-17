@@ -1,7 +1,7 @@
+import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
 import { Either, go, TaskEither } from '@lemma/fx';
 import { TranslationsImportAttempt, TranslationsImportAttemptStatus, TranslationsImportAttemptType } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
-import { FileStorageClient, FileStorageLocation } from '~/services/file-storage';
 import { InvalidFileMIMETypeException } from './translations-import-behavior.exception';
 
 type TriggerImportFromJsonFile = {
