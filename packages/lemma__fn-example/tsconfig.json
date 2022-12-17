@@ -10,5 +10,5 @@
     }
   },
   "include": ["./src"],
-  "references": []
+  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }, { "path": "../lemma__fx/tsconfig.esm.json" }]
 }
