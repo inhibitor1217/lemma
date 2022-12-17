@@ -1,5 +1,5 @@
 {
-  "extends": "../../support/typescript/tsconfig.json",
+  "extends": "../../support/typescript/tsconfig.node.json",
   "compilerOptions": {
     "composite": true,
     "outDir": "dist/",
@@ -10,5 +10,5 @@
     }
   },
   "include": ["./src"],
-  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }, { "path": "../lemma__fx/tsconfig.esm.json" }]
+  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }]
 }

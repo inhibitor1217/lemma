@@ -11,7 +11,10 @@
       "path": "./packages/lemma__aws-lambda/tsconfig.esm.json"
     },
     {
-      "path": "./packages/lemma__fn-example/tsconfig.json"
+      "path": "./packages/lemma__fn-example/tsconfig.cjs.json"
+    },
+    {
+      "path": "./packages/lemma__fn-example/tsconfig.esm.json"
     },
     {
       "path": "./packages/lemma__fx/tsconfig.cjs.json"
