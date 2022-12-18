@@ -100,8 +100,29 @@ require('yargs')
       await exec(`cd ${buildDir} && zip -r ../${zipFileName} .`);
       const zipFilePath = path.resolve(buildDir, '..', zipFileName);
 
-      // Delete existing IAM Role
       console.log(`Creating AWS IAM Role for ${functionName}...`);
+
+      // Delete IAM Policies for existing IAM Role
+      const existingPolicies = await exec(
+        `${awsCommand} iam list-role-policies`,
+        `--region ${region}`,
+        `--role-name ${iamRoleName(functionName)}`
+      )
+        .then((res) => JSON.parse(res.stdout))
+        .catch(() => false);
+
+      if (existingPolicies) {
+        for (const policyName of existingPolicies.PolicyNames) {
+          await exec(
+            `${awsCommand} iam delete-role-policy`,
+            `--region ${region}`,
+            `--role-name ${iamRoleName(functionName)}`,
+            `--policy-name ${policyName}`
+          );
+        }
+      }
+
+      // Delete existing IAM Role
       if (
         await exec(`${awsCommand} iam get-role`, `--region ${region}`, `--role-name ${iamRoleName(functionName)}`).catch(
           () => false
@@ -110,13 +131,27 @@ require('yargs')
         await exec(`${awsCommand} iam delete-role`, `--region ${region}`, `--role-name ${iamRoleName(functionName)}`);
       }
 
+      // Parse IAM Role Policy Document
+      const { AssumeRolePolicyDocument, Policies } = JSON.parse(await fs.readFile(iamRolePolicyDocumentPath, 'utf8'));
+
       // Create IAM Role
       await exec(
         `${awsCommand} iam create-role`,
         `--region ${region}`,
         `--role-name ${iamRoleName(functionName)}`,
-        `--assume-role-policy-document file://${iamRolePolicyDocumentPath}`
+        `--assume-role-policy-document '${JSON.stringify(AssumeRolePolicyDocument)}'`
       );
+
+      // Attach IAM Role Policy
+      for (const { PolicyName, PolicyDocument } of Policies) {
+        await exec(
+          `${awsCommand} iam put-role-policy`,
+          `--region ${region}`,
+          `--role-name ${iamRoleName(functionName)}`,
+          `--policy-name ${PolicyName}`,
+          `--policy-document '${JSON.stringify(PolicyDocument)}'`
+        );
+      }
 
       // Create CloudWatch Log Group, if it doesn't exist
       console.log(`Creating CloudWatch Log Group for ${functionName}...`);
