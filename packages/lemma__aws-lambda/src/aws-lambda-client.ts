@@ -31,7 +31,7 @@ export class AWSLambdaClient {
     functionName: string,
     payload: P
   ): Promise<Either<AWSLambdaClient.SyncInvokeResult<R>, AWSLambdaClient.SyncInvokeError>> {
-    this.logger.debug(`AWSLambdaClient: sync invoke`);
+    this.logger.debug(`AWSLambdaClient#syncInvoke`);
     this.logger.debug({
       functionName,
       payload,
@@ -66,7 +66,7 @@ export class AWSLambdaClient {
     functionName: string,
     payload: P
   ): Promise<Either<AWSLambdaClient.AsyncInvokeResult, AWSLambdaClient.AsyncInvokeError>> {
-    this.logger.debug(`AWSLambdaClient: async invoke`);
+    this.logger.debug(`AWSLambdaClient#asyncInvoke`);
     this.logger.debug({
       functionName,
       payload,
