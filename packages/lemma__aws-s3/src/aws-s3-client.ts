@@ -1,7 +1,7 @@
 import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSS3ClientArgs, AWSS3ClientLogger } from './aws-s3-client-args';
-import { MissingCredentialsException, UnknownError } from './aws-s3-client.exception';
+import { MissingCredentialsException, NoSuchKeyException, UnknownError } from './aws-s3-client.exception';
 
 export namespace AWSS3Client {
   export type Header =
@@ -30,7 +30,7 @@ export namespace AWSS3Client {
     };
   };
 
-  export type HeadObjectError = MissingCredentialsException | UnknownError;
+  export type HeadObjectError = MissingCredentialsException | NoSuchKeyException | UnknownError;
 
   export type PutObjectResult = {
     resource: string;
@@ -160,7 +160,17 @@ export class AWSS3Client {
         return Either.error(new MissingCredentialsException());
       }
 
-      return Either.error(error);
+      /**
+       * @note
+       *
+       * S3 HeadObject commands throw a weird exception when the object does not exist.
+       * This specific branch is to catch that exception and return a more meaningful error.
+       */
+      if (error instanceof TypeError && error.message.includes("Cannot read properties of null (reading 'getReader')")) {
+        return Either.error(new NoSuchKeyException());
+      }
+
+      return Either.error(new UnknownError(error));
     }
 
     return Either.error(new UnknownError(error));
