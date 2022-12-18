@@ -6,10 +6,10 @@
   "packageManager": "yarn@3.2.2",
   "private": true,
   "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    "import": "./dist/esm/client.js",
+    "require": "./dist/cjs/client.js"
   },
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/types/client.d.ts",
   "files": [
     "dist"
   ],

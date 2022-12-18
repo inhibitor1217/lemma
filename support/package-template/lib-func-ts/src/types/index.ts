@@ -1,3 +1,5 @@
-export type Event = {};
+export type Event = {
+  payload: {};
+};
 
 export type Result = {};
