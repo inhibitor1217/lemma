@@ -18,6 +18,9 @@
       "path": "../lemma__file-storage-client/tsconfig.cjs.json"
     },
     {
+      "path": "../lemma__fn-import-translations-from-file/tsconfig.cjs.json"
+    },
+    {
       "path": "../lemma__fx/tsconfig.cjs.json"
     },
     {

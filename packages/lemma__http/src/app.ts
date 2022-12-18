@@ -4,9 +4,10 @@ import cors from '~/lib-plugins/cors';
 import env from '~/lib-plugins/env';
 import jwt from '~/lib-plugins/jwt';
 import web from '~/lib-plugins/web';
-import aws from './service-plugins/aws';
+import aws from '~/service-plugins/aws';
 import db from '~/service-plugins/db';
 import fileStorage from '~/service-plugins/file-storage';
+import fn from '~/service-plugins/fn';
 import routes from '~/routes';
 
 const fastify = Fastify({ logger: true });
@@ -48,6 +49,7 @@ fastify.register(db);
 
 fastify.register(auth);
 fastify.register(fileStorage);
+fastify.register(fn);
 
 fastify.register(routes);
 

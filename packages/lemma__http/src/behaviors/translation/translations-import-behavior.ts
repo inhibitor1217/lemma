@@ -74,6 +74,29 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
         .then(Either.ok)
         .catch(Either.error);
 
+    const triggerImportTranslationsFromFileTask = (translationsImportAttempt: TranslationsImportAttempt) => () =>
+      fastify.fnImportTranslationsFromFile
+        .syncInvoke({
+          payload: {
+            workspaceId,
+            translationsImportAttemptId: translationsImportAttempt.id,
+            file: {
+              type: 'json',
+              key: translationImportFileKey({
+                workspaceId,
+                format: 'json',
+                language,
+                requestKey,
+              }),
+            },
+            translations: {
+              language,
+            },
+          },
+        })
+        .then(Either.ok)
+        .catch(Either.error);
+
     /**
      * @note
      *
@@ -84,6 +107,7 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
     return go(
       uploadFileTask,
       TaskEither.flatMapLeft(createTranslationsImportAttemptTask),
+      TaskEither.chain(triggerImportTranslationsFromFileTask),
       TaskEither.mapLeft((translationsImportAttempt) => ({ translationsImportAttempt }))
     );
   }
