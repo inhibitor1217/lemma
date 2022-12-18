@@ -2782,7 +2782,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lemma/aws-lambda@workspace:packages/lemma__aws-lambda":
+"@lemma/aws-lambda@workspace:^, @lemma/aws-lambda@workspace:packages/lemma__aws-lambda":
   version: 0.0.0-use.local
   resolution: "@lemma/aws-lambda@workspace:packages/lemma__aws-lambda"
   dependencies:
@@ -2819,6 +2819,22 @@ __metadata:
     extended-enum: ^1.0.1
     tsconfig-paths: ^4.1.0
     typescript: ^4.9.3
+    yargs: ^17.6.2
+  languageName: unknown
+  linkType: soft
+
+"@lemma/fn-import-translations-from-file@workspace:packages/lemma__fn-import-translations-from-file":
+  version: 0.0.0-use.local
+  resolution: "@lemma/fn-import-translations-from-file@workspace:packages/lemma__fn-import-translations-from-file"
+  dependencies:
+    "@lemma/aws-lambda": "workspace:^"
+    "@lemma/fx": "workspace:^"
+    "@types/aws-lambda": ^8.10.109
+    "@types/node": ^18.7.8
+    "@yarnpkg/pnpify": ^4.0.0-rc.32
+    tsconfig-paths: ^4.1.0
+    typescript: ^4.9.3
+    vite: ^3.0.7
     yargs: ^17.6.2
   languageName: unknown
   linkType: soft
@@ -3065,6 +3081,13 @@ __metadata:
   version: 1.0.3
   resolution: "@tsconfig/node16@npm:1.0.3"
   checksum: 3a8b657dd047495b7ad23437d6afd20297ce90380ff0bdee93fc7d39a900dbd8d9e26e53ff6b465e7967ce2adf0b218782590ce9013285121e6a5928fbd6819f
+  languageName: node
+  linkType: hard
+
+"@types/aws-lambda@npm:^8.10.109":
+  version: 8.10.109
+  resolution: "@types/aws-lambda@npm:8.10.109"
+  checksum: 879dd30806bbcdcc5495192ed139ab6e7e65d2481c4c80237d8293e3a33e9fcbfb662109246164c493de9fd13b32d1780359a0f191238bd62fd4be14c1efe2fe
   languageName: node
   linkType: hard
 

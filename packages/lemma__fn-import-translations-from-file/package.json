@@ -1,0 +1,37 @@
+{
+  "name": "@lemma/fn-import-translations-from-file",
+  "version": "0.0.1",
+  "description": "Function to import translations into workspace from file",
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "packageManager": "yarn@3.2.2",
+  "private": true,
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "clean:local": "aws-lambda clean --functionName <function-name>",
+    "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json",
+    "deploy:local": "yarn build && aws-lambda deploy --functionName <function-name>",
+    "invoke:local": "aws-lambda invoke --functionName <function-name>",
+    "logs:local": "aws-lambda logs --functionName <function-name>"
+  },
+  "dependencies": {
+    "@lemma/fx": "workspace:^"
+  },
+  "devDependencies": {
+    "@lemma/aws-lambda": "workspace:^",
+    "@types/aws-lambda": "^8.10.109",
+    "@types/node": "^18.7.8",
+    "@yarnpkg/pnpify": "^4.0.0-rc.32",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.9.3",
+    "vite": "^3.0.7",
+    "yargs": "^17.6.2"
+  }
+}

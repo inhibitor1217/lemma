@@ -1,0 +1,15 @@
+{
+  "extends": "../../support/typescript/tsconfig.node.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist/cjs",
+    "declarationDir": "dist/types",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["./src"],
+  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }]
+}
