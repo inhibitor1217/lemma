@@ -22,6 +22,8 @@
     "logs:local": "aws-lambda logs --functionName <function-name>"
   },
   "dependencies": {
+    "@lemma/aws-s3": "workspace:^",
+    "@lemma/file-storage-client": "workspace:^",
     "@lemma/fx": "workspace:^"
   },
   "devDependencies": {

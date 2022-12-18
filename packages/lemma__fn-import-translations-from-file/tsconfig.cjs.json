@@ -11,5 +11,9 @@
     }
   },
   "include": ["./src"],
-  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }]
+  "references": [
+    { "path": "../lemma__aws-s3/tsconfig.cjs.json" },
+    { "path": "../lemma__file-storage-client/tsconfig.cjs.json" },
+    { "path": "../lemma__fx/tsconfig.cjs.json" }
+  ]
 }

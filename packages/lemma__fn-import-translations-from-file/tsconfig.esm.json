@@ -12,5 +12,9 @@
     }
   },
   "include": ["./src"],
-  "references": [{ "path": "../lemma__fx/tsconfig.esm.json" }]
+  "references": [
+    { "path": "../lemma__aws-s3/tsconfig.esm.json" },
+    { "path": "../lemma__file-storage-client/tsconfig.esm.json" },
+    { "path": "../lemma__fx/tsconfig.esm.json" }
+  ]
 }

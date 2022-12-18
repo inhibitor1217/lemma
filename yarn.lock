@@ -2828,6 +2828,8 @@ __metadata:
   resolution: "@lemma/fn-import-translations-from-file@workspace:packages/lemma__fn-import-translations-from-file"
   dependencies:
     "@lemma/aws-lambda": "workspace:^"
+    "@lemma/aws-s3": "workspace:^"
+    "@lemma/file-storage-client": "workspace:^"
     "@lemma/fx": "workspace:^"
     "@types/aws-lambda": ^8.10.109
     "@types/node": ^18.7.8
