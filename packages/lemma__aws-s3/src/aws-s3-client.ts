@@ -1,8 +1,36 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSS3ClientArgs, AWSS3ClientLogger } from './aws-s3-client-args';
 
 export namespace AWSS3Client {
+  export type Header =
+    | 'Cache-Control'
+    | 'Content-Disposition'
+    | 'Content-Encoding'
+    | 'Content-Language'
+    | 'Content-Length'
+    | 'Content-Type'
+    | 'Expires'
+    | 'Last-Modified';
+
+  export type HeadObjectResult = {
+    resource: string;
+    key: string;
+    bucketName: string;
+    httpUri: string;
+    headers: {
+      'Cache-Control'?: string;
+      'Content-Disposition'?: string;
+      'Content-Encoding'?: string;
+      'Content-Length'?: number;
+      'Content-Type'?: string;
+      Expires?: Date;
+      'Last-Modified'?: Date;
+    };
+  };
+
+  export type HeadObjectError = unknown;
+
   export type PutObjectResult = {
     resource: string;
     key: string;
@@ -26,12 +54,55 @@ export class AWSS3Client {
     this.resourcePrefix = resourcePrefix;
   }
 
+  public headObject(resource: string, key: string): Promise<Either<AWSS3Client.HeadObjectResult, AWSS3Client.HeadObjectResult>> {
+    this.logger.debug(`AWSS3Client#headObject`);
+    this.logger.debug({
+      resource,
+      key,
+    });
+
+    const command = new HeadObjectCommand({
+      Bucket: this.bucketName(resource),
+      Key: key,
+    });
+
+    return this.client
+      .send(command)
+      .then((res) => {
+        return Either.ok({
+          resource,
+          key,
+          bucketName: this.bucketName(resource),
+          httpUri: this.objectHttpUri(resource, key),
+          headers: {
+            'Cache-Control': res.CacheControl,
+            'Content-Disposition': res.ContentDisposition,
+            'Content-Encoding': res.ContentEncoding,
+            'Content-Length': res.ContentLength,
+            'Content-Type': res.ContentType,
+            Expires: res.Expires,
+            'Last-Modified': res.LastModified,
+          },
+        });
+      })
+      .catch(
+        pipe(
+          tap((error) => this.logger.error(error)),
+          Either.error
+        )
+      );
+  }
+
   public putObject(
     resource: string,
     key: string,
     file: Blob | Buffer | ReadableStream
   ): Promise<Either<AWSS3Client.PutObjectResult, AWSS3Client.PutObjectError>> {
-    this.logger.debug(`AWSS3Client: upload file to resource ${resource} with key ${key}`);
+    this.logger.debug(`AWSS3Client#putObject`);
+    this.logger.debug({
+      resource,
+      key,
+    });
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName(resource),
