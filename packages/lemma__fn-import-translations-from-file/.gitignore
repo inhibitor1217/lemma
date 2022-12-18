@@ -1,3 +1,7 @@
 # Build artifacts
 build/
 build.zip
+
+# Environment variables
+.env
+.env.*

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs/promises');
 const util = require('util');
 const _exec = util.promisify(require('child_process').exec);
 const path = require('path');
@@ -83,9 +84,14 @@ require('yargs')
         type: 'string',
         default: './res/iam-role.json',
       });
+      yargs.positional('envFile', {
+        describe: 'The path to the environment variables file (only for local stage)',
+        type: 'string',
+        default: './.env.local',
+      });
     },
     async (argv) => {
-      const { stage, functionName, region, buildDir, iamRolePolicyDocumentPath } = argv;
+      const { stage, functionName, region, buildDir, iamRolePolicyDocumentPath, envFile } = argv;
 
       const awsCommand = stage === 'local' ? 'awslocal' : 'aws';
 
@@ -149,6 +155,35 @@ require('yargs')
           `--function-name ${functionName}`,
           `--zip-file fileb://${zipFilePath}`
         );
+      }
+
+      // Update Lambda Function Environment Variables
+      if (stage === 'local') {
+        if (
+          await fs
+            .access(envFile)
+            .then(() => true)
+            .catch(() => false)
+        ) {
+          console.log(`Updating Lambda Function ${functionName} environment variables...`);
+          const envStr = await fs
+            .readFile(envFile, 'utf8')
+            .then((data) => data.toString())
+            .then((str) =>
+              str
+                .split('\n')
+                .filter((line) => !!line)
+                .join(',')
+            );
+          await exec(
+            `${awsCommand} lambda update-function-configuration`,
+            `--region ${region}`,
+            `--function-name ${functionName}`,
+            `--environment "Variables={${envStr}}"`
+          );
+        } else {
+          console.log(`No environment variables file found, skipping ...`);
+        }
       }
     }
   )
