@@ -40,4 +40,18 @@ export namespace TaskEither {
 
         return result;
       });
+
+  export const chainLeft =
+    <A, B>(f: (a: A) => TaskEither<any, B>) =>
+    (fa: TaskEither<A, B>): TaskEither<A, B> =>
+    () =>
+      fa().then((result) => {
+        if (Either.isLeft(result)) {
+          return f(Either.unwrap(result))().then(() => result);
+        }
+
+        return result;
+      });
+
+  export const chain = chainLeft;
 }
