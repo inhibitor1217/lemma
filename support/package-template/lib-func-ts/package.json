@@ -14,10 +14,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "build:dev": "vite build --mode development",
+    "build:prod": "vite build",
     "clean:local": "aws-lambda clean --functionName <function-name>",
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json",
-    "deploy:local": "yarn build && aws-lambda deploy --functionName <function-name>",
+    "deploy:local": "yarn build:dev && aws-lambda deploy --functionName <function-name>",
     "invoke:local": "aws-lambda invoke --functionName <function-name>",
     "logs:local": "aws-lambda logs --functionName <function-name>"
   },

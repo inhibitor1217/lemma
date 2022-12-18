@@ -14,12 +14,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
-    "clean:local": "aws-lambda clean --functionName <function-name>",
+    "build:dev": "vite build --mode development",
+    "build:prod": "vite build",
+    "clean:local": "aws-lambda clean --functionName fn-import-translations-from-file",
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json",
-    "deploy:local": "yarn build && aws-lambda deploy --functionName <function-name>",
-    "invoke:local": "aws-lambda invoke --functionName <function-name>",
-    "logs:local": "aws-lambda logs --functionName <function-name>"
+    "deploy:local": "yarn build:dev && aws-lambda deploy --functionName fn-import-translations-from-file",
+    "invoke:local": "aws-lambda invoke --functionName fn-import-translations-from-file",
+    "logs:local": "aws-lambda logs --functionName fn-import-translations-from-file"
   },
   "dependencies": {
     "@lemma/aws-s3": "workspace:^",
