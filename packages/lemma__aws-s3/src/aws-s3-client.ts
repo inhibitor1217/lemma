@@ -1,6 +1,7 @@
 import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSS3ClientArgs, AWSS3ClientLogger } from './aws-s3-client-args';
+import { MissingCredentialsException, UnknownError } from './aws-s3-client.exception';
 
 export namespace AWSS3Client {
   export type Header =
@@ -29,7 +30,7 @@ export namespace AWSS3Client {
     };
   };
 
-  export type HeadObjectError = unknown;
+  export type HeadObjectError = MissingCredentialsException | UnknownError;
 
   export type PutObjectResult = {
     resource: string;
@@ -38,7 +39,7 @@ export namespace AWSS3Client {
     httpUri: string;
   };
 
-  export type PutObjectError = unknown;
+  export type PutObjectError = MissingCredentialsException | UnknownError;
 }
 
 export class AWSS3Client {
@@ -54,7 +55,7 @@ export class AWSS3Client {
     this.resourcePrefix = resourcePrefix;
   }
 
-  public headObject(resource: string, key: string): Promise<Either<AWSS3Client.HeadObjectResult, AWSS3Client.HeadObjectResult>> {
+  public headObject(resource: string, key: string): Promise<Either<AWSS3Client.HeadObjectResult, AWSS3Client.HeadObjectError>> {
     this.logger.debug(`AWSS3Client#headObject`);
     this.logger.debug({
       resource,
@@ -88,7 +89,7 @@ export class AWSS3Client {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          Either.error
+          AWSS3Client.mapAWSS3Errors
         )
       );
   }
@@ -123,7 +124,7 @@ export class AWSS3Client {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          Either.error
+          AWSS3Client.mapAWSS3Errors
         )
       );
   }
@@ -145,5 +146,17 @@ export class AWSS3Client {
 
   private objectHttpUri(resource: string, key: string): string {
     return `${this.resourceHttpUri(resource)}/${key}`;
+  }
+
+  private static mapAWSS3Errors(error: unknown): Either<any, Error> {
+    if (error instanceof Error) {
+      if (error.message.includes('Credential is missing')) {
+        return Either.error(new MissingCredentialsException());
+      }
+
+      return Either.error(error);
+    }
+
+    return Either.error(new UnknownError(error));
   }
 }
