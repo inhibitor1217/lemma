@@ -50,7 +50,13 @@ export class AWSS3Client {
   constructor(private readonly args: AWSS3ClientArgs) {
     const { logger, resourcePrefix, ...rest } = args;
 
-    this.client = new S3Client(rest);
+    this.client = new S3Client({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+      },
+      ...rest,
+    });
     this.logger = logger;
     this.resourcePrefix = resourcePrefix;
   }

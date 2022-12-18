@@ -17,7 +17,13 @@ export class AWSLambdaClient {
   constructor(private readonly args: AWSLambdaClientArgs) {
     const { logger, ...rest } = args;
 
-    this.client = new LambdaClient(rest);
+    this.client = new LambdaClient({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+      },
+      ...rest,
+    });
     this.logger = logger;
   }
 
