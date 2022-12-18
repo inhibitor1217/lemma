@@ -47,7 +47,9 @@ export namespace TaskEither {
     () =>
       fa().then((result) => {
         if (Either.isLeft(result)) {
-          return f(Either.unwrap(result))().then(() => result);
+          return f(Either.unwrap(result))()
+            .catch(() => {}) // ignore errors from chained task
+            .then(() => result);
         }
 
         return result;
