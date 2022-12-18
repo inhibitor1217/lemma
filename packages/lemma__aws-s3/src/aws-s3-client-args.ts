@@ -21,12 +21,14 @@ export namespace AWSS3ClientArgs {
 
   export const customEndpoint = (args: {
     endpoint: string;
+    region: string;
     resourcePrefix: string;
     logger: AWSS3ClientLogger;
   }): AWSS3ClientArgs => ({
     endpoint: args.endpoint,
     forcePathStyle: true,
     logger: args.logger,
+    region: args.region,
     resourcePrefix: args.resourcePrefix,
   });
 }

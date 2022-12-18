@@ -14,6 +14,7 @@ async function s3(fastify: FastifyInstance) {
     ? AWSS3ClientArgs.customEndpoint({
         endpoint: fastify.env.aws.endpoint,
         logger: fastify.log,
+        region: fastify.env.aws.region,
         resourcePrefix: fastify.env.aws.resourcePrefix,
       })
     : AWSS3ClientArgs.region({
