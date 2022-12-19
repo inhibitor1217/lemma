@@ -60,7 +60,30 @@ export const handler: Handler<Event, Result> = async (event, context) => {
       return Promise.resolve(Either.ok(undefined));
     };
 
-  const result = go(getFileTask(), TaskEither.chainLeft(pipe(readFileProperties, TaskEither.flatMapLeft(logFileProperties))));
+  const parseJsonFile =
+    (result: FileStorageClient.GetFileResult): TaskEither<Record<string, string>, unknown> =>
+    () =>
+      result.file
+        .asBuffer()
+        .then((buffer) => buffer.toString('utf8'))
+        .then(JSON.parse)
+        .then(Either.ok)
+        .catch(Either.error);
+
+  const logNumTranslationEntries =
+    (translations: Record<string, string>): TaskEither<void, unknown> =>
+    () => {
+      console.log(`Read ${Object.keys(translations).length} translation entries from file.`);
+      return Promise.resolve(Either.ok(undefined));
+    };
+
+  const result = go(
+    getFileTask(),
+    TaskEither.chainLeft(pipe(readFileProperties, TaskEither.flatMapLeft(logFileProperties))),
+    TaskEither.flatMapLeft(parseJsonFile),
+    TaskEither.chainLeft(logNumTranslationEntries),
+    TaskEither.mapOr(console.error)
+  );
 
   return await result();
 };
