@@ -76,7 +76,7 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
 
     const triggerImportTranslationsFromFileTask = (translationsImportAttempt: TranslationsImportAttempt) => () =>
       fastify.fnImportTranslationsFromFile
-        .syncInvoke({
+        .asyncInvoke({
           payload: {
             workspaceId,
             translationsImportAttemptId: translationsImportAttempt.id,
