@@ -172,6 +172,12 @@ export class AWSS3Client {
       );
   }
 
+  /**
+   * @fixme
+   *
+   * Identify MIME type of given file,
+   * and set `Content-Type` header when creating a `PutObject` request.
+   */
   public putObject(
     resource: string,
     key: string,
