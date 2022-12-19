@@ -1,5 +1,6 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
+import { Either, go, pipe, TaskEither } from '@lemma/fx';
 import { Handler } from 'aws-lambda';
 import { Event, Result } from './types';
 
@@ -40,7 +41,26 @@ export const handler: Handler<Event, Result> = async (event, context) => {
     throw new TranslationsFileNotFoundException();
   }
 
-  console.log(key);
+  const getFileTask = () => () => fileStorage.getFile(FileStorageLocation.Internal, key);
 
-  return {};
+  const readFileProperties =
+    (result: FileStorageClient.GetFileResult): TaskEither<{ contentType?: string; contentLength?: number }, unknown> =>
+    () =>
+      Promise.resolve(
+        Either.ok({
+          contentType: result.headers['Content-Type'],
+          contentLength: result.headers['Content-Length'],
+        })
+      );
+
+  const logFileProperties =
+    (properties: { contentType?: string; contentLength?: number }): TaskEither<void, unknown> =>
+    () => {
+      console.log('Read file properties from file storage:', properties);
+      return Promise.resolve(Either.ok(undefined));
+    };
+
+  const result = go(getFileTask(), TaskEither.chainLeft(pipe(readFileProperties, TaskEither.flatMapLeft(logFileProperties))));
+
+  return await result();
 };
