@@ -1,4 +1,4 @@
-import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSS3ClientArgs, AWSS3ClientLogger } from './aws-s3-client-args';
 import { MissingCredentialsException, NoSuchKeyException, UnknownError } from './aws-s3-client.exception';
@@ -31,6 +31,28 @@ export namespace AWSS3Client {
   };
 
   export type HeadObjectError = MissingCredentialsException | NoSuchKeyException | UnknownError;
+
+  export type GetObjectResult = {
+    resource: string;
+    key: string;
+    bucketName: string;
+    httpUri: string;
+    headers: {
+      'Cache-Control'?: string;
+      'Content-Disposition'?: string;
+      'Content-Encoding'?: string;
+      'Content-Length'?: number;
+      'Content-Type'?: string;
+      Expires?: Date;
+      'Last-Modified'?: Date;
+    };
+    body: {
+      asStream: () => ReadableStream;
+      asBuffer: () => Promise<Buffer>;
+    };
+  };
+
+  export type GetObjectError = MissingCredentialsException | NoSuchKeyException | UnknownError;
 
   export type PutObjectResult = {
     resource: string;
@@ -89,6 +111,56 @@ export class AWSS3Client {
             'Content-Type': res.ContentType,
             Expires: res.Expires,
             'Last-Modified': res.LastModified,
+          },
+        });
+      })
+      .catch(
+        pipe(
+          tap((error) => this.logger.error(error)),
+          AWSS3Client.mapAWSS3Errors
+        )
+      );
+  }
+
+  public getObject(resource: string, key: string): Promise<Either<AWSS3Client.GetObjectResult, AWSS3Client.GetObjectError>> {
+    this.logger.debug('AWSS3Client#getObject');
+    this.logger.debug({
+      resource,
+      key,
+    });
+
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName(resource),
+      Key: key,
+    });
+
+    return this.client
+      .send(command)
+      .then((res) => {
+        const { Body, CacheControl, ContentDisposition, ContentEncoding, ContentLength, ContentType, Expires, LastModified } =
+          res;
+
+        if (!Body) {
+          throw new TypeError('Empty response body from S3 GetObject');
+        }
+
+        return Either.ok({
+          resource,
+          key,
+          bucketName: this.bucketName(resource),
+          httpUri: this.objectHttpUri(resource, key),
+          headers: {
+            'Cache-Control': CacheControl,
+            'Content-Disposition': ContentDisposition,
+            'Content-Encoding': ContentEncoding,
+            'Content-Length': ContentLength,
+            'Content-Type': ContentType,
+            Expires,
+            'Last-Modified': LastModified,
+          },
+          body: {
+            asStream: () => Body.transformToWebStream(),
+            asBuffer: () => Body.transformToByteArray().then((bytes) => Buffer.from(bytes)),
           },
         });
       })
