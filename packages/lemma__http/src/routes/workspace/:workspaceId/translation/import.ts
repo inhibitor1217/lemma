@@ -2,7 +2,7 @@ import multipart, { MultipartFile, MultipartValue } from '@fastify/multipart';
 import { Either, go, Task } from '@lemma/fx';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { InvalidFileMIMETypeException, translationsImportBehavior } from '~/behaviors/translation';
+import { translationsImportBehavior } from '~/behaviors/translation';
 import { language } from '~/lib/translation';
 
 export default async function _import(fastify: FastifyInstance) {
@@ -110,11 +110,14 @@ export default async function _import(fastify: FastifyInstance) {
                 reply.status(201).send({
                   translationsImportAttempt,
                 }),
-              (error) =>
-                reply.status(400).send({
-                  statusCode: 400,
-                  message: error.toString(),
-                })
+              (error) => {
+                switch (error.type) {
+                  case 'TranslationsImportBehavior.InvalidFileMIMETypeException':
+                    return reply.status(400).send({ statusCode: 400, message: 'Invalid file MIME type' });
+                  case 'TranslationsImportBehavior.TranslationsImportException':
+                    throw error;
+                }
+              }
             )
           );
         default:

@@ -2,7 +2,7 @@ import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-clie
 import { Either, go, TaskEither } from '@lemma/fx';
 import { TranslationsImportAttempt, TranslationsImportAttemptStatus, TranslationsImportAttemptType } from '@lemma/prisma-client';
 import { FastifyInstance } from 'fastify';
-import { InvalidFileMIMETypeException } from './translations-import-behavior.exception';
+import { InvalidFileMIMETypeException, TranslationsImportException } from './translations-import-behavior.exception';
 
 type TriggerImportFromJsonFile = {
   Args: {
@@ -16,7 +16,7 @@ type TriggerImportFromJsonFile = {
   Result: {
     translationsImportAttempt: TranslationsImportAttempt;
   };
-  Error: InvalidFileMIMETypeException;
+  Error: InvalidFileMIMETypeException | TranslationsImportException;
 };
 
 declare module 'fastify' {
@@ -51,16 +51,18 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
     }
 
     const uploadFileTask = () =>
-      fastify.fileStorage.uploadFile(
-        FileStorageLocation.Internal,
-        translationImportFileKey({
-          workspaceId,
-          format: 'json',
-          language,
-          requestKey,
-        }),
-        buffer
-      );
+      fastify.fileStorage
+        .uploadFile(
+          FileStorageLocation.Internal,
+          translationImportFileKey({
+            workspaceId,
+            format: 'json',
+            language,
+            requestKey,
+          }),
+          buffer
+        )
+        .then(Either.mapOr((e) => new TranslationsImportException({}, e)));
 
     const createTranslationsImportAttemptTask = (uploadResult: FileStorageClient.UploadFileResult) => () =>
       fastify.rdb.translationsImportAttempt
@@ -77,7 +79,7 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
           },
         })
         .then(Either.ok)
-        .catch(Either.error);
+        .catch((e) => Either.error(new TranslationsImportException({}, e)));
 
     const triggerImportTranslationsFromFileTask = (translationsImportAttempt: TranslationsImportAttempt) => () =>
       fastify.fnImportTranslationsFromFile
@@ -100,7 +102,7 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
           },
         })
         .then(Either.ok)
-        .catch(Either.error);
+        .catch((e) => Either.error(new TranslationsImportException({}, e)));
 
     /**
      * @note

@@ -20,11 +20,11 @@ export class FileStorageClient {
             if (e instanceof StorageClient.NoSuchKeyException) {
               return Either.ok(false);
             }
-            return Either.error(new FileStorageClient.FlieStorageClientError(e));
+            return Either.error(new FileStorageClient.FlieStorageClientError({}, e));
           }
         )
       )
-      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError({}, e)));
   }
 
   public getFile(
@@ -44,7 +44,7 @@ export class FileStorageClient {
           })
         )
       )
-      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError({}, e)));
   }
 
   public uploadFile(
@@ -57,10 +57,10 @@ export class FileStorageClient {
       .then(
         pipe(
           Either.map(({ httpUri }) => ({ httpUri })),
-          Either.mapOr((e) => new FileStorageClient.FlieStorageClientError(e))
+          Either.mapOr((e) => new FileStorageClient.FlieStorageClientError({}, e))
         )
       )
-      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError({}, e)));
   }
 }
 

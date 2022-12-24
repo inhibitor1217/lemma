@@ -5,3 +5,6 @@ export const InvalidFileMIMETypeException = defineException('TranslationsImportB
   expectedMimeType: string;
 }>();
 export type InvalidFileMIMETypeException = InstanceType<typeof InvalidFileMIMETypeException>;
+
+export const TranslationsImportException = defineException('TranslationsImportBehavior', 'TranslationsImportException')<{}>();
+export type TranslationsImportException = InstanceType<typeof TranslationsImportException>;
