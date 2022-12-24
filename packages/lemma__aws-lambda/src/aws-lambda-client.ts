@@ -1,13 +1,14 @@
 import { InvokeCommand, InvocationType, LambdaClient } from '@aws-sdk/client-lambda';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSLambdaClientArgs, AWSLambdaClientLogger } from './aws-lambda-client-args';
+import { UnknownError } from './aws-lambda-client.exception';
 
 export namespace AWSLambdaClient {
   export type SyncInvokeResult<R> = R;
-  export type SyncInvokeError = unknown;
+  export type SyncInvokeError = UnknownError;
 
   export type AsyncInvokeResult = void;
-  export type AsyncInvokeError = unknown;
+  export type AsyncInvokeError = UnknownError;
 }
 
 export class AWSLambdaClient {
@@ -57,7 +58,7 @@ export class AWSLambdaClient {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          Either.error
+          AWSLambdaClient.mapAWSLambdaError
         )
       );
   }
@@ -84,7 +85,7 @@ export class AWSLambdaClient {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          Either.error
+          AWSLambdaClient.mapAWSLambdaError
         )
       );
   }
@@ -95,5 +96,9 @@ export class AWSLambdaClient {
 
   private static fromPayload(payload: Uint8Array): unknown {
     return JSON.parse(Buffer.from(payload).toString('utf8'));
+  }
+
+  private static mapAWSLambdaError(error: unknown): Either<any, UnknownError> {
+    return Either.error(new UnknownError(error));
   }
 }
