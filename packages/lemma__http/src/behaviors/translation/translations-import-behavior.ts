@@ -42,7 +42,12 @@ export async function translationsImportBehavior(fastify: FastifyInstance) {
     const { requestKey, workspaceId, memberId, language, mimetype, buffer } = args;
 
     if (mimetype !== 'application/json') {
-      return TaskEither.error(new InvalidFileMIMETypeException(mimetype, 'application/json'));
+      return TaskEither.error(
+        new InvalidFileMIMETypeException({
+          mimetype,
+          expectedMimeType: 'application/json',
+        })
+      );
     }
 
     const uploadFileTask = () =>

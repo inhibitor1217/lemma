@@ -118,12 +118,7 @@ export default async function translation(fastify: FastifyInstance) {
         Either.map(MongoDBEntityView.from),
         Either.reduce(
           (translation) => reply.status(201).send({ translation }),
-          (error) => {
-            if (error instanceof DuplicateTranslationKeyException) {
-              return reply.status(400).send({ statusCode: 400, message: error.message });
-            }
-            throw error;
-          }
+          (error) => reply.status(400).send({ statusCode: 400, message: error.toString() })
         )
       );
     }
@@ -182,13 +177,12 @@ export default async function translation(fastify: FastifyInstance) {
         Either.reduce(
           (translation) => reply.status(200).send({ translation }),
           (error) => {
-            if (error instanceof DuplicateTranslationKeyException) {
-              return reply.status(400).send({ statusCode: 400, message: error.message });
+            switch (error.type) {
+              case 'TranslationBehavior.DuplicateTranslationKeyException':
+                return reply.status(400).send({ statusCode: 400, message: error.toString() });
+              case 'TranslationBehavior.TranslationNotFoundException':
+                return reply.status(404).send({ statusCode: 404, message: error.toString() });
             }
-            if (error instanceof TranslationNotFoundException) {
-              return reply.status(404).send({ statusCode: 404, message: error.message });
-            }
-            throw error;
           }
         )
       );
@@ -226,12 +220,7 @@ export default async function translation(fastify: FastifyInstance) {
         await fastify.translationBehavior.deleteTranslation(workspaceId, translationId),
         Either.reduce(
           () => reply.status(204).send(),
-          (error) => {
-            if (error instanceof TranslationNotFoundException) {
-              return reply.status(404).send({ statusCode: 404, message: error.message });
-            }
-            throw error;
-          }
+          (error) => reply.status(404).send({ statusCode: 404, message: error.toString() })
         )
       );
     }

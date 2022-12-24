@@ -54,7 +54,7 @@ export async function translationBehavior(fastify: FastifyInstance) {
       .then(Either.ok)
       .catch((error) => {
         if (error.code === MongoDBErrorCode.DUPLICATE_KEY) {
-          return Either.error(new DuplicateTranslationKeyException(args.key));
+          return Either.error(new DuplicateTranslationKeyException({ key: args.key }));
         }
 
         throw error;
@@ -79,7 +79,9 @@ export async function translationBehavior(fastify: FastifyInstance) {
         }
       )
       .then((translation) =>
-        translation ? Either.ok(translation) : Either.error(new TranslationNotFoundException(args.translationId))
+        translation
+          ? Either.ok(translation)
+          : Either.error(new TranslationNotFoundException({ translationId: args.translationId }))
       )
       .catch((error) => {
         if (error.code === MongoDBErrorCode.DUPLICATE_KEY) {
@@ -87,7 +89,7 @@ export async function translationBehavior(fastify: FastifyInstance) {
             throw new TypeError('args.translation.key should have existed, but it was undefined');
           }
 
-          return Either.error(new DuplicateTranslationKeyException(args.translation.key));
+          return Either.error(new DuplicateTranslationKeyException({ key: args.translation.key }));
         }
 
         throw error;
@@ -101,7 +103,7 @@ export async function translationBehavior(fastify: FastifyInstance) {
         workspaceId,
       })
       .then((translation) =>
-        translation ? Either.ok(undefined) : Either.error(new TranslationNotFoundException(translationId))
+        translation ? Either.ok(undefined) : Either.error(new TranslationNotFoundException({ translationId }))
       );
   }
 

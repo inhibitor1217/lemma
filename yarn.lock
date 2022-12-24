@@ -2877,6 +2877,7 @@ __metadata:
     "@fastify/multipart": ^7.3.0
     "@fastify/session": ^10.0.0
     "@lemma/aws-s3": "workspace:^"
+    "@lemma/exception": "workspace:^"
     "@lemma/file-storage-client": "workspace:^"
     "@lemma/fn-import-translations-from-file": "workspace:^"
     "@lemma/fx": "workspace:^"

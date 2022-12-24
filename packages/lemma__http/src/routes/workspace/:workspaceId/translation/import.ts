@@ -110,16 +110,11 @@ export default async function _import(fastify: FastifyInstance) {
                 reply.status(201).send({
                   translationsImportAttempt,
                 }),
-              (error) => {
-                if (error instanceof InvalidFileMIMETypeException) {
-                  return reply.status(400).send({
-                    statusCode: 400,
-                    message: error.message,
-                  });
-                }
-
-                throw error;
-              }
+              (error) =>
+                reply.status(400).send({
+                  statusCode: 400,
+                  message: error.toString(),
+                })
             )
           );
         default:

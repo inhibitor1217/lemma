@@ -1,11 +1,11 @@
-export class DuplicateTranslationKeyException extends Error {
-  constructor(public readonly key: string) {
-    super(`Translation with key '${key}' already exists`);
-  }
-}
+import { defineException } from '@lemma/exception';
 
-export class TranslationNotFoundException extends Error {
-  constructor(public readonly translationId: string) {
-    super(`Translation with id '${translationId}' not found`);
-  }
-}
+export const DuplicateTranslationKeyException = defineException('TranslationBehavior', 'DuplicateTranslationKeyException')<{
+  key: string;
+}>();
+export type DuplicateTranslationKeyException = InstanceType<typeof DuplicateTranslationKeyException>;
+
+export const TranslationNotFoundException = defineException('TranslationBehavior', 'TranslationNotFoundException')<{
+  translationId: string;
+}>();
+export type TranslationNotFoundException = InstanceType<typeof TranslationNotFoundException>;
