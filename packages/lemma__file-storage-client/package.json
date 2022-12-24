@@ -17,6 +17,7 @@
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json"
   },
   "dependencies": {
+    "@lemma/exception": "workspace:^",
     "@lemma/fx": "workspace:^",
     "extended-enum": "^1.0.1"
   },

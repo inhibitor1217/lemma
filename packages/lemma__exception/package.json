@@ -1,7 +1,7 @@
 {
-  "name": "@lemma/aws-s3",
+  "name": "@lemma/exception",
   "version": "0.0.1",
-  "description": "A wrapper module for AWS S3 client",
+  "description": "Module for common exception interface",
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "packageManager": "yarn@3.2.2",
   "private": true,
@@ -16,13 +16,7 @@
   "scripts": {
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json"
   },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.226.0",
-    "@lemma/exception": "workspace:^",
-    "@lemma/fx": "workspace:^"
-  },
   "devDependencies": {
-    "@lemma/file-storage-client": "workspace:^",
     "@yarnpkg/pnpify": "^4.0.0-rc.32",
     "tsconfig-paths": "^4.1.0",
     "typescript": "^4.9.3",

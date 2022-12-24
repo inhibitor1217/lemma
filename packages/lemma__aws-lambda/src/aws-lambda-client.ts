@@ -1,15 +1,7 @@
 import { InvokeCommand, InvocationType, LambdaClient } from '@aws-sdk/client-lambda';
+import { defineException } from '@lemma/exception';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSLambdaClientArgs, AWSLambdaClientLogger } from './aws-lambda-client-args';
-import { UnknownError } from './aws-lambda-client.exception';
-
-export namespace AWSLambdaClient {
-  export type SyncInvokeResult<R> = R;
-  export type SyncInvokeError = UnknownError;
-
-  export type AsyncInvokeResult = void;
-  export type AsyncInvokeError = UnknownError;
-}
 
 export class AWSLambdaClient {
   private readonly client: LambdaClient;
@@ -31,7 +23,7 @@ export class AWSLambdaClient {
   public syncInvoke<P, R>(
     functionName: string,
     payload: P
-  ): Promise<Either<AWSLambdaClient.SyncInvokeResult<R>, AWSLambdaClient.SyncInvokeError>> {
+  ): Promise<Either<AWSLambdaClient.SyncInvoke<R>['Result'], AWSLambdaClient.SyncInvoke<R>['Error']>> {
     this.logger.debug(`AWSLambdaClient#syncInvoke`);
     this.logger.debug({
       functionName,
@@ -66,7 +58,7 @@ export class AWSLambdaClient {
   public asyncInvoke<P>(
     functionName: string,
     payload: P
-  ): Promise<Either<AWSLambdaClient.AsyncInvokeResult, AWSLambdaClient.AsyncInvokeError>> {
+  ): Promise<Either<AWSLambdaClient.AsyncInvoke['Result'], AWSLambdaClient.AsyncInvoke['Error']>> {
     this.logger.debug(`AWSLambdaClient#asyncInvoke`);
     this.logger.debug({
       functionName,
@@ -98,7 +90,22 @@ export class AWSLambdaClient {
     return JSON.parse(Buffer.from(payload).toString('utf8'));
   }
 
-  private static mapAWSLambdaError(error: unknown): Either<any, UnknownError> {
-    return Either.error(new UnknownError(error));
+  private static mapAWSLambdaError(error: unknown): Either<any, AWSLambdaClient.AWSLambdaError> {
+    return Either.error(new AWSLambdaClient.AWSLambdaError({}, error));
   }
+}
+
+export namespace AWSLambdaClient {
+  export const AWSLambdaError = defineException('AWSLambdaClient', 'AWSLambdaError')<{}>();
+  export type AWSLambdaError = InstanceType<typeof AWSLambdaError>;
+
+  export type SyncInvoke<R> = {
+    Result: R;
+    Error: AWSLambdaError;
+  };
+
+  export type AsyncInvoke = {
+    Result: void;
+    Error: AWSLambdaError;
+  };
 }

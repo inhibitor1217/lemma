@@ -12,5 +12,5 @@
     }
   },
   "include": ["./src"],
-  "references": [{ "path": "../lemma__fx/tsconfig.esm.json" }]
+  "references": [{ "path": "../lemma__exception/tsconfig.esm.json" }, { "path": "../lemma__fx/tsconfig.esm.json" }]
 }

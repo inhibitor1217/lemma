@@ -1,4 +1,5 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
+import { defineException } from '@lemma/exception';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
 import { Either, go, pipe, TaskEither } from '@lemma/fx';
 import { Handler } from 'aws-lambda';
@@ -21,11 +22,10 @@ const s3 = new AWSS3Client(
 
 const fileStorage = new FileStorageClient(s3);
 
-class TranslationsFileNotFoundException extends Error {
-  constructor() {
-    super('TranslationsFileNotFoundException');
-  }
-}
+const TranslationsFileNotFoundException = defineException(
+  'FnImportTranslationsFromFile',
+  'TranslationsFileNotFoundException'
+)<{}>();
 
 export const handler: Handler<Event, Result> = async (event, context) => {
   const {
@@ -38,7 +38,7 @@ export const handler: Handler<Event, Result> = async (event, context) => {
   } = event;
 
   if (!(await fileStorage.exists(FileStorageLocation.Internal, key))) {
-    throw new TranslationsFileNotFoundException();
+    throw new TranslationsFileNotFoundException({});
   }
 
   const getFileTask = () => () => fileStorage.getFile(FileStorageLocation.Internal, key);
@@ -63,7 +63,7 @@ export const handler: Handler<Event, Result> = async (event, context) => {
   const parseJsonFile =
     (result: FileStorageClient.GetFileResult): TaskEither<Record<string, string>, unknown> =>
     () =>
-      result.file
+      result.body
         .asBuffer()
         .then((buffer) => buffer.toString('utf8'))
         .then(JSON.parse)

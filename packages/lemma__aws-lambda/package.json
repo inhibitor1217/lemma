@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.16.0",
+    "@lemma/exception": "workspace:^",
     "@lemma/fx": "workspace:^"
   }
 }

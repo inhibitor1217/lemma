@@ -1,92 +1,10 @@
-import { Either } from '@lemma/fx';
+import { defineException } from '@lemma/exception';
+import { Either, pipe } from '@lemma/fx';
+import { Body, Headers } from './file';
 import { FileStorageLocation } from './file-storage-location';
-import { NoSuchKeyException } from './file-storage.exception';
-
-interface StorageClient {
-  headObject(
-    bucketName: string,
-    key: string
-  ): Promise<
-    Either<
-      {
-        headers: {
-          'Cache-Control'?: string;
-          'Content-Disposition'?: string;
-          'Content-Encoding'?: string;
-          'Content-Length'?: number;
-          'Content-Type'?: string;
-          Expires?: Date;
-          'Last-Modified'?: Date;
-        };
-      },
-      unknown
-    >
-  >;
-
-  getObject(
-    bucketName: string,
-    key: string
-  ): Promise<
-    Either<
-      {
-        headers: {
-          'Cache-Control'?: string;
-          'Content-Disposition'?: string;
-          'Content-Encoding'?: string;
-          'Content-Length'?: number;
-          'Content-Type'?: string;
-          Expires?: Date;
-          'Last-Modified'?: Date;
-        };
-        body: {
-          asStream: () => ReadableStream;
-          asBuffer: () => Promise<Buffer>;
-        };
-      },
-      unknown
-    >
-  >;
-
-  putObject(bucketName: string, key: string, file: Blob | Buffer | ReadableStream): Promise<Either<{ httpUri: string }, unknown>>;
-}
-
-export namespace FileStorageClient {
-  export type ExistsResult = boolean;
-
-  export type ExistsError = unknown;
-
-  export type GetFileResult = {
-    headers: {
-      'Cache-Control'?: string;
-      'Content-Disposition'?: string;
-      'Content-Encoding'?: string;
-      'Content-Length'?: number;
-      'Content-Type'?: string;
-      Expires?: Date;
-      'Last-Modified'?: Date;
-    };
-    file: {
-      asStream: () => ReadableStream;
-      asBuffer: () => Promise<Buffer>;
-    };
-  };
-
-  export type GetFileError = NoSuchKeyException | unknown;
-
-  export type UploadFileResult = {
-    httpUri: string;
-  };
-
-  export type UploadFileError = unknown;
-}
+import { StorageClient } from './storage-client';
 
 export class FileStorageClient {
-  /**
-   * @note
-   *
-   * Might apply abstraction for storage service layer
-   * to support multiple vendors.
-   */
   constructor(private readonly storage: StorageClient) {}
 
   public exists(
@@ -99,15 +17,14 @@ export class FileStorageClient {
         Either.reduce(
           () => Either.ok(true),
           (e) => {
-            if (e instanceof Error && e.message.includes('NoSuchKeyException')) {
+            if (e instanceof StorageClient.NoSuchKeyException) {
               return Either.ok(false);
             }
-
-            return Either.error(e);
+            return Either.error(new FileStorageClient.FlieStorageClientError(e));
           }
         )
       )
-      .catch(Either.error);
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
   }
 
   public getFile(
@@ -116,14 +33,18 @@ export class FileStorageClient {
   ): Promise<Either<FileStorageClient.GetFileResult, FileStorageClient.GetFileError>> {
     return this.storage
       .getObject(location.bucketName, key)
-      .then(Either.map(({ headers, body }) => ({ headers, file: body })))
-      .catch((e) => {
-        if (e instanceof Error && e.message.includes('NoSuchKeyException')) {
-          return Either.error(new NoSuchKeyException(key));
-        }
-
-        return Either.error(e);
-      });
+      .then(
+        pipe(
+          Either.map(({ headers, body }) => ({ headers, body })),
+          Either.mapOr((e) => {
+            if (e.type === 'StorageClient.NoSuchKeyException') {
+              return new FileStorageClient.NoSuchKeyException({ key: e.attrs.key });
+            }
+            return new FileStorageClient.FlieStorageClientError(e);
+          })
+        )
+      )
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
   }
 
   public uploadFile(
@@ -133,7 +54,37 @@ export class FileStorageClient {
   ): Promise<Either<FileStorageClient.UploadFileResult, FileStorageClient.UploadFileError>> {
     return this.storage
       .putObject(location.bucketName, key, file)
-      .then(Either.map(({ httpUri }) => ({ httpUri })))
-      .catch(Either.error);
+      .then(
+        pipe(
+          Either.map(({ httpUri }) => ({ httpUri })),
+          Either.mapOr((e) => new FileStorageClient.FlieStorageClientError(e))
+        )
+      )
+      .catch((e) => Either.error(new FileStorageClient.FlieStorageClientError(e)));
   }
+}
+
+export namespace FileStorageClient {
+  export const NoSuchKeyException = defineException('FileStorageClient', 'NoSuchKeyException')<{ key: string }>();
+  export type NoSuchKeyException = InstanceType<typeof NoSuchKeyException>;
+
+  export const FlieStorageClientError = defineException('FileStorageClient', 'FileStorageClientError')<{}>();
+  export type FlieStorageClientError = InstanceType<typeof FlieStorageClientError>;
+
+  export type ExistsResult = boolean;
+
+  export type ExistsError = FlieStorageClientError;
+
+  export type GetFileResult = {
+    headers: Headers;
+    body: Body;
+  };
+
+  export type GetFileError = NoSuchKeyException | FlieStorageClientError;
+
+  export type UploadFileResult = {
+    httpUri: string;
+  };
+
+  export type UploadFileError = FlieStorageClientError;
 }

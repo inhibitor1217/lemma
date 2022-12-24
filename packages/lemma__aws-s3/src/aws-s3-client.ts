@@ -1,70 +1,10 @@
 import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { defineException } from '@lemma/exception';
+import { Body, Headers, StorageClient } from '@lemma/file-storage-client';
 import { Either, pipe, tap } from '@lemma/fx';
 import { AWSS3ClientArgs, AWSS3ClientLogger } from './aws-s3-client-args';
-import { MissingCredentialsException, NoSuchKeyException, UnknownError } from './aws-s3-client.exception';
 
-export namespace AWSS3Client {
-  export type Header =
-    | 'Cache-Control'
-    | 'Content-Disposition'
-    | 'Content-Encoding'
-    | 'Content-Language'
-    | 'Content-Length'
-    | 'Content-Type'
-    | 'Expires'
-    | 'Last-Modified';
-
-  export type HeadObjectResult = {
-    resource: string;
-    key: string;
-    bucketName: string;
-    httpUri: string;
-    headers: {
-      'Cache-Control'?: string;
-      'Content-Disposition'?: string;
-      'Content-Encoding'?: string;
-      'Content-Length'?: number;
-      'Content-Type'?: string;
-      Expires?: Date;
-      'Last-Modified'?: Date;
-    };
-  };
-
-  export type HeadObjectError = MissingCredentialsException | NoSuchKeyException | UnknownError;
-
-  export type GetObjectResult = {
-    resource: string;
-    key: string;
-    bucketName: string;
-    httpUri: string;
-    headers: {
-      'Cache-Control'?: string;
-      'Content-Disposition'?: string;
-      'Content-Encoding'?: string;
-      'Content-Length'?: number;
-      'Content-Type'?: string;
-      Expires?: Date;
-      'Last-Modified'?: Date;
-    };
-    body: {
-      asStream: () => ReadableStream;
-      asBuffer: () => Promise<Buffer>;
-    };
-  };
-
-  export type GetObjectError = MissingCredentialsException | NoSuchKeyException | UnknownError;
-
-  export type PutObjectResult = {
-    resource: string;
-    key: string;
-    bucketName: string;
-    httpUri: string;
-  };
-
-  export type PutObjectError = MissingCredentialsException | UnknownError;
-}
-
-export class AWSS3Client {
+export class AWSS3Client implements StorageClient {
   private readonly client: S3Client;
   private readonly logger: AWSS3ClientLogger;
   private readonly resourcePrefix: string;
@@ -83,7 +23,10 @@ export class AWSS3Client {
     this.resourcePrefix = resourcePrefix;
   }
 
-  public headObject(resource: string, key: string): Promise<Either<AWSS3Client.HeadObjectResult, AWSS3Client.HeadObjectError>> {
+  public headObject(
+    resource: string,
+    key: string
+  ): Promise<Either<AWSS3Client.HeadObject['Result'], AWSS3Client.HeadObject['Error']>> {
     this.logger.debug(`AWSS3Client#headObject`);
     this.logger.debug({
       resource,
@@ -117,12 +60,27 @@ export class AWSS3Client {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          AWSS3Client.mapAWSS3Errors
+          AWSS3Client.mapAWSS3Error
         )
+      )
+      .then(
+        Either.mapOr((error) => {
+          switch (error.type) {
+            case 'AWSS3Client.AWSS3ClientError':
+            case 'AWSS3Client.MissingCredentialsException':
+            default:
+              return new StorageClient.StorageClientError({}, error);
+            case 'AWSS3Client.NoSuchKeyException':
+              return new StorageClient.NoSuchKeyException({ key }, error);
+          }
+        })
       );
   }
 
-  public getObject(resource: string, key: string): Promise<Either<AWSS3Client.GetObjectResult, AWSS3Client.GetObjectError>> {
+  public getObject(
+    resource: string,
+    key: string
+  ): Promise<Either<AWSS3Client.GetObject['Result'], AWSS3Client.GetObject['Error']>> {
     this.logger.debug('AWSS3Client#getObject');
     this.logger.debug({
       resource,
@@ -167,8 +125,20 @@ export class AWSS3Client {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          AWSS3Client.mapAWSS3Errors
+          AWSS3Client.mapAWSS3Error
         )
+      )
+      .then(
+        Either.mapOr((error) => {
+          switch (error.type) {
+            case 'AWSS3Client.AWSS3ClientError':
+            case 'AWSS3Client.MissingCredentialsException':
+            default:
+              return new StorageClient.StorageClientError({}, error);
+            case 'AWSS3Client.NoSuchKeyException':
+              return new StorageClient.NoSuchKeyException({ key }, error);
+          }
+        })
       );
   }
 
@@ -182,7 +152,7 @@ export class AWSS3Client {
     resource: string,
     key: string,
     file: Blob | Buffer | ReadableStream
-  ): Promise<Either<AWSS3Client.PutObjectResult, AWSS3Client.PutObjectError>> {
+  ): Promise<Either<AWSS3Client.PutObject['Result'], AWSS3Client.PutObject['Error']>> {
     this.logger.debug(`AWSS3Client#putObject`);
     this.logger.debug({
       resource,
@@ -208,9 +178,10 @@ export class AWSS3Client {
       .catch(
         pipe(
           tap((error) => this.logger.error(error)),
-          AWSS3Client.mapAWSS3Errors
+          AWSS3Client.mapAWSS3Error
         )
-      );
+      )
+      .then(Either.mapOr((error) => new StorageClient.StorageClientError({}, error)));
   }
 
   private bucketName(resource: string): string {
@@ -232,10 +203,12 @@ export class AWSS3Client {
     return `${this.resourceHttpUri(resource)}/${key}`;
   }
 
-  private static mapAWSS3Errors(error: unknown): Either<any, Error> {
+  private static mapAWSS3Error(
+    error: unknown
+  ): Either<any, AWSS3Client.AWSS3ClientError | AWSS3Client.MissingCredentialsException | AWSS3Client.NoSuchKeyException> {
     if (error instanceof Error) {
       if (error.message.includes('Credential is missing')) {
-        return Either.error(new MissingCredentialsException());
+        return Either.error(new AWSS3Client.MissingCredentialsException({}, error));
       }
 
       /**
@@ -245,12 +218,56 @@ export class AWSS3Client {
        * This specific branch is to catch that exception and return a more meaningful error.
        */
       if (error instanceof TypeError && error.message.includes("Cannot read properties of null (reading 'getReader')")) {
-        return Either.error(new NoSuchKeyException());
+        return Either.error(new AWSS3Client.NoSuchKeyException({}));
       }
 
-      return Either.error(new UnknownError(error));
+      return Either.error(new AWSS3Client.AWSS3ClientError({}, error));
     }
 
-    return Either.error(new UnknownError(error));
+    return Either.error(new AWSS3Client.AWSS3ClientError({}, error));
   }
+}
+
+export namespace AWSS3Client {
+  export const MissingCredentialsException = defineException('AWSS3Client', 'MissingCredentialsException')<{}>();
+  export type MissingCredentialsException = InstanceType<typeof MissingCredentialsException>;
+
+  export const NoSuchKeyException = defineException('AWSS3Client', 'NoSuchKeyException')<{}>();
+  export type NoSuchKeyException = InstanceType<typeof NoSuchKeyException>;
+
+  export const AWSS3ClientError = defineException('AWSS3Client', 'AWSS3ClientError')<unknown>();
+  export type AWSS3ClientError = InstanceType<typeof AWSS3ClientError>;
+
+  export type HeadObject = {
+    Result: {
+      resource: string;
+      key: string;
+      bucketName: string;
+      httpUri: string;
+      headers: Headers;
+    };
+    Error: StorageClient.NoSuchKeyException | StorageClient.StorageClientError;
+  };
+
+  export type GetObject = {
+    Result: {
+      resource: string;
+      key: string;
+      bucketName: string;
+      httpUri: string;
+      headers: Headers;
+      body: Body;
+    };
+    Error: StorageClient.NoSuchKeyException | StorageClient.StorageClientError;
+  };
+
+  export type PutObject = {
+    Result: {
+      resource: string;
+      key: string;
+      bucketName: string;
+      httpUri: string;
+    };
+    Error: StorageClient.StorageClientError;
+  };
 }

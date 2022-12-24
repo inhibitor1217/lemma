@@ -11,5 +11,5 @@
     }
   },
   "include": ["./src"],
-  "references": [{ "path": "../lemma__fx/tsconfig.cjs.json" }]
+  "references": [{ "path": "../lemma__exception/tsconfig.cjs.json" }, { "path": "../lemma__fx/tsconfig.cjs.json" }]
 }

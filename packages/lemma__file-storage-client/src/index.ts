@@ -1,3 +1,4 @@
 export { FileStorageClient } from './file-storage-client';
 export { FileStorageLocation } from './file-storage-location';
-export { NoSuchKeyException } from './file-storage.exception';
+export { Body, HeaderKeys, Headers } from './file';
+export { StorageClient } from './storage-client';

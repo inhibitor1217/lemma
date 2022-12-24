@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@lemma/aws-s3": "workspace:^",
+    "@lemma/exception": "workspace:^",
     "@lemma/file-storage-client": "workspace:^",
     "@lemma/fx": "workspace:^"
   },
