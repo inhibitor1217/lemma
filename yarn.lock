@@ -2847,6 +2847,7 @@ __metadata:
     "@lemma/exception": "workspace:^"
     "@lemma/file-storage-client": "workspace:^"
     "@lemma/fx": "workspace:^"
+    "@lemma/prisma-client": "workspace:^"
     "@types/aws-lambda": ^8.10.109
     "@types/node": ^18.7.8
     "@yarnpkg/pnpify": ^4.0.0-rc.32

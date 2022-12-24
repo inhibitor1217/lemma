@@ -1,6 +1,7 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
-import { Either, go, pipe, TaskEither } from '@lemma/fx';
+import { Either, go, pipe, tap, TaskEither } from '@lemma/fx';
+import { PrismaClient, TranslationsImportAttemptStatus } from '@lemma/prisma-client';
 import { Handler } from 'aws-lambda';
 import { TranslationsFileNotFoundException } from './exception';
 import { Event, Result } from './types';
@@ -21,6 +22,15 @@ const s3 = new AWSS3Client(
 );
 
 const fileStorage = new FileStorageClient(s3);
+
+const rds = new PrismaClient({
+  log: [
+    {
+      emit: 'event',
+      level: 'query',
+    },
+  ],
+});
 
 export const handler: Handler<Event, Result> = async (event, context) => {
   const {
@@ -72,12 +82,27 @@ export const handler: Handler<Event, Result> = async (event, context) => {
       return Promise.resolve(Either.ok(undefined));
     };
 
+  const logTranslationsImportError = console.error;
+
+  const markTranslationsImportAttemptAsFailed = () =>
+    rds.translationsImportAttempt
+      .update({
+        data: {
+          status: TranslationsImportAttemptStatus.FAILED,
+        },
+        where: {
+          id: translationsImportAttemptId,
+        },
+      })
+      .then(() => Either.ok(undefined))
+      .catch(Either.error);
+
   const result = go(
     getFileTask(),
     TaskEither.chainLeft(pipe(readFileProperties, TaskEither.flatMapLeft(logFileProperties))),
     TaskEither.flatMapLeft(parseJsonFile),
     TaskEither.chainLeft(logNumTranslationEntries),
-    TaskEither.mapOr(console.error)
+    TaskEither.mapOr(pipe(tap(logTranslationsImportError), tap(markTranslationsImportAttemptAsFailed)))
   );
 
   return await result();
