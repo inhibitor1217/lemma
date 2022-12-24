@@ -1,8 +1,8 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
-import { defineException } from '@lemma/exception';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
 import { Either, go, pipe, TaskEither } from '@lemma/fx';
 import { Handler } from 'aws-lambda';
+import { TranslationsFileNotFoundException } from './exception';
 import { Event, Result } from './types';
 
 const s3 = new AWSS3Client(
@@ -21,11 +21,6 @@ const s3 = new AWSS3Client(
 );
 
 const fileStorage = new FileStorageClient(s3);
-
-const TranslationsFileNotFoundException = defineException(
-  'FnImportTranslationsFromFile',
-  'TranslationsFileNotFoundException'
-)<{}>();
 
 export const handler: Handler<Event, Result> = async (event, context) => {
   const {
