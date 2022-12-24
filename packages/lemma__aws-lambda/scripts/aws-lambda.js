@@ -89,11 +89,28 @@ require('yargs')
         type: 'string',
         default: './.env.local',
       });
+      yargs.positional('prismaRuntime', {
+        describe: 'Whether to include the Prisma runtime',
+        type: 'boolean',
+        default: false,
+      });
     },
     async (argv) => {
-      const { stage, functionName, region, buildDir, iamRolePolicyDocumentPath, envFile } = argv;
+      const { stage, functionName, region, buildDir, iamRolePolicyDocumentPath, envFile, prismaRuntime } = argv;
 
       const awsCommand = stage === 'local' ? 'awslocal' : 'aws';
+
+      if (prismaRuntime) {
+        // Copy Prisma runtime into build directory
+        console.log('Resolving Prisma runtime...');
+
+        const prismaClientRuntimePath = path.resolve(__dirname, '..', '..', 'lemma__prisma-client', 'dist');
+        const prismaRuntimeSourcePath = path.resolve(prismaClientRuntimePath, 'runtime');
+        const prismaRuntimeBinaryPath = path.resolve(prismaClientRuntimePath, 'libquery_engine-rhel-openssl-1.0.x.so.node');
+
+        await exec(`cp -r ${prismaRuntimeSourcePath} ${buildDir}`);
+        await exec(`cp ${prismaRuntimeBinaryPath} ${buildDir}`);
+      }
 
       // Create zip file
       console.log('Creating zip file...');

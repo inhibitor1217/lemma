@@ -18,7 +18,7 @@
     "build:prod": "vite build",
     "clean:local": "aws-lambda clean --functionName fn-import-translations-from-file",
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json",
-    "deploy:local": "yarn build:dev && aws-lambda deploy --functionName fn-import-translations-from-file",
+    "deploy:local": "yarn build:dev && aws-lambda deploy --functionName fn-import-translations-from-file --prismaRuntime",
     "invoke:local": "aws-lambda invoke --functionName fn-import-translations-from-file",
     "logs:local": "aws-lambda logs --functionName fn-import-translations-from-file"
   },
