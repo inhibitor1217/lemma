@@ -14,8 +14,9 @@
     "dist"
   ],
   "scripts": {
-    "build:dev": "vite build --mode development",
-    "build:prod": "vite build",
+    "build:clean": "rm -rf build/ build.zip",
+    "build:dev": "yarn build:clean && vite build --mode development",
+    "build:prod": "yarn build:clean && vite build",
     "clean:local": "aws-lambda clean --functionName <function-name>",
     "compile": "tsc --build ./tsconfig.esm.json ./tsconfig.cjs.json",
     "deploy:local": "yarn build:dev && aws-lambda deploy --functionName <function-name>",

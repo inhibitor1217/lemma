@@ -105,11 +105,23 @@ require('yargs')
         console.log('Resolving Prisma runtime...');
 
         const prismaClientRuntimePath = path.resolve(__dirname, '..', '..', 'lemma__prisma-client', 'dist');
-        const prismaRuntimeSourcePath = path.resolve(prismaClientRuntimePath, 'runtime');
-        const prismaRuntimeBinaryPath = path.resolve(prismaClientRuntimePath, 'libquery_engine-rhel-openssl-1.0.x.so.node');
+        const prismaLibDestinationPath = path.resolve(buildDir, 'node_modules', '@lemma', 'prisma-client');
 
-        await exec(`cp -r ${prismaRuntimeSourcePath} ${buildDir}`);
-        await exec(`cp ${prismaRuntimeBinaryPath} ${buildDir}`);
+        const excludedPatterns = [
+          '*.d.ts',
+          '*-browser.js',
+          '*-esm.js',
+          'libquery_engine-debian-*',
+          'libquery_engine-macos-*',
+          'libquery_engine-windows-*',
+        ];
+
+        await exec(`mkdir -p ${prismaLibDestinationPath}`);
+        await exec(
+          `rsync -a --exclude ${excludedPatterns
+            .map((pattern) => `'${pattern}'`)
+            .join(' --exclude ')} ${prismaClientRuntimePath}/ ${prismaLibDestinationPath}/`
+        );
       }
 
       // Create zip file

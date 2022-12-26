@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => ({
     },
     outDir: 'build',
     minify: mode === 'production' ? 'esbuild' : false,
+    rollupOptions: {
+      external: ['@lemma/prisma-client'],
+    },
   },
   resolve: {
     alias: {
