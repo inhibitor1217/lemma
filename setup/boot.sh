@@ -3,10 +3,9 @@
 # This script automates the setup of local dev environment.
 
 list_fn() {
-  ls packages/ | \
-    sed -n 's/^.*lemma__\(.*\):$/\1/p' | \
-    awk -F/ '{print $1}' | \
-    sort
+  ls -d packages/lemma__fn-* | \
+    sed 's/packages\/lemma__fn-//g' | \
+    tr ' ' ' '
 }
 
 localstack_s3() {
@@ -19,7 +18,7 @@ localstack_lambda() {
   echo "Creating Lambda Functions ..."
   for fn in $(list_fn); do
     echo "  - $fn"
-    yarn workspace @lemma/$fn deploy:local
+    yarn workspace @lemma/fn-$fn deploy:local
   done
 }
 
