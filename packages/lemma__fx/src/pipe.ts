@@ -15,6 +15,27 @@ type Go = {
     f5: (e: E) => F,
     f6: (f: F) => G
   ): G;
+  <A, B, C, D, E, F, G, H>(
+    a: A,
+    f1: (a: A) => B,
+    f2: (b: B) => C,
+    f3: (c: C) => D,
+    f4: (d: D) => E,
+    f5: (e: E) => F,
+    f6: (f: F) => G,
+    f7: (g: G) => H
+  ): H;
+  <A, B, C, D, E, F, G, H, I>(
+    a: A,
+    f1: (a: A) => B,
+    f2: (b: B) => C,
+    f3: (c: C) => D,
+    f4: (d: D) => E,
+    f5: (e: E) => F,
+    f6: (f: F) => G,
+    f7: (g: G) => H,
+    f8: (h: H) => I
+  ): I;
   (a: unknown, ...fs: ((a: unknown) => unknown)[]): unknown;
 };
 
@@ -29,6 +50,25 @@ type Pipe = {
   <A, B, C, D, E, F, G>(f1: (a: A) => B, f2: (b: B) => C, f3: (c: C) => D, f4: (d: D) => E, f5: (e: E) => F, f6: (f: F) => G): (
     a: A
   ) => G;
+  <A, B, C, D, E, F, G, H>(
+    f1: (a: A) => B,
+    f2: (b: B) => C,
+    f3: (c: C) => D,
+    f4: (d: D) => E,
+    f5: (e: E) => F,
+    f6: (f: F) => G,
+    f7: (g: G) => H
+  ): (a: A) => H;
+  <A, B, C, D, E, F, G, H, I>(
+    f1: (a: A) => B,
+    f2: (b: B) => C,
+    f3: (c: C) => D,
+    f4: (d: D) => E,
+    f5: (e: E) => F,
+    f6: (f: F) => G,
+    f7: (g: G) => H,
+    f8: (h: H) => I
+  ): (a: A) => I;
   (...fs: ((a: unknown) => unknown)[]): (a: unknown) => unknown;
 };
 

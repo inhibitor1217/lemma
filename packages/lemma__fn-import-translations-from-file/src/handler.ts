@@ -1,7 +1,7 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
 import { Either, go, pipe, tap, TaskEither } from '@lemma/fx';
-import { MongoClient } from '@lemma/mongo-client';
+import { MongoClient, Translation } from '@lemma/mongo-client';
 import { PrismaClient, TranslationsImportAttemptStatus } from '@lemma/prisma-client';
 import { Handler } from 'aws-lambda';
 import { TranslationsFileNotFoundException } from './exception';
@@ -96,9 +96,60 @@ export const handler: Handler<Event, Result> = async (event, context) => {
       return Promise.resolve(Either.ok(undefined));
     };
 
+  const fetchTranslation = async (key: string): Promise<Translation> =>
+    (await mongo.translation.findOne({
+      workspaceId,
+      key,
+    })) ??
+    new mongo.translation({
+      workspaceId,
+      key,
+    });
+
+  const updateTranslation = async (
+    translation: Translation,
+    key: string,
+    value: string,
+    language: string
+  ): Promise<Translation> => {
+    translation.translations.set(language, value);
+    return await translation.save();
+  };
+
+  const processTranslationEntryTask =
+    ([key, value]: [string, string]): TaskEither<void, unknown> =>
+    async () => {
+      try {
+        const translation = await fetchTranslation(key);
+        await updateTranslation(translation, key, value, language);
+        return Either.ok(undefined);
+      } catch (e) {
+        return Either.error(e);
+      }
+    };
+
+  const processTranslationEntriesTask =
+    (entries: [string, string][]): TaskEither<void, unknown> =>
+    () =>
+      Promise.all(entries.map(processTranslationEntryTask)).then(() => Either.ok(undefined));
+
+  const markTranslationsImportAttemptAsSucceeded: TaskEither<void, unknown> = () =>
+    rds.translationsImportAttempt
+      .update({
+        data: {
+          status: TranslationsImportAttemptStatus.SUCCESS,
+          progress: 1,
+        },
+        where: {
+          id: translationsImportAttemptId,
+        },
+      })
+      .then(() => Either.ok(undefined))
+      .catch(Either.error);
+
   const logTranslationsImportError = console.error;
 
-  const markTranslationsImportAttemptAsFailed = () =>
+  const markTranslationsImportAttemptAsFailed: TaskEither<void, unknown> = () =>
     rds.translationsImportAttempt
       .update({
         data: {
@@ -116,6 +167,9 @@ export const handler: Handler<Event, Result> = async (event, context) => {
     TaskEither.chainLeft(pipe(readFileProperties, TaskEither.flatMapLeft(logFileProperties))),
     TaskEither.flatMapLeft(parseJsonFile),
     TaskEither.chainLeft(logNumTranslationEntries),
+    TaskEither.mapLeft(Object.entries),
+    TaskEither.flatMapLeft(processTranslationEntriesTask),
+    TaskEither.chainLeft(() => markTranslationsImportAttemptAsSucceeded),
     TaskEither.mapOr(pipe(tap(logTranslationsImportError), tap(markTranslationsImportAttemptAsFailed)))
   );
 
