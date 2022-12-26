@@ -1,6 +1,7 @@
 import { AWSS3Client, AWSS3ClientArgs } from '@lemma/aws-s3';
 import { FileStorageClient, FileStorageLocation } from '@lemma/file-storage-client';
 import { Either, go, pipe, tap, TaskEither } from '@lemma/fx';
+import { MongoClient } from '@lemma/mongo-client';
 import { PrismaClient, TranslationsImportAttemptStatus } from '@lemma/prisma-client';
 import { Handler } from 'aws-lambda';
 import { TranslationsFileNotFoundException } from './exception';
@@ -30,6 +31,19 @@ const rds = new PrismaClient({
       level: 'query',
     },
   ],
+});
+
+const mongo = new MongoClient({
+  host: process.env.MONGODB_HOST || '',
+  port: Number(process.env.MONGODB_PORT) || 0,
+  database: process.env.MONGODB_DATABASE || '',
+  username: process.env.MONGODB_USERNAME || '',
+  password: process.env.MONGODB_PASSWORD || '',
+  log: {
+    logger: console,
+    level: process.env.STAGE === 'dev' ? 'debug' : 'info',
+  },
+  enableMigration: false,
 });
 
 export const handler: Handler<Event, Result> = async (event, context) => {

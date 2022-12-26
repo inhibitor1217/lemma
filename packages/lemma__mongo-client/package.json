@@ -5,6 +5,7 @@
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "packageManager": "yarn@3.2.2",
   "exports": {
+    "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js"
   },
   "types": "dist/types/index.d.ts",
