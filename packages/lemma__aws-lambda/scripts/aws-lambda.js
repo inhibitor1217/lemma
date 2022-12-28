@@ -47,6 +47,23 @@ require('yargs')
       console.log('Deleting log group...');
       await exec(`${awsCommand} logs delete-log-group`, `--region ${region}`, `--log-group-name ${logGroupName(functionName)}`);
 
+      // Delete IAM Role policies
+      console.log('Deleting IAM Role policies...');
+      const existingPolicies = await exec(
+        `${awsCommand} iam list-role-policies`,
+        `--region ${region}`,
+        `--role-name ${iamRoleName(functionName)}`
+      );
+      const existingPolicyNames = JSON.parse(existingPolicies.stdout).PolicyNames;
+      for (const policyName of existingPolicyNames) {
+        await exec(
+          `${awsCommand} iam delete-role-policy`,
+          `--region ${region}`,
+          `--role-name ${iamRoleName(functionName)}`,
+          `--policy-name ${policyName}`
+        );
+      }
+
       // Delete IAM Role
       console.log('Deleting IAM Role...');
       await exec(`${awsCommand} iam delete-role`, `--region ${region}`, `--role-name ${iamRoleName(functionName)}`);
@@ -208,8 +225,8 @@ require('yargs')
           `--region ${region}`,
           `--function-name ${functionName}`,
           `--zip-file fileb://${zipFilePath}`,
-          `--handler index.handler`,
-          `--runtime nodejs16.x`,
+          `--handler handler.handler`,
+          `--runtime nodejs18.x`,
           `--role ${iamRoleArn(functionName)}`
         );
       } else {
