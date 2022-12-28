@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => ({
   build: {
+    target: 'node18',
     lib: {
       entry: path.resolve(__dirname, 'src/handler.ts'),
       fileName: 'index',
